@@ -19,7 +19,7 @@ namespace Rdl.Engine
         protected Expression _toolTop = null;
         protected Expression _label = null;
         protected string _linkToChild = null;
-        protected Expression _boolmark = null;
+        protected Expression _bookmark = null;
         protected string _repeatWith = null;
         protected string _dataElementName = string.Empty;
         protected Enums.DataElementOutputEnum _dataElementOutput = Enums.DataElementOutputEnum.Auto;
@@ -101,7 +101,7 @@ namespace Rdl.Engine
                     _linkToChild = attr.InnerText;
                     break;
                 case "bookmark":
-                    _boolmark = new Expression(attr, this);
+                    _bookmark = new Expression(attr, this);
                     break;
                 case "repeatwith":
                     _repeatWith = attr.InnerText;
@@ -127,6 +127,11 @@ namespace Rdl.Engine
             get { return _repeatWith; }
         }
 
+        public Action Action
+        {
+            get { return _action; }
+        }
+
         // For ReportItems rendering is broken into 2 parts.  The first part generates
         // the contianing box and the second part is called after.  This allows
         // for base type operations to be performed on the containing box.
@@ -146,6 +151,9 @@ namespace Rdl.Engine
                 visible = false;
 
             Render1(box, context, visible);
+
+            if (_action != null)
+                _action.Render(box, context);
 
             if (_box != null && visible)
             {

@@ -74,6 +74,9 @@ namespace Rdl.Engine
                 _table = args.dt;
             else
             {
+                // Clear the table prior to populating it.
+                if (ds.Tables.Contains(_name))
+                    ds.Tables[_name].Clear();
                 _query.Exec(ds, _name, context);
                 _table = ds.Tables[_name];
             }

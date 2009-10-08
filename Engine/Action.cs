@@ -22,7 +22,7 @@ namespace Rdl.Engine
                 case "hyperlink":
                     _hyperlink = new Expression(attr, this);
                     break;
-                case "drillghrough":
+                case "drillthrough":
                     _drillthrough = new Drillthrough(attr, this);
                     break;
                 case "bookmarklink":
@@ -30,6 +30,32 @@ namespace Rdl.Engine
                     break;
                 default:
                     break;
+            }
+        }
+
+        internal override void Render(Rdl.Render.Container box, Rdl.Runtime.Context context)
+        {
+            // Find the ActionElement
+            Rdl.Render.ActionElement ae = null;
+
+            foreach(Rdl.Render.Element e in box.Children)
+                if (e is Rdl.Render.ActionElement)
+                    ae = (Rdl.Render.ActionElement)e;
+
+            if (ae == null)
+                throw new Exception("An action is defined where no textbox or image is contained");
+
+            if (_hyperlink != null)
+                ae.Hyperlink = _hyperlink.ExecAsString(context);
+            if (_bookmarkLink != null)
+                ae.BookmarkLink = _bookmarkLink.ExecAsString(context);
+            if (_drillthrough != null)
+            {
+                ae.DrillThroughReportName = _drillthrough.ReportName;
+                foreach (Parameter parm in _drillthrough.Parameters)
+                    ae.DrillThroughParameterList.Add(
+                        new Rdl.Render.ActionElement.ActionParameter(parm.Name,
+                            parm.Value(context)));
             }
         }
     }

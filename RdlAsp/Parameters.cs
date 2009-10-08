@@ -62,96 +62,101 @@ namespace RdlAsp
                 Controls.Add(new LiteralControl("<div>"));
                 foreach (Rdl.Engine.ReportParameter parm in _report.ReportParameters.Values)
                 {
-                    Controls.Add(new LiteralControl("<div style=\"float:left; margin: 5px;\">"));
-                    Label label = new Label();
-                    label.Text = parm.Prompt;
-                    Controls.Add(label);
-
-                    if (parm.ValidValues.Count > 0)
+                    if (!parm.Hidden)
                     {
-                        if (parm.MultiValue)
-                        {
-                            CheckBoxList lb = new CheckBoxList();
-                            Controls.Add(lb);
-                            foreach (Rdl.Engine.ParameterValue value in parm.ValidValues)
-                                lb.Items.Add(new ListItem(value.Label, value.Value));
-                            lb.ID = parm.Name;
+                        Controls.Add(new LiteralControl("<div style=\"float:left; margin: 5px;\">"));
+                        Label label = new Label();
+                        label.Text = parm.Prompt;
+                        Controls.Add(label);
 
-                            if (parm.DefaultValue != null)
+                        if (parm.ValidValues.Count > 0)
+                        {
+                            if (parm.MultiValue)
                             {
-                                foreach (string s in parm.DefaultValue)
-                                    foreach (ListItem li in lb.Items)
-                                        if (li.Value == s)
-                                            li.Selected = true;
+                                CheckBoxList lb = new CheckBoxList();
+                                Controls.Add(lb);
+                                foreach (Rdl.Engine.ParameterValue value in parm.ValidValues)
+                                    lb.Items.Add(new ListItem(value.Label, value.Value));
+                                lb.ID = parm.Name;
+
+                                if (parm.DefaultValue != null)
+                                {
+                                    foreach (string s in parm.DefaultValue)
+                                        foreach (ListItem li in lb.Items)
+                                            if (li.Value == s)
+                                                li.Selected = true;
+                                }
+                            }
+                            else
+                            {
+                                DropDownList ddl = new DropDownList();
+                                Controls.Add(ddl);
+                                if (parm.Nullable)
+                                    ddl.Items.Add(new ListItem("", ""));
+                                foreach (Rdl.Engine.ParameterValue value in parm.ValidValues)
+                                    ddl.Items.Add(new ListItem(value.Label, value.Value));
+                                ddl.ID = parm.Name;
+
+                                if (parm.DefaultValue != null)
+                                {
+                                    foreach (ListItem li in ddl.Items)
+                                        if (li.Value == parm.DefaultValue[0])
+                                            ddl.Text = li.Text;
+                                }
                             }
                         }
                         else
-                        {
-                            DropDownList ddl = new DropDownList();
-                            Controls.Add(ddl);
-                            foreach (Rdl.Engine.ParameterValue value in parm.ValidValues)
-                                ddl.Items.Add(new ListItem(value.Label,value.Value));
-                            ddl.ID = parm.Name;
-
-                            if (parm.DefaultValue != null)
+                            switch (parm.DataType.Name)
                             {
-                                foreach (ListItem li in ddl.Items)
-                                    if (li.Value == parm.DefaultValue[0])
-                                        ddl.Text = li.Text;
+                                case "Boolean":
+                                    CheckBox cb = new CheckBox();
+                                    Controls.Add(cb);
+                                    if (parm.DefaultValue != null)
+                                        cb.Checked = bool.Parse(parm.DefaultValue[0]);
+                                    cb.ID = parm.Name;
+                                    break;
+                                case "DateTime":
+                                    TextBox tbCal = new TextBox();
+                                    tbCal.ID = parm.Name;
+                                    Controls.Add(tbCal);
+                                    if (parm.DefaultValue != null && parm.DefaultValue.Length > 0)
+                                        tbCal.Text = parm.DefaultValue[0];
+                                    ImageButton ib = new ImageButton();
+                                    Controls.Add(ib);
+                                    ib.ID = parm.Name + "_ib";
+                                    ib.ImageUrl = "image." + ReportServer._extension + "?source=resource&name=calendar.bmp";
+                                    AjaxControlToolkit.CalendarExtender ce = new AjaxControlToolkit.CalendarExtender();
+                                    Controls.Add(ce);
+                                    ce.PopupButtonID = parm.Name + "_ib";
+                                    ce.TargetControlID = parm.Name;
+                                    ce.ID = parm.Name + "_extender";
+                                    break;
+                                case "Int32":
+                                    TextBox tb = new TextBox();
+                                    Controls.Add(tb);
+                                    tb.ID = parm.Name;
+                                    if (parm.DefaultValue != null && parm.DefaultValue.Length > 0)
+                                        tb.Text = parm.DefaultValue[0];
+                                    break;
+                                case "Single":
+                                    TextBox tb2 = new TextBox();
+                                    Controls.Add(tb2);
+                                    tb2.ID = parm.Name;
+                                    if (parm.DefaultValue != null && parm.DefaultValue.Length > 0)
+                                        tb2.Text = parm.DefaultValue[0];
+                                    break;
+                                case "String":
+                                    TextBox tb3 = new TextBox();
+                                    Controls.Add(tb3);
+                                    tb3.ID = parm.Name;
+                                    if (parm.DefaultValue != null && parm.DefaultValue.Length > 0)
+                                        tb3.Text = parm.DefaultValue[0];
+                                    break;
                             }
-                        }
-                    }
-                    else
-                        switch (parm.DataType.Name)
-                        {
-                            case "Boolean" :
-                                CheckBox cb = new CheckBox();
-                                Controls.Add(cb);
-                                if (parm.DefaultValue != null)
-                                    cb.Checked = bool.Parse(parm.DefaultValue[0]);
-                                cb.ID = parm.Name;
-                                break;
-                            case "DateTime":
-                                TextBox tbCal = new TextBox();
-                                tbCal.ID = parm.Name;
-                                Controls.Add(tbCal);
-                                if (parm.DefaultValue != null && parm.DefaultValue.Length > 0)
-                                    tbCal.Text = parm.DefaultValue[0];
-                                ImageButton ib = new ImageButton();
-                                Controls.Add(ib);
-                                ib.ID = parm.Name + "_ib";
-                                ib.ImageUrl = "image." + ReportServer._extension + "?source=resource&name=calendar.bmp";
-                                AjaxControlToolkit.CalendarExtender ce = new AjaxControlToolkit.CalendarExtender();
-                                Controls.Add(ce);
-                                ce.PopupButtonID = parm.Name + "_ib";
-                                ce.TargetControlID = parm.Name;
-                                ce.ID = parm.Name + "_extender";
-                                break;
-                            case "Int32":
-                                TextBox tb = new TextBox();
-                                Controls.Add(tb);
-                                tb.ID = parm.Name;
-                                if (parm.DefaultValue != null && parm.DefaultValue.Length > 0)
-                                    tb.Text = parm.DefaultValue[0];
-                                break;
-                            case "Single":
-                                TextBox tb2 = new TextBox();
-                                Controls.Add(tb2);
-                                tb2.ID = parm.Name;
-                                if (parm.DefaultValue != null && parm.DefaultValue.Length > 0)
-                                    tb2.Text = parm.DefaultValue[0];
-                                break;
-                            case "String":
-                                TextBox tb3 = new TextBox();
-                                Controls.Add(tb3);
-                                tb3.ID = parm.Name;
-                                if (parm.DefaultValue != null && parm.DefaultValue.Length > 0)
-                                    tb3.Text = parm.DefaultValue[0];
-                                break;
-                        }
 
-                    // Add some space before the next control.
-                    Controls.Add(new LiteralControl("</div>"));
+                        // Add some space before the next control.
+                        Controls.Add(new LiteralControl("</div>"));
+                    }
                     //Controls.Add(new LiteralControl("&nbsp&nbsp&nbsp&nbsp"));
                 }
                 Controls.Add(new LiteralControl("</div>"));
@@ -217,8 +222,16 @@ namespace RdlAsp
                             parm.Value = ((TextBox)ctrl).Text;
                             break;
                         case "DropDownList":
+                            if (((DropDownList)ctrl).Text == string.Empty)
+                            {
+                                if (parm.Nullable)
+                                    parm.Value = null;
+                                else
+                                    parm.Value = string.Empty;
+                                break;
+                            }
                             foreach (Rdl.Engine.ParameterValue value in parm.ValidValues)
-                                if (value.Label == ((DropDownList)ctrl).Text)
+                                if (value.Label == ((DropDownList)ctrl).SelectedItem.Text)
                                     parm.Value = value.Value;
                             break;
                         case "CheckBoxList":
@@ -242,7 +255,11 @@ namespace RdlAsp
         /// <param name="report"></param>
         public void SetReport(Rdl.Engine.Report report)
         {
+            // Load the valid values into the report parameters.
             _report = report;
+            if (report != null)
+                foreach (Rdl.Engine.ReportParameter r in report.ReportParameters.Values)
+                    r.LoadValidValues(report);
             Page.Session["RdlReport"] = _report;
             ChildControlsCreated = false;
         }

@@ -78,6 +78,8 @@ namespace Rdl.Engine
 
                     XmlDocument doc = new XmlDocument();
                     doc.Load(fs);
+                    fs.Close();
+                    fs.Dispose();
 
                     XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.NameTable);
                     if (doc.NamespaceURI != string.Empty)

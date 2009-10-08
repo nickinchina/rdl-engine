@@ -27,7 +27,8 @@ namespace RdlAsp
 
         public void ProcessRequest(HttpContext context)
         {
-            _renderedReport = (Rdl.Render.RenderToHtml)context.Session["RenderedReport"];
+            string sessionId = context.Request.QueryString["ReportSessionID"];
+            _renderedReport = (Rdl.Render.RenderToHtml)context.Session[sessionId];
             string path = context.Request.Url.LocalPath;
             path = path.Substring(context.Request.Url.LocalPath.LastIndexOf('/')+1);
             if (path.IndexOf('.') >= 0)

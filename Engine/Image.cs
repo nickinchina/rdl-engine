@@ -88,6 +88,7 @@ namespace Rdl.Engine
                             s = new FileStream(name, FileMode.Open, FileAccess.Read);
                         img = System.Drawing.Image.FromStream(s);
                         s.Close();
+                        s.Dispose();
                     }
                     catch (Exception err)
                     {

@@ -53,6 +53,7 @@ namespace Rdl.Engine.Table
                 _grouping,
                 _sortBy);
 
+            TextBox tb = FindToggleItem(_visibility);
             if (_visibility != null && _visibility.ToggleItem == null)
                 hidden = _visibility.IsHidden(context); ;
 
@@ -75,6 +76,9 @@ namespace Rdl.Engine.Table
                         rowBox.Top = top;
                         rowBox.Width = box.Width;
                         rowBox.ContextBase = true;
+                    
+                        if (tb != null)
+                            tb.LinkedToggles.Add(new Toggle(rowBox, tb));
                     }
 
                     tr.Render(rowBox, context);

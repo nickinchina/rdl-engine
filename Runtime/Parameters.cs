@@ -17,7 +17,7 @@ namespace Rdl.Runtime
         {
             get 
             {
-                if (_rpt.ReportParameters[key] == null)
+                if (!_rpt.ReportParameters.ContainsKey(key))
                     throw new Exception("Invalid report parameter " + key);
                 return _rpt.ReportParameters[key];
             }

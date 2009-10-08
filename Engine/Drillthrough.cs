@@ -31,5 +31,15 @@ namespace Rdl.Engine
                     break;
             }
         }
+
+        internal string ReportName
+        {
+            get { return _reportName; }
+        }
+
+        internal List<Parameter> Parameters
+        {
+            get { return _parameters; }
+        }
     }
 }

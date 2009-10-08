@@ -112,6 +112,7 @@ namespace Rdl.Render
         protected int RecurseRender(Rdl.Engine.Report rpt, StringBuilder body, Element elmt, int level, bool forPrint)
         {
             StringBuilder bodyPart = new StringBuilder();
+            bool hasAction = false;
 
             string style = string.Empty;
             //BoxStyle bs = rpt.StyleList[elmt.StyleIndex];
@@ -145,6 +146,21 @@ namespace Rdl.Render
                 // 12/26/2007 This line caused problems with tables.
                 //if (!elmt.MatchParentHeight) 
                     style += "position: absolute;";
+            }
+            if (elmt is TextElement && ((TextStyle)elmt.Style).TextAlign == Rdl.Engine.Style.TextAlignEnum.General)
+            {
+                TextElement te = elmt as TextElement;
+                decimal val;
+
+                if (te.Text.Length > 0 && 
+                        decimal.TryParse(te.Text, 
+                            System.Globalization.NumberStyles.AllowCurrencySymbol |
+                                System.Globalization.NumberStyles.Number, 
+                            System.Globalization.CultureInfo.CurrentCulture, 
+                            out val ))
+                    style += "text-align: right;";
+                else
+                    style += "text-align: left;";
             }
 
             if (elmt is FlowContainer && ((FlowContainer)elmt).FlowDirection == FlowContainer.FlowDirectionEnum.LeftToRight)
@@ -195,6 +211,34 @@ namespace Rdl.Render
                         "<img id=\"" + te.Name + "_img\" src=\"" + ((te.ToggleState == TextElement.ToggleStateEnum.open) ? _minusGif : _plusGif) + "\" border=\"0\" style=\"float: left;\" />");
                     bodyPart.AppendLine(Spaces(level + 1) + "</a>");
                 }
+            }
+
+            if (elmt is ActionElement)
+            {
+                ActionElement ae = (ActionElement)elmt;
+                if (ae.DrillThroughReportName != null)
+                {
+                    bodyPart.AppendLine(Spaces(level + 1) +
+                        "<a href=\"javascript:{}\" onclick=\"javascript:Action('" + ae.Name + "');\">");
+                    hasAction = true;
+                }
+                else if (ae.Hyperlink != null)
+                {
+                    bodyPart.AppendLine(Spaces(level + 1) +
+                        "<a href=\"" + ae.Hyperlink + "\" >");
+                    hasAction = true;
+                }
+                else if (ae.BookmarkLink != null)
+                {
+                    bodyPart.AppendLine(Spaces(level + 1) +
+                        "<a href=\"#" + ae.BookmarkLink + "\" >");
+                    hasAction = true;
+                }
+            }
+
+            if (elmt is TextElement)
+            {
+                TextElement te = elmt as TextElement;
 
                 string text = te.Text;
                 bodyPart.AppendLine(Spaces(level) + text);
@@ -230,6 +274,11 @@ namespace Rdl.Render
                 int elements = 0;
                 foreach (Element child in ((Container)elmt).Children)
                     elements += RecurseRender(rpt, bodyPart, child, level + 1, forPrint);
+            }
+
+            if (hasAction)
+            {
+                bodyPart.Append("</a>");
             }
 
             if (elmt is Container || elmt is TextElement || elmt is ImageElement || elmt is ChartElement)
@@ -335,8 +384,9 @@ namespace Rdl.Render
                     ts.FontWeight.ToString().Replace("_", "") + ";");
                 _styles.AppendLine("    text-decoration: " +
                     ts.TextDecoration.ToString() + ";");
-                _styles.AppendLine("    text-align: " +
-                    ts.TextAlign.ToString() + ";");
+                if (ts.TextAlign.ToString().ToLower() != "general")
+                    _styles.AppendLine("    text-align: " +
+                        ts.TextAlign.ToString() + ";");
                 _styles.AppendLine("    vertical-align: " +
                     ts.VerticalAlign.ToString() + ";");
                 _styles.AppendLine("    line-height: " +

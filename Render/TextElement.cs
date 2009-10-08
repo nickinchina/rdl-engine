@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Rdl.Render
 {
-    public class TextElement : Element
+    public class TextElement : ActionElement
     {
         public enum ToggleStateEnum
         {

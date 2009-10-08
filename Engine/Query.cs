@@ -82,6 +82,8 @@ namespace Rdl.Engine
                 foreach (QueryParameter parm in _queryParameters)
                 {
                     object parmValue = parm.Value(context);
+                    if (parmValue == null)
+                        parmValue = DBNull.Value;
                     if (parmValue is Array)
                     {
                         string s = (((Array)parmValue).Length > 0) ? ((Array)parmValue).GetValue(0).ToString() : String.Empty;

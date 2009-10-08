@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Rdl.Render
 {
-    public class ImageElement : Element
+    public class ImageElement : ActionElement
     {
         public ImageElement(Container parent, 
             Rdl.Engine.ReportElement reportItem, 

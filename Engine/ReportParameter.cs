@@ -94,7 +94,7 @@ namespace Rdl.Engine
             }
         }
 
-        internal void LoadDefaultValues(Report rpt)
+        public void LoadDefaultValues(Report rpt)
         {
             if (_defaultValue != null)
             {
@@ -103,7 +103,7 @@ namespace Rdl.Engine
             }
         }
 
-        internal void LoadValidValues(Report rpt)
+        public void LoadValidValues(Report rpt)
         {
             if (_validValuesDS != null)
             {
@@ -158,6 +158,8 @@ namespace Rdl.Engine
                     for (int i = 0; i < v.Length; i++)
                         _value[i] = v.GetValue(i).ToString();
                 }
+                else if (value == null)
+                    _value = null;
                 else
                     _value = new string[] { value.ToString() };
             }
@@ -260,6 +262,22 @@ namespace Rdl.Engine
         public List<ParameterValue> ValidValues
         {
             get { return _validValues; }
+        }
+
+        public bool Hidden
+        {
+            get { return _hidden; }
+            set { _hidden = value; }
+        }
+
+        public bool Nullable
+        {
+            get { return _nullable; }
+        }
+
+        public bool AllowBlank
+        {
+            get { return _allowBlank; }
         }
     }
 }

@@ -16,14 +16,19 @@ namespace RdlAsp
     /// <summary>
     /// A ASP.NET viewer control used to view RDL reports.
     /// </summary>
-    public partial class ReportViewer : System.Web.UI.WebControls.WebControl, ICallbackEventHandler
+    public partial class ReportViewer : System.Web.UI.WebControls.WebControl, ICallbackEventHandler, INamingContainer
     {
         protected string _RenderType = "html";
         protected Rdl.Render.RenderToHtml _htmlReport = null;
+        private static int reportIndex = 0;
+        private string _reportSessionID = string.Empty;
 
-        protected void Page_Load(object sender, EventArgs e)
+        protected override void OnLoad(EventArgs e)
         {
-            _htmlReport = (Rdl.Render.RenderToHtml)Page.Session["RenderedReport"];
+            // do something here
+            base.OnLoad(e);
+
+            _htmlReport = (Rdl.Render.RenderToHtml)Page.Session[ReportSessionID];
 
             if (_htmlReport != null)
             {
@@ -39,22 +44,121 @@ namespace RdlAsp
             }
 
             string cbReference = Page.ClientScript.GetCallbackEventReference(
-                this, "arguments", "ToggleStateData", "context");
+                this, "arguments", "ToggleStateData", "");
             Page.ClientScript.RegisterClientScriptBlock(
                 this.GetType(), "ToggleState",
-                "function ToggleStateCallback(arguments, context) {" + cbReference + "}", true);
+                "function ToggleStateCallback(arguments) {" + cbReference + "}", true);
         }
 
-        #region ICallbackEventHandler Members
+
+        private string ReportSessionID
+        {
+            get
+            {
+                _reportSessionID = ((HiddenField)FindControl("tbReportID")).Value;
+                if (_reportSessionID == string.Empty)
+                {
+                    _reportSessionID = "RenderedReport_" + (reportIndex++).ToString();
+                    ((HiddenField)FindControl("tbReportID")).Value = _reportSessionID;
+                }
+                return _reportSessionID;
+            }
+        }
+
+        void btnAction_Click(object sender, EventArgs e)
+        {
+            if (FindControl("tbAction") != null)
+            {
+                // Get the ID of the element which triggered the action
+                string actionID = ((HiddenField)FindControl("tbAction")).Value;
+                // Prevent recursion 
+                if (actionID != string.Empty)
+                {
+                    // Find the named text action element.
+                    Rdl.Render.ActionElement ae = (Rdl.Render.ActionElement)_htmlReport.SourceReport.BodyContainer.FindNamedElement(actionID);
+
+                    if (ae != null)
+                    {
+                        // If the action is a drill-through, then load the new report,
+                        // set the parameters and open the report.
+                        if (ae.DrillThroughReportName != null)
+                        {
+                            string reportName = ae.DrillThroughReportName;
+                            if (!reportName.Contains("\\"))
+                                reportName = _htmlReport.SourceReport.ReportPath + reportName;
+                            if (!reportName.Contains(".rdl"))
+                            {
+                                if (File.Exists(reportName + ".rdl"))
+                                    reportName += ".rdl";
+                                else if (File.Exists(reportName + ".rdlc"))
+                                    reportName += ".rdlc";
+                            }
+                            if (!File.Exists(reportName))
+                                throw new Exception("Unable to locate sub report " + reportName);
+
+                            Rdl.Engine.Report rpt = new Rdl.Engine.Report();
+                            FileStream fs = new FileStream(reportName,
+                                FileMode.Open, FileAccess.Read, FileShare.Read);
+                            rpt.Load(fs,
+                                _htmlReport.SourceReport.ReportPath);
+                            fs.Close();
+                            fs.Dispose();
+
+                            foreach (Rdl.Render.ActionElement.ActionParameter parm in ae.DrillThroughParameterList)
+                            {
+                                rpt.ReportParameters[parm.Name].Value = parm.Value;
+                                rpt.ReportParameters[parm.Name].Hidden = true;
+                            }
+                            rpt.Run();
+
+                            _reportSessionID = "RenderedReport_" + (reportIndex++).ToString();
+                            ((HiddenField)FindControl("tbReportID")).Value = _reportSessionID;
+
+                            SetReport(rpt);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
 
         protected override void RenderContents(HtmlTextWriter writer)
         {
+            base.RenderContents(writer);
+
             string body = html;
             if (_htmlReport != null)
                 body = body.Replace("<%report%>", _htmlReport.Body);
             else
                 body = body.Replace("<%report%>", string.Empty);
+            body = body.Replace("<%btnAction%>", FindControl("btnAction").ClientID);
+            body = body.Replace("<%tbAction%>", FindControl("tbAction").ClientID);
+            body = body.Replace("<%ReportSessionID%>", ReportSessionID);
             writer.Write(body);
+        }
+
+        protected override void CreateChildControls()
+        {
+            base.CreateChildControls();
+
+            // Add a hidden button to handle actions
+            Button btnAction = new Button();
+            btnAction.ID = "btnAction";
+            btnAction.Style.Add(HtmlTextWriterStyle.Display, "none");
+            btnAction.Text = "";
+            btnAction.Click += new EventHandler(btnAction_Click);
+            Controls.Add(btnAction);
+
+            // Add a hidden text box to hold the action elements ID
+            HiddenField tbAction = new HiddenField();
+            tbAction.ID = "tbAction";
+            tbAction.Value = "";
+            Controls.Add(tbAction);
+
+            HiddenField tbReportId = new HiddenField();
+            tbReportId.ID = "tbReportID";
+            tbReportId.Value = "";
+            Controls.Add(tbReportId);
         }
 
         /// <summary>
@@ -68,10 +172,12 @@ namespace RdlAsp
             _htmlReport.ImageUrl += new Rdl.Render.RenderToHtml.ImageUrlEventHandler(htmlRender_ImageUrl);
             _htmlReport.Render(report);
 
-            Page.Session["RenderedReport"] = _htmlReport;
+            Page.Session[ReportSessionID] = _htmlReport;
 
-            Page_Load(null, null);
+            OnLoad(null);
         }
+
+        #region ICallbackEventHandler Members
 
         public string GetCallbackResult()
         {
@@ -81,7 +187,8 @@ namespace RdlAsp
         void htmlRender_ImageUrl(object sender, Rdl.Render.RenderToHtml.ImageUrlArgs args)
         {
             args.Url = "image." + ReportServer._extension + "?source=" + HttpUtility.UrlEncode(args.Source) +
-                "&name=" + HttpUtility.UrlEncode(args.ImageName);
+                "&name=" + HttpUtility.UrlEncode(args.ImageName) +
+                "&reportSessionID=" + HttpUtility.UrlEncode(ReportSessionID.ToString());
             if (args.Source == "SizedImage" || args.Source == "Chart")
                 args.Url += "&width=' + document.getElementById('" + args.ElementName + "').clientWidth + " +
                     "'&height=' + document.getElementById('" + args.ElementName + "').clientHeight";
@@ -91,7 +198,7 @@ namespace RdlAsp
         {
             string[] args = eventArgument.Split(null);
 
-            _htmlReport = (Rdl.Render.RenderToHtml)Context.Session["RenderedReport"];
+            _htmlReport = (Rdl.Render.RenderToHtml)Context.Session[ReportSessionID];
 
             // Find the named text element and set the toggle state.
             Rdl.Render.TextElement te = (Rdl.Render.TextElement)_htmlReport.SourceReport.BodyContainer.FindNamedElement(args[0]);
@@ -128,34 +235,42 @@ function ExportOnChange(selectedIndex)
     var reportKey = document.getElementById('LabelReportID').innerText;
     if (selectedIndex == 1)
     {
-        var url = 'PdfExport." + ReportServer._extension + @"';
+        var url = 'PdfExport." + ReportServer._extension + @"?ReportSessionID=<%ReportSessionID%>';
         window.open(url,'_blank','');
         window.opener=top;
     }
     if (selectedIndex == 2)
     {
-        var url = 'XlsExport." + ReportServer._extension + @"';
+        var url = 'XlsExport." + ReportServer._extension + @"?ReportSessionID=<%ReportSessionID%>';
         window.open(url,'_blank','');
         window.opener=top;
     }
     if (selectedIndex == 3)
     {
-        var url = 'TxtExport." + ReportServer._extension + @"';
+        var url = 'TxtExport." + ReportServer._extension + @"?ReportSessionID=<%ReportSessionID%>';
         window.open(url,'_blank','');
         window.opener=top;
     }
     if (selectedIndex == 4)
     {
-        var url = 'CsvExport." + ReportServer._extension + @"';
+        var url = 'CsvExport." + ReportServer._extension + @"?ReportSessionID=<%ReportSessionID%>';
         window.open(url,'_blank','');
         window.opener=top;
     }
     document.getElementById('Export').selectedIndex = 0;
 }    
 
+function Action(a_id)
+{
+    var elmt = document.getElementById('<%tbAction%>');
+    elmt.value = a_id;
+    var btn = document.getElementById('<%btnAction%>');
+    btn.click();
+}
+
 function printClick()
 {
-    var url = 'Print." + ReportServer._extension + @"';
+    var url = 'Print." + ReportServer._extension + @"?ReportSessionID=<%ReportSessionID%>';
     window.open(url,'_blank','');
     window.opener=top;
 }
@@ -163,7 +278,8 @@ function printClick()
 function imageUrl(elementName, source, name)
 {
     var src = 'image." + ReportServer._extension + @"?source=' + source + 
-                '&name=' + name;
+                '&name=' + name +
+                '&ReportSessionID=<%ReportSessionID%>';
 
     // Get the size of the DIV element containing the image
     var elmt = document.getElementById(elementName);
@@ -190,7 +306,8 @@ Export To:<select id=""Export"" onchange=""ExportOnChange(this.selectedIndex)"">
     <option>CSV</option>
 </select>
 &nbsp;&nbsp;&nbsp;&nbsp;
-<input type=""button"" id=""btnPrint"" onclick=""printClick()"" value=""Print..."">
+<input type=""hidden"" id=""hiddenAction"" name=""hiddenAction"" value="""" />
+<input type=""button"" id=""btnPrint"" onclick=""printClick()"" value=""Print..."" />
 <div id=""ReportContentDiv"" style=""position: static; overflow: visible;"">
     <%report%>
 </div>

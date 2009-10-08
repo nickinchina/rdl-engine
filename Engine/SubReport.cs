@@ -40,6 +40,7 @@ namespace Rdl.Engine
                     FileStream fs = new FileStream(_reportName, FileMode.Open, FileAccess.Read, FileShare.Read);
                     _subReport.Load(fs, Path.GetDirectoryName(_reportName));
                     fs.Close();
+                    fs.Dispose();
 
                     _subReport.CredentialsPrompt += new Report.CredentialsPromptEventHandler(_subReport_CredentialsPrompt);
                     _subReport.InitializeDataSet += new Report.InitializeDataSetEventHandler(_subReport_InitializeDataSet);
