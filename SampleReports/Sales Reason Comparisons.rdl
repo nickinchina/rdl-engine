@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2005/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <InteractiveHeight>11in</InteractiveHeight>
+  <rd:ReportID>618899f7-5933-4f95-8705-f3e73f8b9cac</rd:ReportID>
+  <ReportParameters>
+    <ReportParameter Name="ProductCategory">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>[Product].[Category].&amp;[1]</Value>
+          <Value>[Product].[Category].&amp;[2]</Value>
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Product Category</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>ProductList</DataSetName>
+          <ValueField>ParameterValue</ValueField>
+          <LabelField>ParameterCaption</LabelField>
+        </DataSetReference>
+      </ValidValues>
+      <MultiValue>true</MultiValue>
+    </ReportParameter>
+  </ReportParameters>
+  <rd:DrawGrid>true</rd:DrawGrid>
+  <InteractiveWidth>8.5in</InteractiveWidth>
+  <DataSources>
+    <DataSource Name="AdventureWorksAS">
+      <rd:DataSourceID>730f9b5e-c499-4e6a-82a6-480c65d59e88</rd:DataSourceID>
+      <DataSourceReference>AdventureWorksAS</DataSourceReference>
+    </DataSource>
+  </DataSources>
+  <rd:GridSpacing>0.0625in</rd:GridSpacing>
+  <rd:SnapToGrid>true</rd:SnapToGrid>
+  <Body>
+    <ReportItems>
+      <Matrix Name="matrix1">
+        <MatrixColumns>
+          <MatrixColumn>
+            <Width>1in</Width>
+          </MatrixColumn>
+          <MatrixColumn>
+            <Width>1in</Width>
+          </MatrixColumn>
+          <MatrixColumn>
+            <Width>1in</Width>
+          </MatrixColumn>
+        </MatrixColumns>
+        <Left>0.125in</Left>
+        <RowGroupings>
+          <RowGrouping>
+            <DynamicRows>
+              <Grouping Name="matrix1_Sales_Reason">
+                <GroupExpressions>
+                  <GroupExpression>=Fields!Sales_Reason.Value</GroupExpression>
+                </GroupExpressions>
+              </Grouping>
+              <ReportItems>
+                <Textbox Name="Sales_Reason_1">
+                  <rd:DefaultName>Sales_Reason_1</rd:DefaultName>
+                  <ZIndex>3</ZIndex>
+                  <Style>
+                    <PaddingLeft>2pt</PaddingLeft>
+                    <PaddingTop>2pt</PaddingTop>
+                    <PaddingBottom>2pt</PaddingBottom>
+                    <PaddingRight>2pt</PaddingRight>
+                  </Style>
+                  <CanGrow>true</CanGrow>
+                  <Value>=Fields!Sales_Reason.Value</Value>
+                </Textbox>
+              </ReportItems>
+            </DynamicRows>
+            <Width>1.875in</Width>
+          </RowGrouping>
+        </RowGroupings>
+        <ColumnGroupings>
+          <ColumnGrouping>
+            <Height>0.375in</Height>
+            <DynamicColumns>
+              <Grouping Name="matrix1_ColumnGroup1">
+                <GroupExpressions>
+                  <GroupExpression>=1</GroupExpression>
+                </GroupExpressions>
+              </Grouping>
+              <ReportItems>
+                <Textbox Name="Sales_Territory_Group_2">
+                  <rd:DefaultName>Sales_Territory_Group_2</rd:DefaultName>
+                  <ZIndex>8</ZIndex>
+                  <Style>
+                    <FontWeight>700</FontWeight>
+                    <PaddingLeft>2pt</PaddingLeft>
+                    <PaddingTop>2pt</PaddingTop>
+                    <FontSize>14pt</FontSize>
+                    <FontStyle>Italic</FontStyle>
+                    <TextAlign>Center</TextAlign>
+                    <Color>DarkSlateBlue</Color>
+                    <PaddingBottom>2pt</PaddingBottom>
+                    <PaddingRight>2pt</PaddingRight>
+                  </Style>
+                  <CanGrow>true</CanGrow>
+                  <Value>Adventure Works Cycles</Value>
+                </Textbox>
+              </ReportItems>
+            </DynamicColumns>
+          </ColumnGrouping>
+          <ColumnGrouping>
+            <Height>0.25in</Height>
+            <DynamicColumns>
+              <Grouping Name="matrix1_Sales_Territory_Group">
+                <GroupExpressions>
+                  <GroupExpression>=Fields!Sales_Territory_Group.Value</GroupExpression>
+                </GroupExpressions>
+              </Grouping>
+              <ReportItems>
+                <Textbox Name="Sales_Territory_Group_1">
+                  <rd:DefaultName>Sales_Territory_Group_1</rd:DefaultName>
+                  <ZIndex>7</ZIndex>
+                  <Style>
+                    <FontWeight>700</FontWeight>
+                    <PaddingLeft>2pt</PaddingLeft>
+                    <PaddingTop>2pt</PaddingTop>
+                    <FontSize>12pt</FontSize>
+                    <BorderStyle>
+                      <Left>Solid</Left>
+                      <Right>Solid</Right>
+                    </BorderStyle>
+                    <TextAlign>Center</TextAlign>
+                    <PaddingBottom>2pt</PaddingBottom>
+                    <PaddingRight>2pt</PaddingRight>
+                  </Style>
+                  <CanGrow>true</CanGrow>
+                  <Value>=Fields!Sales_Territory_Group.Value</Value>
+                </Textbox>
+              </ReportItems>
+            </DynamicColumns>
+          </ColumnGrouping>
+          <ColumnGrouping>
+            <Height>0.25in</Height>
+            <StaticColumns>
+              <StaticColumn>
+                <ReportItems>
+                  <Textbox Name="textbox2">
+                    <rd:DefaultName>textbox2</rd:DefaultName>
+                    <ZIndex>6</ZIndex>
+                    <Style>
+                      <FontWeight>700</FontWeight>
+                      <PaddingLeft>2pt</PaddingLeft>
+                      <PaddingTop>2pt</PaddingTop>
+                      <BorderStyle>
+                        <Bottom>Solid</Bottom>
+                        <Left>Solid</Left>
+                      </BorderStyle>
+                      <TextAlign>Center</TextAlign>
+                      <PaddingBottom>2pt</PaddingBottom>
+                      <PaddingRight>2pt</PaddingRight>
+                    </Style>
+                    <CanGrow>true</CanGrow>
+                    <Value>Internet Orders</Value>
+                  </Textbox>
+                </ReportItems>
+              </StaticColumn>
+              <StaticColumn>
+                <ReportItems>
+                  <Textbox Name="textbox3">
+                    <rd:DefaultName>textbox3</rd:DefaultName>
+                    <ZIndex>5</ZIndex>
+                    <Style>
+                      <FontWeight>700</FontWeight>
+                      <PaddingLeft>2pt</PaddingLeft>
+                      <PaddingTop>2pt</PaddingTop>
+                      <BorderStyle>
+                        <Bottom>Solid</Bottom>
+                      </BorderStyle>
+                      <TextAlign>Center</TextAlign>
+                      <PaddingBottom>2pt</PaddingBottom>
+                      <PaddingRight>2pt</PaddingRight>
+                    </Style>
+                    <CanGrow>true</CanGrow>
+                    <Value>Internet Sales Amount</Value>
+                  </Textbox>
+                </ReportItems>
+              </StaticColumn>
+              <StaticColumn>
+                <ReportItems>
+                  <Textbox Name="textbox4">
+                    <rd:DefaultName>textbox4</rd:DefaultName>
+                    <ZIndex>4</ZIndex>
+                    <Style>
+                      <FontWeight>700</FontWeight>
+                      <PaddingLeft>2pt</PaddingLeft>
+                      <PaddingTop>2pt</PaddingTop>
+                      <BorderStyle>
+                        <Bottom>Solid</Bottom>
+                        <Right>Solid</Right>
+                      </BorderStyle>
+                      <TextAlign>Center</TextAlign>
+                      <PaddingBottom>2pt</PaddingBottom>
+                      <PaddingRight>2pt</PaddingRight>
+                    </Style>
+                    <CanGrow>true</CanGrow>
+                    <Value>Internet Total  Product Cost</Value>
+                  </Textbox>
+                </ReportItems>
+              </StaticColumn>
+            </StaticColumns>
+          </ColumnGrouping>
+        </ColumnGroupings>
+        <DataSetName>ProductData</DataSetName>
+        <Top>0.125in</Top>
+        <Width>4.875in</Width>
+        <Corner>
+          <ReportItems>
+            <Rectangle Name="rectangle1">
+              <ReportItems>
+                <Textbox Name="textbox1">
+                  <rd:DefaultName>textbox1</rd:DefaultName>
+                  <Top>0.625in</Top>
+                  <ZIndex>1</ZIndex>
+                  <Width>1.5in</Width>
+                  <Style>
+                    <FontWeight>700</FontWeight>
+                    <PaddingLeft>2pt</PaddingLeft>
+                    <PaddingTop>2pt</PaddingTop>
+                    <TextAlign>Center</TextAlign>
+                    <PaddingBottom>2pt</PaddingBottom>
+                    <PaddingRight>2pt</PaddingRight>
+                  </Style>
+                  <CanGrow>true</CanGrow>
+                  <Value>Sales Reason</Value>
+                </Textbox>
+                <Image Name="Logo">
+                  <Left>0.4375in</Left>
+                  <Top>0.0625in</Top>
+                  <Width>0.73958in</Width>
+                  <MIMEType>image/jpeg</MIMEType>
+                  <Sizing>AutoSize</Sizing>
+                  <Style />
+                  <Source>Embedded</Source>
+                  <Height>0.3125in</Height>
+                  <Value>logopart_xs</Value>
+                </Image>
+              </ReportItems>
+              <ZIndex>9</ZIndex>
+              <Style>
+                <BorderStyle>
+                  <Bottom>Solid</Bottom>
+                </BorderStyle>
+              </Style>
+            </Rectangle>
+          </ReportItems>
+        </Corner>
+        <Style>
+          <BorderStyle>
+            <Bottom>Solid</Bottom>
+          </BorderStyle>
+        </Style>
+        <MatrixRows>
+          <MatrixRow>
+            <MatrixCells>
+              <MatrixCell>
+                <ReportItems>
+                  <Textbox Name="Internet_Order_Quantity">
+                    <rd:DefaultName>Internet_Order_Quantity</rd:DefaultName>
+                    <ZIndex>2</ZIndex>
+                    <Style>
+                      <PaddingLeft>2pt</PaddingLeft>
+                      <PaddingTop>2pt</PaddingTop>
+                      <Format>C0</Format>
+                      <BorderStyle>
+                        <Left>Solid</Left>
+                      </BorderStyle>
+                      <BackgroundColor>Lavender</BackgroundColor>
+                      <TextAlign>Right</TextAlign>
+                      <PaddingBottom>2pt</PaddingBottom>
+                      <PaddingRight>2pt</PaddingRight>
+                    </Style>
+                    <CanGrow>true</CanGrow>
+                    <Value>=Sum(Fields!Internet_Order_Quantity.Value)</Value>
+                  </Textbox>
+                </ReportItems>
+              </MatrixCell>
+              <MatrixCell>
+                <ReportItems>
+                  <Textbox Name="Internet_Sales_Amount">
+                    <rd:DefaultName>Internet_Sales_Amount</rd:DefaultName>
+                    <ZIndex>1</ZIndex>
+                    <Style>
+                      <PaddingLeft>2pt</PaddingLeft>
+                      <PaddingTop>2pt</PaddingTop>
+                      <Format>C0</Format>
+                      <BackgroundColor>LavenderBlush</BackgroundColor>
+                      <TextAlign>Right</TextAlign>
+                      <PaddingBottom>2pt</PaddingBottom>
+                      <PaddingRight>2pt</PaddingRight>
+                    </Style>
+                    <CanGrow>true</CanGrow>
+                    <Value>=Sum(Fields!Internet_Sales_Amount.Value)</Value>
+                  </Textbox>
+                </ReportItems>
+              </MatrixCell>
+              <MatrixCell>
+                <ReportItems>
+                  <Textbox Name="Internet_Total_Product_Cost">
+                    <rd:DefaultName>Internet_Total_Product_Cost</rd:DefaultName>
+                    <Style>
+                      <PaddingLeft>2pt</PaddingLeft>
+                      <PaddingTop>2pt</PaddingTop>
+                      <Format>C0</Format>
+                      <BorderStyle>
+                        <Right>Solid</Right>
+                      </BorderStyle>
+                      <TextAlign>Right</TextAlign>
+                      <PaddingBottom>2pt</PaddingBottom>
+                      <PaddingRight>2pt</PaddingRight>
+                    </Style>
+                    <CanGrow>true</CanGrow>
+                    <Value>=Sum(Fields!Internet_Total_Product_Cost.Value)</Value>
+                  </Textbox>
+                </ReportItems>
+              </MatrixCell>
+            </MatrixCells>
+            <Height>0.25in</Height>
+          </MatrixRow>
+        </MatrixRows>
+        <Height>1.125in</Height>
+      </Matrix>
+    </ReportItems>
+    <Height>1.5in</Height>
+    <Style />
+  </Body>
+  <BottomMargin>1in</BottomMargin>
+  <LeftMargin>1in</LeftMargin>
+  <EmbeddedImages>
+    <EmbeddedImage Name="logopart_xs">
+      <MIMEType>image/jpeg</MIMEType>
+      <ImageData>/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAeAEcDASIAAhEBAxEB/8QAGwAAAgIDAQAAAAAAAAAAAAAAAAcGCAIECQX/xAAzEAABAwMCBAQEBAcAAAAAAAABAgMEBQYRACEHCBIxExRBUQkiQmEycYGCFRYjJFORsv/EABkBAAIDAQAAAAAAAAAAAAAAAAEEAgMFAP/EACoRAAEDAgQFAwUAAAAAAAAAAAEAAgMEERIhMUETUYGRoQVxsRQiMmHw/9oADAMBAAIRAxEAPwDqnrnVz6X/AM0Vq8fraj8LItX/AJPLLKo5pcIPMPyOo+KmUrpOB2GFEJ6dx6nXQmq1aJRITkuc+iNGb/E44cAeg/UnbGqGc6PF53j5xGtbl7tNdViQ5shupXfPahPJcjU9BStKejp6sK2VnH+P0J1IMc4XAXKK3F8Yd/h/eNWtm5eEcgS6TKchyJEKshQWttRSpSUqYGxI99N/lp+JlanMtxDg2dSbIuSnVGS2txUlaG3ozCUpJy4tKspBxjJT3IGmTzMcI3+MnLNV7Zsm50W8tUJIYqKF9SHmm07suufiCFAdKiN/fO4NZfh4XLbVAZm8Iq3T3OF1/wAMJU9SmUeA9Wk9OfMeYXlayQchCSABukEZwQ2/5ZILo0TsTqP2lfdDvhM9VFnImiDIVFkdKVJ6HE9xuBn8xsdRy671p3CyieRafmVqtPhXkqet4vyXlfcncIHqpWwGdJzhhe7PDejTKLa1Ne4h3rUJS5lR/hSgmHHdV9C5KvkAT9s757anLwYKcyzOsSRhG555a9t0zT001U7DC29t
+ToB7k5DqVafRpCLo3Hm7QXlXRbdmJP4YkGL5xxI9lKXtn8tR2u0DmTs5tU2n3VR7zaaHUqE7CbYcWPYAJT/1rFfWuYMXBfb2Hxe/ha8fpTJDg+qjDuRLvnDh8qzujSL5fuYmbxVqFToFftuTb9xUtHVJQUq8JQzj6gCk5+k5+xOjTcFRHUMEkZyWbWUc1DMYJxZw/dxnoQRsU3Jdus1CtxajJcU8IqCGIyseGhwndzHqrGAD6DOO51p07hzbNIvKqXbDocGPctUZbYm1RtkB99tAwhKldyAAP9D2GpJo01cnIpJK3iBSXafIqUSmhXg12nyVORm+xkNhJ6kj3WkqSffA14XF/lksDmTZteu1RMmFWKS6zMptdozwYltpBCujxMHKD7Ht3BB03pNGYl1eJUXOovRW3G205+UdfTk49/lA/U++vMpdpLoFTW7TZpj0x5anHqctHUgLO5U2dijJ3I3HfYE51e6Rr2BpOY8/wshulhenAeTcV2S5ny1CnzOlTkd+T5VgEDH9VLSPEkds4UsDfGpZTuDMJNLZgVKa87BbGE06mf2ENP7GiFK/cpWmPo1Sw8M42Czue/c5jomJJ5ZWCNzvtGg27addUlLr5WrbmpRMtWRKs6uNEKbnwXnFA7/Ugq3/AEIP56b1GiyINKhx5kkzZTTKEPSSgI8VYGFL6R2yd8ffW7o1fLUzTtDZXXtpfXvqlwANFiG0gkhIBPc40ay0aWRX/9k=</ImageData>
+    </EmbeddedImage>
+  </EmbeddedImages>
+  <DataSets>
+    <DataSet Name="ProductData">
+      <Query>
+        <CommandText>WITH MEMBER [Measures].[Profit] AS '[Measures].[Sales Amount]-[Measures].[Standard Product Cost]' SELECT NON EMPTY { [Measures].[Internet Sales Amount], [Measures].[Internet Total Product Cost], [Measures].[Internet Order Quantity] } ON COLUMNS, NON EMPTY { ([Sales Reason].[Sales Reason].[Sales Reason].ALLMEMBERS * [Sales Territory].[Sales Territory Group].[Sales Territory Group].ALLMEMBERS ) } DIMENSION PROPERTIES MEMBER_CAPTION, MEMBER_UNIQUE_NAME, [Sales Reason].[Sales Reason].[Sales Reason].KEY, [Sales Territory].[Sales Territory Group].[Sales Territory Group].KEY ON ROWS FROM ( SELECT ( STRTOSET(@ProductCategory, CONSTRAINED) ) ON COLUMNS FROM [Adventure Works]) WHERE ( IIF( STRTOSET(@ProductCategory, CONSTRAINED).Count = 1, STRTOSET(@ProductCategory, CONSTRAINED), [Product].[Category].currentmember ) ) CELL PROPERTIES VALUE, BACK_COLOR, FORE_COLOR, FORMATTED_VALUE, FORMAT_STRING, FONT_NAME, FONT_SIZE, FONT_FLAGS</CommandText>
+        <DataSourceName>AdventureWorksAS</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="ProductCategory">
+            <Value>=Parameters!ProductCategory.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <rd:MdxQuery><QueryDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/AnalysisServices/QueryDefinition"><CommandType>MDX</CommandType><QuerySpecification xsi:type="MDXQuerySpecification"><Select><Items><Item><ID xsi:type="Level"><DimensionName>Sales Reason</DimensionName><HierarchyName>Sales Reason</HierarchyName><HierarchyUniqueName>[Sales Reason].[Sales Reason]</HierarchyUniqueName><LevelName>Sales Reason</LevelName><UniqueName>[Sales Reason].[Sales Reason].[Sales Reason]</UniqueName></ID><ItemCaption>Sales Reason</ItemCaption><UniqueName>true</UniqueName><Key>true</Key></Item><Item><ID xsi:type="Level"><DimensionName>Sales Territory</DimensionName><HierarchyName>Sales Territory Group</HierarchyName><HierarchyUniqueName>[Sales Territory].[Sales Territory Group]</HierarchyUniqueName><LevelName>Sales Territory Group</LevelName><UniqueName>[Sales Territory].[Sales Territory Group].[Sales Territory Group]</UniqueName></ID><ItemCaption>Sales Territory Group</ItemCaption><UniqueName>true</UniqueName><Key>true</Key></Item><Item><ID xsi:type="Measure"><MeasureName>Internet Order Quantity</MeasureName><UniqueName>[Measures].[Internet Order Quantity]</UniqueName></ID><ItemCaption>Internet Order Quantity</ItemCaption><BackColor>true</BackColor><ForeColor>true</ForeColor><FontFamily>true</FontFamily><FontSize>true</FontSize><FontWeight>true</FontWeight><FontStyle>true</FontStyle><FontDecoration>true</FontDecoration><FormattedValue>true</FormattedValue><FormatString>true</FormatString><DisplayFolder>Direct Sales</DisplayFolder></Item><Item><ID xsi:type="Measure"><MeasureName>Internet Sales Amount</MeasureName><UniqueName>[Measures].[Internet Sales Amount]</UniqueName></ID><ItemCaption>Internet Sales Amount</ItemCaption><BackColor>true</BackColor><ForeColor>true</ForeColor><FontFamily>true</FontFamily><FontSize>true</FontSize><FontWeight>true</FontWeight><FontStyle>true</FontStyle><FontDecoration>true</FontDecoration><FormattedValue>true</FormattedValue><FormatString>true</FormatString><DisplayFolder>Direct Sales</DisplayFolder></Item><Item><ID xsi:type="Measure"><MeasureName>Internet Total Product Cost</MeasureName><UniqueName>[Measures].[Internet Total Product Cost]</UniqueName></ID><ItemCaption>Internet Total Product Cost</ItemCaption><BackColor>true</BackColor><ForeColor>true</ForeColor><FontFamily>true</FontFamily><FontSize>true</FontSize><FontWeight>true</FontWeight><FontStyle>true</FontStyle><FontDecoration>true</FontDecoration><FormattedValue>true</FormattedValue><FormatString>true</FormatString><DisplayFolder>Direct Sales</DisplayFolder></Item></Items></Select><From>Adventure Works</From><Filter><FilterItems><FilterItem><HierarchyUniqueName>[Product].[Category]</HierarchyUniqueName><Condition xsi:type="EqualTo"><Members><Member><MemberUniqueName>[Product].[Category].[Category].&amp;[1]</MemberUniqueName></Member><Member><MemberUniqueName>[Product].[Category].[Category].&amp;[2]</MemberUniqueName></Member></Members><Parametrized>true</Parametrized></Condition></FilterItem></FilterItems></Filter><Calculations><Calculation><ID>[Profit]</ID><Name>Profit</Name><ParentUniqueName>[Measures]</ParentUniqueName><Expression>[Measures].[Sales Amount]-[Measures].[Standard Product Cost]</Expression></Calculation></Calculations><Aggregates /><QueryProperties /></QuerySpecification><Query><Statement>WITH MEMBER [Measures].[Profit] AS '[Measures].[Sales Amount]-[Measures].[Standard Product Cost]' SELECT NON EMPTY { [Measures].[Internet Sales Amount], [Measures].[Internet Total Product Cost], [Measures].[Internet Order Quantity] } ON COLUMNS, NON EMPTY { ([Sales Reason].[Sales Reason].[Sales Reason].ALLMEMBERS * [Sales Territory].[Sales Territory Group].[Sales Territory Group].ALLMEMBERS ) } DIMENSION PROPERTIES MEMBER_CAPTION, MEMBER_UNIQUE_NAME, [Sales Reason].[Sales Reason].[Sales Reason].KEY, [Sales Territory].[Sales Territory Group].[Sales Territory Group].KEY ON ROWS FROM ( SELECT ( STRTOSET(@ProductCategory, CONSTRAINED) ) ON COLUMNS FROM [Adventure Works]) WHERE ( IIF( STRTOSET(@ProductCategory, CONSTRAINED).Count = 1, STRTOSET(@ProductCategory, CONSTRAINED), [Product].[Category].currentmember ) ) CELL PROPERTIES VALUE, BACK_COLOR, FORE_COLOR, FORMATTED_VALUE, FORMAT_STRING, FONT_NAME, FONT_SIZE, FONT_FLAGS</Statement><ParameterDefinitions><ParameterDefinition><Name>ProductCategory</Name><DefaultValues><DefaultValue>[Product].[Category].[Category].&amp;[1]</DefaultValue><DefaultValue>[Product].[Category].[Category].&amp;[2]</DefaultValue></DefaultValues><Caption>Category</Caption><HierarchyUniqueName>[Product].[Category]</HierarchyUniqueName><ParameterValuesQuery><Statement>WITH MEMBER [Measures].[ParameterCaption] AS '[Product].[Category].CURRENTMEMBER.MEMBER_CAPTION' MEMBER [Measures].[ParameterValue] AS '[Product].[Category].CURRENTMEMBER.UNIQUENAME' MEMBER [Measures].[ParameterLevel] AS '[Product].[Category].CURRENTMEMBER.LEVEL.ORDINAL' SELECT {[Measures].[ParameterCaption], [Measures].[ParameterValue], [Measures].[ParameterLevel]} ON COLUMNS , [Product].[Category].ALLMEMBERS ON ROWS FROM [Adventure Works]</Statement><ParameterizedStatement><ReferencedParameters /></ParameterizedStatement></ParameterValuesQuery><MultipleValues>true</MultipleValues></ParameterDefinition></ParameterDefinitions></Query></QueryDefinition></rd:MdxQuery>
+      </Query>
+      <Fields>
+        <Field Name="Sales_Reason">
+          <DataField>&lt;?xml version="1.0" encoding="utf-8"?&gt;&lt;Field xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:type="Level" UniqueName="[Sales Reason].[Sales Reason].[Sales Reason]" /&gt;</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Sales_Territory_Group">
+          <DataField>&lt;?xml version="1.0" encoding="utf-8"?&gt;&lt;Field xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:type="Level" UniqueName="[Sales Territory].[Sales Territory Group].[Sales Territory Group]" /&gt;</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Internet_Order_Quantity">
+          <DataField>&lt;?xml version="1.0" encoding="utf-8"?&gt;&lt;Field xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:type="Measure" UniqueName="[Measures].[Internet Order Quantity]" /&gt;</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Internet_Sales_Amount">
+          <DataField>&lt;?xml version="1.0" encoding="utf-8"?&gt;&lt;Field xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:type="Measure" UniqueName="[Measures].[Internet Sales Amount]" /&gt;</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Internet_Total_Product_Cost">
+          <DataField>&lt;?xml version="1.0" encoding="utf-8"?&gt;&lt;Field xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:type="Measure" UniqueName="[Measures].[Internet Total Product Cost]" /&gt;</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="ProductList">
+      <Query>
+        <CommandText>WITH MEMBER [Measures].[ParameterCaption] AS '[Product].[Category].CURRENTMEMBER.MEMBER_CAPTION' MEMBER [Measures].[ParameterValue] AS '[Product].[Category].CURRENTMEMBER.UNIQUENAME' MEMBER [Measures].[ParameterLevel] AS '[Product].[Category].CURRENTMEMBER.LEVEL.ORDINAL' SELECT {[Measures].[ParameterCaption], [Measures].[ParameterValue], [Measures].[ParameterLevel]} ON COLUMNS , [Product].[Category].ALLMEMBERS ON ROWS FROM [Adventure Works]</CommandText>
+        <DataSourceName>AdventureWorksAS</DataSourceName>
+        <rd:MdxQuery><QueryDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.microsoft.com/AnalysisServices/QueryDefinition"><CommandType>MDX</CommandType><Type>Query</Type><QuerySpecification xsi:type="MDXQuerySpecification"><Select><Items><Item><ID xsi:type="Level"><DimensionName>Product</DimensionName><HierarchyName>Category</HierarchyName><HierarchyUniqueName>[Product].[Category]</HierarchyUniqueName><LevelName>Category</LevelName><UniqueName>[Product].[Category].[Category]</UniqueName></ID><ItemCaption>Category</ItemCaption></Item><Item><ID xsi:type="Measure"><MeasureName>ParameterCaption</MeasureName><UniqueName>[Measures].[ParameterCaption]</UniqueName></ID><ItemCaption>ParameterCaption</ItemCaption><FormattedValue>true</FormattedValue></Item><Item><ID xsi:type="Measure"><MeasureName>ParameterValue</MeasureName><UniqueName>[Measures].[ParameterValue]</UniqueName></ID><ItemCaption>ParameterValue</ItemCaption><FormattedValue>true</FormattedValue></Item><Item><ID xsi:type="Measure"><MeasureName>ParameterLevel</MeasureName><UniqueName>[Measures].[ParameterLevel]</UniqueName></ID><ItemCaption>ParameterLevel</ItemCaption><FormattedValue>true</FormattedValue></Item></Items></Select><From>Adventure Works</From><Filter><FilterItems /></Filter><Calculations /><Aggregates /><QueryProperties /></QuerySpecification><Query><Statement>WITH MEMBER [Measures].[ParameterCaption] AS '[Product].[Category].CURRENTMEMBER.MEMBER_CAPTION' MEMBER [Measures].[ParameterValue] AS '[Product].[Category].CURRENTMEMBER.UNIQUENAME' MEMBER [Measures].[ParameterLevel] AS '[Product].[Category].CURRENTMEMBER.LEVEL.ORDINAL' SELECT {[Measures].[ParameterCaption], [Measures].[ParameterValue], [Measures].[ParameterLevel]} ON COLUMNS , [Product].[Category].ALLMEMBERS ON ROWS FROM [Adventure Works]</Statement><ParameterDefinitions /></Query></QueryDefinition></rd:MdxQuery>
+      </Query>
+      <Fields>
+        <Field Name="Category">
+          <DataField>&lt;?xml version="1.0" encoding="utf-8"?&gt;&lt;Field xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:type="Level" UniqueName="[Product].[Category].[Category]" /&gt;</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ParameterCaption">
+          <DataField>&lt;?xml version="1.0" encoding="utf-8"?&gt;&lt;Field xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:type="Measure" UniqueName="[Measures].[ParameterCaption]" /&gt;</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ParameterValue">
+          <DataField>&lt;?xml version="1.0" encoding="utf-8"?&gt;&lt;Field xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:type="Measure" UniqueName="[Measures].[ParameterValue]" /&gt;</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="ParameterLevel">
+          <DataField>&lt;?xml version="1.0" encoding="utf-8"?&gt;&lt;Field xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:type="Measure" UniqueName="[Measures].[ParameterLevel]" /&gt;</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+  </DataSets>
+  <RightMargin>1in</RightMargin>
+  <Code />
+  <Width>5.0625in</Width>
+  <Description>Shows sales reason comparison data from an Analysis Services cube. Also illustrates the use of a multivalued parameter. The Sales Reason Comparisons report requires SQL Server Analysis Services and the AdventureWorks Analysis Services database.</Description>
+  <Language>en-US</Language>
+  <TopMargin>1in</TopMargin>
+</Report>

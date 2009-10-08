@@ -1,0 +1,533 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2005/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <DataSources>
+    <DataSource Name="Northwind">
+      <DataSourceReference>Northwind</DataSourceReference>
+      <rd:DataSourceID>5821528d-9169-46f1-8d19-24f0216354b4</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <BottomMargin>1in</BottomMargin>
+  <RightMargin>1in</RightMargin>
+  <rd:DrawGrid>true</rd:DrawGrid>
+  <InteractiveWidth>8.5in</InteractiveWidth>
+  <rd:SnapToGrid>true</rd:SnapToGrid>
+  <Body>
+    <ReportItems>
+      <Table Name="table1">
+        <DataSetName>TopProducts</DataSetName>
+        <Top>2.875in</Top>
+        <ZIndex>3</ZIndex>
+        <Width>2.75in</Width>
+        <Details>
+          <TableRows>
+            <TableRow>
+              <TableCells>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textbox9">
+                      <rd:DefaultName>textbox9</rd:DefaultName>
+                      <ZIndex>1</ZIndex>
+                      <Style>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingBottom>2pt</PaddingBottom>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>=Fields!ProductName.Value</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textbox10">
+                      <rd:DefaultName>textbox10</rd:DefaultName>
+                      <Style>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingBottom>2pt</PaddingBottom>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>=Fields!Sales.Value</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+              </TableCells>
+              <Height>0.25in</Height>
+            </TableRow>
+          </TableRows>
+        </Details>
+        <TableColumns>
+          <TableColumn>
+            <Width>2in</Width>
+          </TableColumn>
+          <TableColumn>
+            <Width>0.75in</Width>
+          </TableColumn>
+        </TableColumns>
+        <Height>0.25in</Height>
+      </Table>
+      <Textbox Name="textbox4">
+        <Top>2.5in</Top>
+        <ZIndex>2</ZIndex>
+        <Width>3in</Width>
+        <Style>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingBottom>2pt</PaddingBottom>
+          <FontFamily>Tahoma</FontFamily>
+          <FontWeight>700</FontWeight>
+          <FontSize>14pt</FontSize>
+          <Color>SteelBlue</Color>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+        </Style>
+        <CanGrow>true</CanGrow>
+        <Height>0.375in</Height>
+        <Value>Top 10 products in 1997</Value>
+      </Textbox>
+      <Rectangle Name="rectangle1">
+        <ReportItems>
+          <Matrix Name="matrix1">
+            <MatrixColumns>
+              <MatrixColumn>
+                <Width>1.375in</Width>
+              </MatrixColumn>
+            </MatrixColumns>
+            <RowGroupings>
+              <RowGrouping>
+                <Width>0.75in</Width>
+                <DynamicRows>
+                  <ReportItems>
+                    <Textbox Name="textYear">
+                      <ZIndex>4</ZIndex>
+                      <Style>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingBottom>2pt</PaddingBottom>
+                        <FontFamily>Tahoma</FontFamily>
+                        <FontWeight>700</FontWeight>
+                        <BorderColor>
+                          <Default>LightGrey</Default>
+                        </BorderColor>
+                        <BackgroundColor>#6e9eca</BackgroundColor>
+                        <Color>White</Color>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>=Fields!year.Value</Value>
+                    </Textbox>
+                  </ReportItems>
+                  <Grouping Name="matrix1_Year">
+                    <GroupExpressions>
+                      <GroupExpression>=Fields!year.Value</GroupExpression>
+                    </GroupExpressions>
+                  </Grouping>
+                </DynamicRows>
+              </RowGrouping>
+              <RowGrouping>
+                <Width>0.5in</Width>
+                <DynamicRows>
+                  <ReportItems>
+                    <Textbox Name="textMonth">
+                      <ZIndex>3</ZIndex>
+                      <Style>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingBottom>2pt</PaddingBottom>
+                        <FontFamily>Tahoma</FontFamily>
+                        <FontWeight>700</FontWeight>
+                        <BorderColor>
+                          <Default>LightGrey</Default>
+                        </BorderColor>
+                        <BackgroundColor>#6e9eca</BackgroundColor>
+                        <Color>White</Color>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>=Fields!month.Value</Value>
+                    </Textbox>
+                  </ReportItems>
+                  <Visibility>
+                    <ToggleItem>textYear</ToggleItem>
+                    <Hidden>true</Hidden>
+                  </Visibility>
+                  <Grouping Name="matrix1_Month">
+                    <GroupExpressions>
+                      <GroupExpression>=Fields!month.Value</GroupExpression>
+                    </GroupExpressions>
+                  </Grouping>
+                </DynamicRows>
+              </RowGrouping>
+              <RowGrouping>
+                <Width>0.5in</Width>
+                <DynamicRows>
+                  <ReportItems>
+                    <Textbox Name="textWeek">
+                      <ZIndex>2</ZIndex>
+                      <Style>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingBottom>2pt</PaddingBottom>
+                        <FontFamily>Tahoma</FontFamily>
+                        <FontWeight>700</FontWeight>
+                        <BorderColor>
+                          <Default>LightGrey</Default>
+                        </BorderColor>
+                        <BackgroundColor>#6e9eca</BackgroundColor>
+                        <Color>White</Color>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>=Fields!week.Value</Value>
+                    </Textbox>
+                  </ReportItems>
+                  <Visibility>
+                    <ToggleItem>textMonth</ToggleItem>
+                    <Hidden>true</Hidden>
+                  </Visibility>
+                  <Grouping Name="matrix1_Week">
+                    <GroupExpressions>
+                      <GroupExpression>=Fields!week.Value</GroupExpression>
+                    </GroupExpressions>
+                  </Grouping>
+                </DynamicRows>
+              </RowGrouping>
+              <RowGrouping>
+                <Width>1.25in</Width>
+                <DynamicRows>
+                  <ReportItems>
+                    <Textbox Name="OrderDate">
+                      <rd:DefaultName>OrderDate</rd:DefaultName>
+                      <ZIndex>1</ZIndex>
+                      <Style>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingBottom>2pt</PaddingBottom>
+                        <FontFamily>Tahoma</FontFamily>
+                        <FontWeight>700</FontWeight>
+                        <BorderColor>
+                          <Default>LightGrey</Default>
+                        </BorderColor>
+                        <BackgroundColor>#6e9eca</BackgroundColor>
+                        <Color>White</Color>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>=Fields!OrderDate.Value</Value>
+                    </Textbox>
+                  </ReportItems>
+                  <Visibility>
+                    <ToggleItem>textWeek</ToggleItem>
+                    <Hidden>true</Hidden>
+                  </Visibility>
+                  <Sorting>
+                    <SortBy>
+                      <SortExpression>=Fields!OrderDate.Value</SortExpression>
+                      <Direction>Ascending</Direction>
+                    </SortBy>
+                  </Sorting>
+                  <Grouping Name="matrix1_OrderDate">
+                    <GroupExpressions>
+                      <GroupExpression>=Fields!OrderDate.Value</GroupExpression>
+                    </GroupExpressions>
+                  </Grouping>
+                </DynamicRows>
+              </RowGrouping>
+            </RowGroupings>
+            <ColumnGroupings>
+              <ColumnGrouping>
+                <DynamicColumns>
+                  <ReportItems>
+                    <Rectangle Name="rectangle2">
+                      <ReportItems>
+                        <Image Name="image1">
+                          <Sizing>FitProportional</Sizing>
+                          <MIMEType>image/bmp</MIMEType>
+                          <Top>0.25in</Top>
+                          <ZIndex>1</ZIndex>
+                          <Source>Database</Source>
+                          <Style />
+                          <Value>=Code.ArrayCopy(Fields!Picture.Value, 78)</Value>
+                        </Image>
+                        <Textbox Name="CategoryName">
+                          <Style>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingBottom>2pt</PaddingBottom>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                          </Style>
+                          <CanGrow>true</CanGrow>
+                          <Height>0.25in</Height>
+                          <Value>=Fields!CategoryName.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                      <ZIndex>6</ZIndex>
+                      <Style>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <BorderColor>
+                          <Default>LightGrey</Default>
+                        </BorderColor>
+                      </Style>
+                    </Rectangle>
+                  </ReportItems>
+                  <Sorting>
+                    <SortBy>
+                      <SortExpression>=Fields!CategoryName.Value</SortExpression>
+                      <Direction>Ascending</Direction>
+                    </SortBy>
+                  </Sorting>
+                  <Grouping Name="matrix1_CategoryName">
+                    <GroupExpressions>
+                      <GroupExpression>=Fields!CategoryName.Value</GroupExpression>
+                    </GroupExpressions>
+                  </Grouping>
+                </DynamicColumns>
+                <Height>1.125in</Height>
+              </ColumnGrouping>
+              <ColumnGrouping>
+                <DynamicColumns>
+                  <ReportItems>
+                    <Textbox Name="textbox5">
+                      <rd:DefaultName>textbox5</rd:DefaultName>
+                      <ZIndex>5</ZIndex>
+                      <Style>
+                        <BorderStyle>
+                          <Default>Solid</Default>
+                        </BorderStyle>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingBottom>2pt</PaddingBottom>
+                        <BorderColor>
+                          <Default>LightGrey</Default>
+                        </BorderColor>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>=Fields!ProductName.Value</Value>
+                    </Textbox>
+                  </ReportItems>
+                  <Visibility>
+                    <ToggleItem>CategoryName</ToggleItem>
+                    <Hidden>true</Hidden>
+                  </Visibility>
+                  <Sorting>
+                    <SortBy>
+                      <SortExpression>=Fields!ProductName.Value</SortExpression>
+                      <Direction>Ascending</Direction>
+                    </SortBy>
+                  </Sorting>
+                  <Grouping Name="matrix1_ProductName">
+                    <GroupExpressions>
+                      <GroupExpression>=Fields!ProductName.Value</GroupExpression>
+                    </GroupExpressions>
+                  </Grouping>
+                </DynamicColumns>
+                <Height>0.25in</Height>
+              </ColumnGrouping>
+            </ColumnGroupings>
+            <DataSetName>Products</DataSetName>
+            <Width>4.375in</Width>
+            <Corner>
+              <ReportItems>
+                <Textbox Name="textbox3">
+                  <rd:DefaultName>textbox3</rd:DefaultName>
+                  <ZIndex>7</ZIndex>
+                  <Style>
+                    <BorderStyle>
+                      <Default>Solid</Default>
+                    </BorderStyle>
+                    <PaddingLeft>2pt</PaddingLeft>
+                    <PaddingBottom>2pt</PaddingBottom>
+                    <FontFamily>Tahoma</FontFamily>
+                    <BorderColor>
+                      <Default>LightGrey</Default>
+                    </BorderColor>
+                    <PaddingRight>2pt</PaddingRight>
+                    <PaddingTop>2pt</PaddingTop>
+                  </Style>
+                  <CanGrow>true</CanGrow>
+                  <Value>
+              </Value>
+                </Textbox>
+              </ReportItems>
+            </Corner>
+            <Height>1.585in</Height>
+            <MatrixRows>
+              <MatrixRow>
+                <Height>0.21in</Height>
+                <MatrixCells>
+                  <MatrixCell>
+                    <ReportItems>
+                      <Textbox Name="textbox2">
+                        <rd:DefaultName>textbox2</rd:DefaultName>
+                        <Style>
+                          <BorderStyle>
+                            <Default>Solid</Default>
+                          </BorderStyle>
+                          <PaddingLeft>2pt</PaddingLeft>
+                          <PaddingBottom>2pt</PaddingBottom>
+                          <BorderColor>
+                            <Default>LightGrey</Default>
+                          </BorderColor>
+                          <PaddingRight>2pt</PaddingRight>
+                          <PaddingTop>2pt</PaddingTop>
+                        </Style>
+                        <CanGrow>true</CanGrow>
+                        <Value>=count(Fields!OrderID.Value)</Value>
+                      </Textbox>
+                    </ReportItems>
+                  </MatrixCell>
+                </MatrixCells>
+              </MatrixRow>
+            </MatrixRows>
+          </Matrix>
+        </ReportItems>
+        <Top>0.375in</Top>
+        <ZIndex>1</ZIndex>
+        <Width>5.25in</Width>
+        <Style>
+          <BorderStyle>
+            <Default>Solid</Default>
+          </BorderStyle>
+          <BorderWidth>
+            <Default>4pt</Default>
+          </BorderWidth>
+          <BorderColor>
+            <Default>RoyalBlue</Default>
+          </BorderColor>
+        </Style>
+        <Height>1.75in</Height>
+      </Rectangle>
+      <Textbox Name="textbox1">
+        <rd:DefaultName>textbox1</rd:DefaultName>
+        <Width>5in</Width>
+        <Style>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingBottom>2pt</PaddingBottom>
+          <FontFamily>Tahoma</FontFamily>
+          <FontWeight>700</FontWeight>
+          <FontSize>20pt</FontSize>
+          <Color>SteelBlue</Color>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+        </Style>
+        <CanGrow>true</CanGrow>
+        <Height>0.36in</Height>
+        <Value>ProductsOrdered</Value>
+      </Textbox>
+    </ReportItems>
+    <Height>4.75in</Height>
+    <Style>
+      <BorderStyle>
+        <Default>Solid</Default>
+      </BorderStyle>
+      <BackgroundImage>
+        <Value>c:\windows\web\wallpaper\Peace.jpg</Value>
+        <Source>External</Source>
+      </BackgroundImage>
+      <BorderColor>
+        <Default>Red</Default>
+      </BorderColor>
+    </Style>
+  </Body>
+  <rd:ReportID>4fa4d9b4-d470-49df-a673-b6f26a949d24</rd:ReportID>
+  <LeftMargin>1in</LeftMargin>
+  <DataSets>
+    <DataSet Name="Products">
+      <Query>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+        <CommandText>select T4.CategoryName, picture, T3.ProductName, T1.OrderDate, datepart( wk, T1.OrderDate ) as [week], datepart( mm, T1.OrderDate ) as [month], datepart( yy, T1.OrderDate ) as [year], T1.OrderID
+from orders T1
+   join [Order Details] T2 on T1.OrderID = T2.OrderID
+   join Products T3 on T2.ProductID = T3.ProductID
+   join Categories T4 on T3.CategoryID = T4.CategoryID</CommandText>
+        <DataSourceName>Northwind</DataSourceName>
+      </Query>
+      <Fields>
+        <Field Name="CategoryName">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>CategoryName</DataField>
+        </Field>
+        <Field Name="Picture">
+          <rd:TypeName>System.Byte[]</rd:TypeName>
+          <DataField>picture</DataField>
+        </Field>
+        <Field Name="ProductName">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>ProductName</DataField>
+        </Field>
+        <Field Name="OrderDate">
+          <rd:TypeName>System.DateTime</rd:TypeName>
+          <DataField>OrderDate</DataField>
+        </Field>
+        <Field Name="week">
+          <rd:TypeName>System.Int32</rd:TypeName>
+          <DataField>week</DataField>
+        </Field>
+        <Field Name="month">
+          <rd:TypeName>System.Int32</rd:TypeName>
+          <DataField>month</DataField>
+        </Field>
+        <Field Name="year">
+          <rd:TypeName>System.Int32</rd:TypeName>
+          <DataField>year</DataField>
+        </Field>
+        <Field Name="OrderID">
+          <rd:TypeName>System.Int32</rd:TypeName>
+          <DataField>OrderID</DataField>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="TopProducts">
+      <Query>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+        <CommandText>select top 10 T3.ProductName, count(*) as Sales
+from Orders T1 
+	join [Order Details] T2 on T2.OrderID = T1.OrderID
+	join Products T3 on T2.ProductID = T3.ProductID
+where T1.OrderDate between '1997-1-1' and '1997-8-1'
+group by T3.ProductName
+order by 2 desc</CommandText>
+        <DataSourceName>Northwind</DataSourceName>
+      </Query>
+      <Fields>
+        <Field Name="ProductName">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>ProductName</DataField>
+        </Field>
+        <Field Name="Sales">
+          <rd:TypeName>System.Int32</rd:TypeName>
+          <DataField>Sales</DataField>
+        </Field>
+      </Fields>
+    </DataSet>
+  </DataSets>
+  <Code>Public Shared Function ArrayCopy(ByRef arr as Byte(), ByVal start As Integer) As Byte()
+dim arr2(arr.Length - start) as Byte
+
+for i as Integer = start to arr.Length - 1
+	arr2(i-start) = arr(i)
+next
+ArrayCopy = arr2
+End Function
+</Code>
+  <Width>6in</Width>
+  <InteractiveHeight>11in</InteractiveHeight>
+  <Language>en-US</Language>
+  <TopMargin>1in</TopMargin>
+</Report>
