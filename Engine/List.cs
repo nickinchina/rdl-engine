@@ -69,21 +69,17 @@ namespace Rdl.Engine
             while (_context.GroupIndex < _context.GroupCount)
             {
                 Rdl.Render.FixedContainer cell = null;
-                while (_context.CurrentRow != null)
+                if (_box != null && _dataElementOutput == Enums.DataElementOutputEnum.Auto)
                 {
-                    if (_box != null && _dataElementOutput == Enums.DataElementOutputEnum.Auto)
-                    {
-                        bool first = (cell == null);
-                        cell = ((Rdl.Render.Container)_box).AddFixedContainer(this, Style, context);
-                        cell.Name = "ListItem";
-                        if (first && _grouping != null && _grouping.PageBreakAtStart)
-                            cell.PageBreakBefore = true;
-                    }
-
-                    _reportItems.Render(cell, _context);
-
-                    _context.MoveNext();
+                    bool first = (cell == null);
+                    cell = ((Rdl.Render.Container)_box).AddFixedContainer(this, Style, context);
+                    cell.Name = "ListItem";
+                    cell.MatchParentWidth = true;
+                    if (first && _grouping != null && _grouping.PageBreakAtStart)
+                        cell.PageBreakBefore = true;
                 }
+
+                _reportItems.Render(cell, _context);
 
                 if (cell != null && _grouping != null && _grouping.PageBreakAtEnd)
                     cell.PageBreakAfter = true;

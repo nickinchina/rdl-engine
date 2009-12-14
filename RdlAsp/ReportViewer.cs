@@ -236,26 +236,30 @@ function ExportOnChange(selectedIndex)
     if (selectedIndex == 1)
     {
         var url = 'PdfExport." + ReportServer._extension + @"?ReportSessionID=<%ReportSessionID%>';
-        window.open(url,'_blank','');
-        window.opener=top;
+        window.location = url;
+        //window.open(url,'_blank','');
+        //window.opener=top;
     }
     if (selectedIndex == 2)
     {
         var url = 'XlsExport." + ReportServer._extension + @"?ReportSessionID=<%ReportSessionID%>';
-        window.open(url,'_blank','');
-        window.opener=top;
+        window.location = url;
+        //window.open(url,'_blank','');
+        //window.opener=top;
     }
     if (selectedIndex == 3)
     {
         var url = 'TxtExport." + ReportServer._extension + @"?ReportSessionID=<%ReportSessionID%>';
-        window.open(url,'_blank','');
-        window.opener=top;
+        window.location = url;
+        //window.open(url,'_blank','');
+        //window.opener=top;
     }
     if (selectedIndex == 4)
     {
         var url = 'CsvExport." + ReportServer._extension + @"?ReportSessionID=<%ReportSessionID%>';
-        window.open(url,'_blank','');
-        window.opener=top;
+        window.location = url;
+        //window.open(url,'_blank','');
+        //window.opener=top;
     }
     document.getElementById('Export').selectedIndex = 0;
 }    

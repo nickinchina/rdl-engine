@@ -54,7 +54,7 @@ namespace Rdl.Render
                     if (diff >= 0 && childElements[j].Height > 0)
                         childElements[j]._renderedTop = childElements[i].Top + childElements[i].Height + diff;
                 }
-                if (childElements[i]._height > 0)
+                if (childElements[i].Height > 0)
                     _renderedHeight = Math.Max(_renderedHeight, childElements[i].Top + childElements[i].Height);
             }
 
@@ -70,7 +70,7 @@ namespace Rdl.Render
                     if (diff >= 0 && childElements[j].Width > 0)
                         childElements[j]._renderedLeft = childElements[i].Left + childElements[i].Width + diff;
                 }
-                if (childElements[i]._width > 0)
+                if (childElements[i].Width > 0)
                     _renderedWidth = Math.Max(_renderedWidth, childElements[i].Left + childElements[i].Width);
             }
         }
