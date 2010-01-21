@@ -199,7 +199,10 @@ namespace Rdl.Render
             }
             get 
             {
-                return _renderedWidth;
+                if (MatchParentWidth && _renderedWidth == 0)
+                    return Parent.Width;
+                else
+                    return _renderedWidth;
                 //return Math.Max(_renderedWidth, _width);
                 //if (_width == 0 && _renderedHeight == 0 && _parentElement != null)
                 //    return _parentElement.Width;
@@ -229,7 +232,10 @@ namespace Rdl.Render
             }
             get 
             {
-                return _renderedHeight;
+                if (MatchParentHeight && _renderedHeight == 0)
+                    return Parent.Height;
+                else
+                    return _renderedHeight;
                 //return Math.Max(_renderedHeight, _height);
                 //if (_height == 0 && _renderedHeight == 0 && _parentElement != null)
                 //    return _parentElement.Height;
