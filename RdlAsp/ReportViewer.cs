@@ -29,25 +29,6 @@ namespace RdlAsp
             base.OnLoad(e);
 
             _htmlReport = (Rdl.Render.RenderToHtml)Page.Session[ReportSessionID];
-
-            if (_htmlReport != null)
-            {
-                Page.Header.Controls.Add(new LiteralControl(
-                    "<style type='text/css'>\n" +
-                    _htmlReport.Style +
-                    "</style>"));
-
-                Page.ClientScript.RegisterStartupScript(this.GetType(), "ReportScript", 
-                    "<script language=\"javascript\">\n" +
-                    _htmlReport.Script +
-                    "</script>");
-            }
-
-            string cbReference = Page.ClientScript.GetCallbackEventReference(
-                this, "arguments", "ToggleStateData", "");
-            Page.ClientScript.RegisterClientScriptBlock(
-                this.GetType(), "ToggleState",
-                "function ToggleStateCallback(arguments) {" + cbReference + "}", true);
         }
 
 
@@ -128,9 +109,15 @@ namespace RdlAsp
 
             string body = html;
             if (_htmlReport != null)
+            {
                 body = body.Replace("<%report%>", _htmlReport.Body);
+                body = body.Replace("<%buttons%>", htmlButtons);
+            }
             else
+            {
                 body = body.Replace("<%report%>", string.Empty);
+                body = body.Replace("<%buttons%>", string.Empty);
+            }
             body = body.Replace("<%btnAction%>", FindControl("btnAction").ClientID);
             body = body.Replace("<%tbAction%>", FindControl("tbAction").ClientID);
             body = body.Replace("<%ReportSessionID%>", ReportSessionID);
@@ -174,7 +161,25 @@ namespace RdlAsp
 
             Page.Session[ReportSessionID] = _htmlReport;
 
-            OnLoad(null);
+//            OnLoad(null);
+            if (_htmlReport != null)
+            {
+                Page.Header.Controls.Add(new LiteralControl(
+                    "<style type='text/css'>\n" +
+                    _htmlReport.Style +
+                    "</style>"));
+
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "ReportScript",
+                    "<script language=\"javascript\">\n" +
+                    _htmlReport.Script +
+                    "</script>");
+            }
+
+            string cbReference = Page.ClientScript.GetCallbackEventReference(
+                this, "arguments", "ToggleStateData", "");
+            Page.ClientScript.RegisterClientScriptBlock(
+                this.GetType(), "ToggleState",
+                "function ToggleStateCallback(arguments) {" + cbReference + "}", true);
         }
 
         #region ICallbackEventHandler Members
@@ -186,12 +191,14 @@ namespace RdlAsp
 
         void htmlRender_ImageUrl(object sender, Rdl.Render.RenderToHtml.ImageUrlArgs args)
         {
-            args.Url = "image." + ReportServer._extension + "?source=" + HttpUtility.UrlEncode(args.Source) +
+            args.Url = "'image." + ReportServer._extension + "?source=" + HttpUtility.UrlEncode(args.Source) +
                 "&name=" + HttpUtility.UrlEncode(args.ImageName) +
                 "&reportSessionID=" + HttpUtility.UrlEncode(ReportSessionID.ToString());
             if (args.Source == "SizedImage" || args.Source == "Chart")
                 args.Url += "&width=' + document.getElementById('" + args.ElementName + "').clientWidth + " +
                     "'&height=' + document.getElementById('" + args.ElementName + "').clientHeight";
+            else
+                args.Url += "'";
         }
 
         public void RaiseCallbackEvent(string eventArgument)
@@ -236,26 +243,30 @@ function ExportOnChange(selectedIndex)
     if (selectedIndex == 1)
     {
         var url = 'PdfExport." + ReportServer._extension + @"?ReportSessionID=<%ReportSessionID%>';
-        window.open(url,'_blank','');
-        window.opener=top;
+        window.location = url;
+        //window.open(url,'_blank','');
+        //window.opener=top;
     }
     if (selectedIndex == 2)
     {
         var url = 'XlsExport." + ReportServer._extension + @"?ReportSessionID=<%ReportSessionID%>';
-        window.open(url,'_blank','');
-        window.opener=top;
+        window.location = url;
+        //window.open(url,'_blank','');
+        //window.opener=top;
     }
     if (selectedIndex == 3)
     {
         var url = 'TxtExport." + ReportServer._extension + @"?ReportSessionID=<%ReportSessionID%>';
-        window.open(url,'_blank','');
-        window.opener=top;
+        window.location = url;
+        //window.open(url,'_blank','');
+        //window.opener=top;
     }
     if (selectedIndex == 4)
     {
         var url = 'CsvExport." + ReportServer._extension + @"?ReportSessionID=<%ReportSessionID%>';
-        window.open(url,'_blank','');
-        window.opener=top;
+        window.location = url;
+        //window.open(url,'_blank','');
+        //window.opener=top;
     }
     document.getElementById('Export').selectedIndex = 0;
 }    
@@ -298,6 +309,13 @@ function imageUrl(elementName, source, name)
 </script>
 
 <asp:Label ID=""LabelReportID"" runat=""server"" Text="""" style=""display:none;""></asp:Label>
+<%buttons%>
+<div id=""ReportContentDiv"" style=""position: static; overflow: visible;"">
+    <%report%>
+</div>
+";
+
+        private string htmlButtons = @"
 Export To:<select id=""Export"" onchange=""ExportOnChange(this.selectedIndex)"">
     <option selected=""selected"">---</option>
     <option>PDF</option>
@@ -308,9 +326,7 @@ Export To:<select id=""Export"" onchange=""ExportOnChange(this.selectedIndex)"">
 &nbsp;&nbsp;&nbsp;&nbsp;
 <input type=""hidden"" id=""hiddenAction"" name=""hiddenAction"" value="""" />
 <input type=""button"" id=""btnPrint"" onclick=""printClick()"" value=""Print..."" />
-<div id=""ReportContentDiv"" style=""position: static; overflow: visible;"">
-    <%report%>
-</div>
 ";
+
     }
 }

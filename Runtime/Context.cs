@@ -98,7 +98,7 @@ namespace Rdl.Runtime
                 if (_grouping.Filters != null)
                     _groupFilter = _grouping.Filters.GroupFilter;
             }
-            else
+            else if (_rows.Count > 0)
             {
                 GroupEntry ge = new GroupEntry();
                 ge.Rows = _rows;
@@ -140,7 +140,10 @@ namespace Rdl.Runtime
             }
 
             _currentGroup = 0;
-            _rows = _groups[0].Rows;
+            if (_groups.Count > 0)
+                _rows = _groups[0].Rows;
+            else
+                _rows = new List<System.Data.DataRow>();
             _currentPosition = 0;
             if (_rows.Count > 0)
                 _currentRow = _rows[0];
@@ -432,7 +435,10 @@ namespace Rdl.Runtime
             set
             {
                 _currentGroup = value.CurrentGroup;
-                _rows = _groups[_currentGroup].Rows;
+                if (_groups.Count > 0)
+                    _rows = _groups[_currentGroup].Rows;
+                else
+                    _rows = new List<System.Data.DataRow>();
                 _currentPosition = value.CurrentPosition;
                 _currentRow = null;
                 if (_rows.Count > 0)

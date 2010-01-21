@@ -16,6 +16,7 @@ namespace RdlAsp
     {
         #region IHttpHandler Members
         private Rdl.Render.RenderToHtml _renderedReport;
+        private string _sessionId;
         internal static string _extension = 
             (ConfigurationManager.AppSettings["CustomExtension"] == null) ? "rdlx" : 
             ConfigurationManager.AppSettings["CustomExtension"];
@@ -27,8 +28,8 @@ namespace RdlAsp
 
         public void ProcessRequest(HttpContext context)
         {
-            string sessionId = context.Request.QueryString["ReportSessionID"];
-            _renderedReport = (Rdl.Render.RenderToHtml)context.Session[sessionId];
+            _sessionId = context.Request.QueryString["ReportSessionID"];
+            _renderedReport = (Rdl.Render.RenderToHtml)context.Session[_sessionId];
             string path = context.Request.Url.LocalPath;
             path = path.Substring(context.Request.Url.LocalPath.LastIndexOf('/')+1);
             if (path.IndexOf('.') >= 0)
@@ -180,13 +181,20 @@ namespace RdlAsp
 
         void htmlRender_ImageUrl(object sender, Rdl.Render.RenderToHtml.ImageUrlArgs args)
         {
-            if (args.Source == "SizedImage")
-                args.Url = "javascript:imageUrl('" + args.ElementName + "'" +
-                    ", '" + HttpUtility.UrlEncode(args.Source) + "'" +
-                    ", '" + HttpUtility.UrlEncode(args.ImageName) + "')";
-            else
-                args.Url = "image." + _extension + "?source=" + HttpUtility.UrlEncode(args.Source) +
-                    "&name=" + HttpUtility.UrlEncode(args.ImageName);
+            args.Url = "'image." + _extension + "?source=" + HttpUtility.UrlEncode(args.Source) +
+                "&name=" + HttpUtility.UrlEncode(args.ImageName) +
+                "&reportSessionID=" + HttpUtility.UrlEncode(_sessionId.ToString()) + "'";
+            //if (args.Source == "SizedImage" || args.Source == "Chart")
+            //    args.Url += "&width=' + document.getElementById('" + args.ElementName + "').clientWidth + " +
+            //        "'&height=' + document.getElementById('" + args.ElementName + "').clientHeight";
+
+            //if (args.Source == "SizedImage")
+            //    args.Url = "javascript:imageUrl('" + args.ElementName + "'" +
+            //        ", '" + HttpUtility.UrlEncode(args.Source) + "'" +
+            //        ", '" + HttpUtility.UrlEncode(args.ImageName) + "')";
+            //else
+            //    args.Url = "'image." + _extension + "?source=" + HttpUtility.UrlEncode(args.Source) +
+            //        "&name=" + HttpUtility.UrlEncode(args.ImageName);
         }
 
 
@@ -217,13 +225,16 @@ namespace RdlAsp
         // Set the SRC for the image 
         elmt = document.getElementById('img_' + elementName);
         elmt.src = src;
+        return src;
     }
-    <!--script-->
     </script>
 </head>
 <body onload=""body_onload();"">
 <!--body-->
 </body>
+    <script language=""javascript"">
+    <!--script-->
+    </script>
 </html>
 ";
 

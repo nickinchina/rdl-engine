@@ -133,7 +133,7 @@ namespace Rdl.Render
             }
             if (elmt._imageIndex >= 0 && !(elmt is ImageElement))
             {
-                style += "background-image: url('" + GetImageUrl(elmt.Name, "StaticImage", elmt._imageIndex.ToString()) + "');";
+                style += "background-image: url(" + GetImageUrl(elmt.Name, "StaticImage", elmt._imageIndex.ToString()) + ");";
                 style += "background-repeat: " + rpt.ImageList[elmt._imageIndex].ImageRepeat.ToString() + ";";
             }
             if (elmt.Parent != null && elmt.Parent is Rdl.Render.FixedContainer)
@@ -208,7 +208,7 @@ namespace Rdl.Render
                     bodyPart.AppendLine(Spaces(level + 1) +
                         "<a href=\"javascript:{}\" onclick=\"javascript:ToggleState('" + te.Name + "');\">");
                     bodyPart.AppendLine(Spaces(level + 1) +
-                        "<img id=\"" + te.Name + "_img\" src=\"" + ((te.ToggleState == TextElement.ToggleStateEnum.open) ? _minusGif : _plusGif) + "\" border=\"0\" style=\"float: left;\" />");
+                        "<img id=\"" + te.Name + "_img\" src=" + ((te.ToggleState == TextElement.ToggleStateEnum.open) ? _minusGif : _plusGif) + " border=\"0\" style=\"float: left;\" />");
                     bodyPart.AppendLine(Spaces(level + 1) + "</a>");
                 }
             }
@@ -251,7 +251,7 @@ namespace Rdl.Render
                 bodyPart.AppendLine(Spaces(level) +
                     "<img id=\"img_" + elmt.Name + "\" alt=\"\" border=\"0\" src=\"\">");
                 _script.AppendLine(Spaces(level) +
-                    "document.getElementById('img_" + elmt.Name + "').src = '" +
+                    "document.getElementById('img_" + elmt.Name + "').src = " +
                     GetImageUrl(elmt.Name, "SizedImage", elmt._imageIndex.ToString()) + ";" 
                     );
             }
@@ -262,7 +262,7 @@ namespace Rdl.Render
                 bodyPart.AppendLine(Spaces(level) +
                     "<img id=\"img_" + elmt.Name + "\" alt=\"\" border=\"0\" src=\"\">");
                 _script.AppendLine(Spaces(level) +
-                    "document.getElementById('img_" + elmt.Name + "').src = '" +
+                    "document.getElementById('img_" + elmt.Name + "').src = " +
                     GetImageUrl(elmt.Name, "Chart", elmt.Name) + ";" 
                     );
             }

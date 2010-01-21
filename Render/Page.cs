@@ -146,8 +146,8 @@ namespace Rdl.Render
                 b1.Top -= (b1.AbsoluteTop - RelativeTop);
             else
             {
-                if (b1.AbsoluteTop < _relativeTop)
-                    b1.Height -= (_relativeTop - b1.AbsoluteTop);
+                if (b.AbsoluteTop < _relativeTop)
+                    b1.Height -= (_relativeTop - b.AbsoluteTop);
                 b1.Top = 0;
             }
             if (b1.Height > newParent.Height)

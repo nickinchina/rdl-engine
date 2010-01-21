@@ -138,11 +138,11 @@ namespace Rdl.Engine
 
                 ie._imageIndex = Report.AddImage(this, context);
 
-                if (_sizing == ImageSizingEnum.Autosize)
-                {
-                    ie.Width = Report.ImageList[ie._imageIndex].imageData.Width;
-                    ie.Height = Report.ImageList[ie._imageIndex].imageData.Height;
-                }
+                //if (_sizing == ImageSizingEnum.Autosize)
+                //{
+                //    ie.Width = Report.ImageList[ie._imageIndex].imageData.Width;
+                //    ie.Height = Report.ImageList[ie._imageIndex].imageData.Height;
+                //}
             }
         }
 

@@ -78,25 +78,39 @@ namespace Rdl.Engine
                 }
 
                 cmm.CommandTimeout = _timeout;
+                string commandText = _commandText.ExecAsString(context);
 
                 foreach (QueryParameter parm in _queryParameters)
                 {
                     object parmValue = parm.Value(context);
-                    if (parmValue == null)
-                        parmValue = DBNull.Value;
                     if (parmValue is Array)
                     {
-                        string s = (((Array)parmValue).Length > 0) ? ((Array)parmValue).GetValue(0).ToString() : String.Empty;
-                        for( int i=1; i < ((Array)parmValue).Length; i++)
-                            s += "," + ((Array)parmValue).GetValue(i).ToString();
-                        parmValue = s;
+                        int i = 0;
+                        string parmNameList = string.Empty;
+
+                        // For arrays build a list of parameters to pass to the database.
+                        foreach (string s in (string[])parmValue)
+                        {
+                            System.Data.SqlClient.SqlParameter sqlParm =
+                                new System.Data.SqlClient.SqlParameter(parm.Name + "_" + i.ToString(), s);
+                            cmm.Parameters.Add(sqlParm);
+                            parmNameList += ((parmNameList.Length == 0) ? string.Empty : ",") + parm.Name + "_" + (i++).ToString();
+                        }
+
+                        commandText = commandText.Replace(parm.Name, parmNameList);
                     }
-                    System.Data.SqlClient.SqlParameter sqlParm = 
-                        new System.Data.SqlClient.SqlParameter(parm.Name, parmValue);
-                    cmm.Parameters.Add(sqlParm);
+                    else
+                    {
+                        if (parmValue == null)
+                            parmValue = DBNull.Value;
+                        System.Data.SqlClient.SqlParameter sqlParm =
+                            new System.Data.SqlClient.SqlParameter(parm.Name, parmValue);
+                        cmm.Parameters.Add(sqlParm);
+                    }
                 }
 
-                cmm.CommandText = _commandText.ExecAsString(context);
+
+                cmm.CommandText = commandText;
 
                 System.Data.SqlClient.SqlDataAdapter da =
                     new System.Data.SqlClient.SqlDataAdapter(cmm);

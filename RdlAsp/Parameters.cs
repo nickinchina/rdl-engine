@@ -28,6 +28,21 @@ namespace RdlAsp
     }
 
     /// <summary>
+    /// Used in the <see cref="Parameters.ViewReport"/> event.fl
+    /// </summary>
+    public class ParameterErrorEventArgs : EventArgs
+    {
+        public Rdl.Engine.Report Report;
+        public string ErrorMessage;
+
+        public ParameterErrorEventArgs(Rdl.Engine.Report report, string errorMessage)
+        {
+            Report = report;
+            ErrorMessage = errorMessage;
+        }
+    }
+
+    /// <summary>
     /// A dynamic parameter entry control.
     /// When the SetReport function is called this control fill in with entry fields
     /// for each parameter in the report.  If default values are available then
@@ -49,6 +64,8 @@ namespace RdlAsp
         private Button btnView;
 
         private static readonly object EventViewReport =
+            new object();
+        private static readonly object EventParameterError =
             new object();
 
         protected override void CreateChildControls()
@@ -111,7 +128,9 @@ namespace RdlAsp
                                 case "Boolean":
                                     CheckBox cb = new CheckBox();
                                     Controls.Add(cb);
-                                    if (parm.DefaultValue != null)
+                                    if (parm.Value != null)
+                                        cb.Checked = bool.Parse((string)parm.Value);
+                                    else if (parm.DefaultValue != null)
                                         cb.Checked = bool.Parse(parm.DefaultValue[0]);
                                     cb.ID = parm.Name;
                                     break;
@@ -132,25 +151,35 @@ namespace RdlAsp
                                     ce.ID = parm.Name + "_extender";
                                     break;
                                 case "Int32":
+                                case "Single":
+                                case "String":
                                     TextBox tb = new TextBox();
                                     Controls.Add(tb);
                                     tb.ID = parm.Name;
-                                    if (parm.DefaultValue != null && parm.DefaultValue.Length > 0)
-                                        tb.Text = parm.DefaultValue[0];
-                                    break;
-                                case "Single":
-                                    TextBox tb2 = new TextBox();
-                                    Controls.Add(tb2);
-                                    tb2.ID = parm.Name;
-                                    if (parm.DefaultValue != null && parm.DefaultValue.Length > 0)
-                                        tb2.Text = parm.DefaultValue[0];
-                                    break;
-                                case "String":
-                                    TextBox tb3 = new TextBox();
-                                    Controls.Add(tb3);
-                                    tb3.ID = parm.Name;
-                                    if (parm.DefaultValue != null && parm.DefaultValue.Length > 0)
-                                        tb3.Text = parm.DefaultValue[0];
+                                    string sValue = string.Empty;
+                                    if (parm.MultiValue)
+                                    {
+                                        if (parm.Value == null)
+                                        {
+                                            if (parm.DefaultValue != null)
+                                                foreach (string val in parm.DefaultValue)
+                                                    sValue += ((sValue.Length > 0) ? "," : string.Empty) + val;
+                                        }
+                                        else
+                                        {
+                                            foreach (string val in (string[])parm.Value)
+                                                sValue += ((sValue.Length > 0) ? "," : string.Empty) + val;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (parm.Value != null)
+                                            sValue = (string)parm.Value;
+                                        else
+                                            if (parm.DefaultValue != null)
+                                                sValue = parm.DefaultValue[0];
+                                    }
+                                    tb.Text = sValue;
                                     break;
                             }
 
@@ -200,6 +229,39 @@ namespace RdlAsp
             }
         }
 
+        /// <summary>
+        /// Raised when the ViewReport button is pressed
+        /// The <see cref="Rdl.Engine.Report"/> class is passed through this event which can
+        /// then in turn be passed to the <see cref="ReportViewer"/> control.
+        /// </summary>
+        [
+        Category("Action"),
+        Description("Raised when the user clicks the View button.")
+        ]
+        public event EventHandler<ParameterErrorEventArgs> ParameterError
+        {
+            add
+            {
+                Events.AddHandler(EventParameterError, value);
+            }
+            remove
+            {
+                Events.RemoveHandler(EventParameterError, value);
+            }
+        }
+
+        // The method that raises the ViewReport event.
+        protected virtual void OnParameterError(ParameterErrorEventArgs e)
+        {
+            EventHandler<ParameterErrorEventArgs> ParameterErrorHandler =
+                (EventHandler<ParameterErrorEventArgs>)Events[EventParameterError];
+            if (ParameterErrorHandler != null)
+            {
+                ParameterErrorHandler(this, e);
+            }
+        }
+
+
         void btnView_Click(object sender, EventArgs e)
         {
             EnsureChildControls();
@@ -215,11 +277,65 @@ namespace RdlAsp
                         case "CheckBox":
                             parm.Value = ((CheckBox)ctrl).Checked;
                             break;
-                        case "Calendar":
-                            parm.Value = DateTime.Parse(((TextBox)ctrl).Text);
-                            break;
                         case "TextBox":
-                            parm.Value = ((TextBox)ctrl).Text;
+                            string[] values;
+                            if (parm.MultiValue)
+                                values = ((TextBox)ctrl).Text.Split(new char[] { ',' });
+                            else
+                                values = new string[1] { ((TextBox)ctrl).Text };
+
+                            for (int i = 0; i < values.Length; i++)
+                            {
+                                switch (parm.DataType.Name)
+                                {
+                                    case "DateTime":
+                                        DateTime dt;
+                                        if (!DateTime.TryParse(((TextBox)ctrl).Text, out dt))
+                                        {
+                                            OnParameterError(new ParameterErrorEventArgs(_report, "Invalid date"));
+                                            return;
+                                        }
+                                        values[i] = dt.ToString("yyyy-MM-dd hh:mm:ss");
+                                        break;
+                                    case "Boolean":
+                                        Boolean bv;
+                                        if (!Boolean.TryParse(((TextBox)ctrl).Text, out bv))
+                                        {
+                                            OnParameterError(new ParameterErrorEventArgs(_report, "Invalid Boolean value"));
+                                            return;
+                                        }
+                                        values[i] = bv.ToString();
+                                        break;
+                                    case "Int32":
+                                        Int32 iv;
+                                        if (!Int32.TryParse(((TextBox)ctrl).Text, out iv))
+                                        {
+                                            OnParameterError(new ParameterErrorEventArgs(_report, "Invalid numeric value"));
+                                            return;
+                                        }
+                                        values[i] = iv.ToString();
+                                        break;
+                                    case "Single":
+                                        Single sv;
+                                        if (!Single.TryParse(((TextBox)ctrl).Text, out sv))
+                                        {
+                                            OnParameterError(new ParameterErrorEventArgs(_report, "Invalid numeric value"));
+                                            return;
+                                        }
+                                        values[i] = sv.ToString();
+                                        break;
+                                    default:
+                                        if (parm.MultiValue)
+                                            parm.Value = ((TextBox)ctrl).Text.Split(new char[] { ',' });
+                                        else
+                                            parm.Value = ((TextBox)ctrl).Text;
+                                        break;
+                                }
+                            }
+                            if (parm.MultiValue)
+                                parm.Value = values;
+                            else
+                                parm.Value = values[0];
                             break;
                         case "DropDownList":
                             if (((DropDownList)ctrl).Text == string.Empty)

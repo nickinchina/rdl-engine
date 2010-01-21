@@ -46,7 +46,7 @@ namespace Rdl.Render
                 null,
                 ref b);
             _pageList.Add(p);
-            RecurseRender( rpt, rpt.BodyContainer, ref b, ref p, 0, 0, 0);
+            RecurseRender( rpt, rpt.BodyContainer, ref b, ref p, 0, rpt.BodyContainer.Top, 0, 0);
 
             p.AddFooters(rpt, null, true);
         }
@@ -57,11 +57,12 @@ namespace Rdl.Render
         //      and parent will point to the bottom of the new parent hierarchy.
         // currentPage will refer to the current page being built.  It will be updated
         //      inside this routine if elmt spans pages.
-        private decimal RecurseRender(
+        private void RecurseRender(
             Rdl.Engine.Report rpt,
             Element elmt, // The current element from the source document
             ref Container parent,   // The parent element in the page.
             ref Page currentPage,   // The current page.
+            decimal parentTop,      // The absolute position of the parent element in the master rendered document.
             decimal top,            // The absolute position in the master rendered document.
             decimal xPos,           // The X position within the parent object
             decimal yPos            // The Y position within the parent object
@@ -79,7 +80,7 @@ namespace Rdl.Render
                 // If this is a toggle item, then determine if we want to include it in the
                 // rendered page.
                 if (!((Container)elmt).IsVisible)
-                    return 0;
+                    return;
 
                 foreach (Container re in ((Container)elmt).RepeatList)
                 {
@@ -91,15 +92,15 @@ namespace Rdl.Render
 
             // If this element is spanning pages, then calculate the top
             // based on the starting position of this page.
-            if (elmt.Parent != null && elmt.Parent.AbsoluteTop < currentPage.RelativeTop)
-                elementTop = yPos - (currentPage.RelativeTop - elmt.Parent.AbsoluteTop);
+            if (parentTop < currentPage.RelativeTop)
+                elementTop = yPos - (currentPage.RelativeTop - parentTop);
             else
                 elementTop = yPos;
 
             bool newPage = false;
             if (elmt is Container && ((Container)elmt).PageBreakBefore)
                 newPage = true;
-            else if (PosOnPage(parent) + elementTop + requiredHeight > currentPage.AvailableHeight)
+            else if (top - currentPage.RelativeTop + requiredHeight > currentPage.AvailableHeight)
             {
                 // If the element doesn't fit entirely on this page and we should keep it on
                 // one page, then create a new page.
@@ -119,6 +120,11 @@ namespace Rdl.Render
                     top, elmt.Parent, ref parent);
 
                 _pageList.Add(currentPage);
+
+                if (parentTop < currentPage.RelativeTop)
+                    elementTop = yPos - (currentPage.RelativeTop - parentTop);
+                else
+                    elementTop = yPos;
             }
 
             Element newElement = null;
@@ -151,12 +157,11 @@ namespace Rdl.Render
             // Set the height of this element to either the height of the source element
             // or the height of the remaining space on the page.  Whichever is less.
             newElement.Top = elementTop;
-            newElement.Height = Math.Min(elementHeight, currentPage.AvailableHeight - PosOnPage(parent));
+            newElement.Height = Math.Min(elementHeight, currentPage.AvailableHeight - (top - currentPage.RelativeTop));
 
             if (elmt is Container)
             {
                 Container be = newElement as Container;
-                decimal pos2 = 0;
 
                 // Sort the children by the top values so if the children span a page then
                 // they will render in the correct order.
@@ -165,12 +170,7 @@ namespace Rdl.Render
 
                 foreach (Element child in ((Container)elmt).Children)
                 {
-                    if (!(elmt is FlowContainer))
-                        pos2 = child.Top;
-                    if (elmt is FlowContainer && ((FlowContainer)elmt).FlowDirection == FlowContainer.FlowDirectionEnum.LeftToRight)
-                        pos2 += RecurseRender(rpt, child, ref be, ref currentPage, top + elmt.Top, pos2, 0);
-                    else
-                        pos2 += RecurseRender(rpt, child, ref be, ref currentPage, top + elmt.Top, 0, pos2);
+                    RecurseRender(rpt, child, ref be, ref currentPage, top, top + child.Top, child.Left, child.Top);
                     parent = be.Parent;
                 }
 
@@ -190,15 +190,11 @@ namespace Rdl.Render
                         currentPage.PageNumber + 1,
                         rpt.BodyContainer.Width, //PageWidth - RightMargin - LeftMargin,
                         PageHeight - TopMargin - BottomMargin,
-                        top, elmt.Parent, ref parent);
+                        elmt.Top + elementHeight, elmt.Parent, ref parent);
 
                     _pageList.Add(currentPage);
                 }
             }
-            if (elmt.Parent != null && elmt.Parent is FlowContainer && ((FlowContainer)elmt.Parent).FlowDirection == FlowContainer.FlowDirectionEnum.LeftToRight)
-                return newElement.Width;
-            else
-                return elementHeight;
         }
 
         //private decimal CalcHeight(Element elmt)
@@ -223,17 +219,6 @@ namespace Rdl.Render
         //    }
         //    return height;
         //}
-
-        private decimal PosOnPage(Element elmt)
-        {
-            decimal pos = 0;
-            while (elmt != null)
-            {
-                pos += elmt.Top;
-                elmt = elmt.Parent;
-            }
-            return pos;
-        }
 
         public List<Page> Pages
         {
