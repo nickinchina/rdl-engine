@@ -1,0 +1,5 @@
+SCC = This is a Source Code Control file
+
+[RdlViewer.csproj]
+SCC_Aux_Path = "\\fileserver1\VSS\"
+SCC_Project_Name = "$/RdlEngine/RdlViewer", FBRAAAAA

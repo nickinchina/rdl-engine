@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RptDataSource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Name>AdventureWorks</Name>
+  <DataSourceID>12678ad7-1cbc-436e-97db-176185ac26a0</DataSourceID>
+  <ConnectionProperties>
+    <Extension>SQL</Extension>
+    <ConnectString>Data Source=TAPROCESS;Initial Catalog=AdventureWorks2000</ConnectString>
+    <IntegratedSecurity>true</IntegratedSecurity>
+    <!--ConnectString>Data Source=p3swhsql-v11.shr.phx3.secureserver.net; Initial Catalog=mik0802705360562; User ID=mik0802705360562; Password=Demo0127;</ConnectString-->
+  </ConnectionProperties>
+</RptDataSource>
