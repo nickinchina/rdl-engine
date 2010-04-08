@@ -38,7 +38,9 @@ namespace Rdl.Engine
                     if (!File.Exists(_reportName))
                         throw new Exception("Unable to locate sub report " + _reportName);
                     FileStream fs = new FileStream(_reportName, FileMode.Open, FileAccess.Read, FileShare.Read);
+
                     _subReport.Load(fs, Path.GetDirectoryName(_reportName));
+                    _subReport.Parent = this;
                     fs.Close();
                     fs.Dispose();
 
@@ -69,6 +71,11 @@ namespace Rdl.Engine
         void _subReport_CredentialsPrompt(object sender, Rdl.Runtime.CredentialsPromptEventArgs args)
         {
             Report.OnCredentialsPrompt(args);
+        }
+
+        public Report GetSubReport()
+        {
+            return _subReport;
         }
 
         protected override void Render1(Rdl.Render.Container parentBox, Rdl.Runtime.Context context, bool visible)

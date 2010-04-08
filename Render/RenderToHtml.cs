@@ -8,6 +8,7 @@ namespace Rdl.Render
     {
         protected StringBuilder _body = new StringBuilder();
         protected StringBuilder _styles = new StringBuilder();
+        private int _styleBase = 0;
         protected StringBuilder _script = new StringBuilder();
         private string _plusGif = "plus.gif";
         private string _minusGif = "minus.gif";
@@ -40,9 +41,13 @@ namespace Rdl.Render
 
             _sourceReport = report;
 
-            RenderBody(forPrint);
+            int styleTop = AddStyles(report, 0);
+            RecurseAddStyles(report.PageHeaderContainer, 0, ref styleTop);
+            RecurseAddStyles(report.PageFooterContainer, 0, ref styleTop);
+            RecurseAddStyles(report.BodyContainer, 0, ref styleTop);
+            //int styleBase = AddStyles(report);
 
-            AddStyles(report);
+            RenderBody(forPrint);
 
             //_body.AppendLine("</div>");
         }
@@ -117,6 +122,10 @@ namespace Rdl.Render
             string style = string.Empty;
             //BoxStyle bs = rpt.StyleList[elmt.StyleIndex];
 
+            if (elmt.ReportElement is Rdl.Engine.Report)
+            {
+                rpt = (Rdl.Engine.Report)elmt.ReportElement;
+            }
             if (elmt is Container)
             {
                 Container c = elmt as Container;
@@ -168,7 +177,7 @@ namespace Rdl.Render
                 int elements = 0;
                 bodyPart.AppendLine(Spaces(level) + "<table cellpadding=\"0\" cellspacing=\"0\" " +
                     "id=\"" + elmt.Name + "\" " +
-                    ((elmt.StyleIndex >= 0) ? "class=\"Report_style" + elmt.StyleIndex + "\" " : string.Empty) +
+                    ((elmt.RenderedStyleIndex >= 0) ? "class=\"Report_style" + elmt.RenderedStyleIndex + "\" " : string.Empty) +
                     "style=\"" + style + "\"" +
                     ">" +
                     "<tr>");
@@ -191,7 +200,7 @@ namespace Rdl.Render
                 string divTag =
                     "<div " +
                     "id=\"" + elmt.Name + "\" " +
-                    ((elmt.StyleIndex >= 0) ? "class=\"Report_style" + elmt.StyleIndex + "\" " : string.Empty) +
+                    ((elmt.RenderedStyleIndex >= 0) ? "class=\"Report_style" + elmt.RenderedStyleIndex.ToString() + "\" " : string.Empty) +
                     "style=\"" + style + "\"";
                 if (elmt is TextElement && ((TextElement)elmt).IsToggle)
                     divTag += " stateToggle=\"" + ((TextElement)elmt).ToggleState.ToString() + "\"";
@@ -328,12 +337,30 @@ namespace Rdl.Render
             return height;
         }
 
-        protected void AddStyles(Rdl.Engine.Report rpt)
+        protected int AddStyles(Rdl.Engine.Report rpt, int styleBase)
         {
             for (int i = 0; i < rpt.StyleList.Count; i++)
             {
-                AddStyle(rpt.StyleList[i], i);
+                AddStyle(rpt.StyleList[i], styleBase + i);
             }
+            return rpt.StyleList.Count;
+        }
+
+        protected void RecurseAddStyles(Element elmt, int styleBase, ref int styleTop)
+        {
+            elmt.RenderedStyleIndex = elmt.StyleIndex + styleBase;
+            if (elmt.ReportElement is Rdl.Engine.SubReport)
+            {
+                styleBase = styleTop;
+                Rdl.Engine.Report rpt = ((Rdl.Engine.SubReport)elmt.ReportElement).GetSubReport();
+                styleTop += AddStyles(rpt, styleBase);
+            }
+
+            if (elmt is Container)
+                foreach (Element child in ((Container)elmt).Children)
+                {
+                    RecurseAddStyles(child, styleBase, ref styleTop);
+                }
         }
 
         protected void AddStyle(BoxStyle style, int index)
