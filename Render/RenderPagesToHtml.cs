@@ -24,6 +24,11 @@ namespace Rdl.Render
             //_styles.AppendLine("    height: " + pageRender.PageHeight.ToString() + "pt;");
             _styles.AppendLine("}");
 
+            int styleTop = AddStyles(report, 0);
+            RecurseAddStyles(report.PageHeaderContainer, 0, ref styleTop);
+            RecurseAddStyles(report.PageFooterContainer, 0, ref styleTop);
+            RecurseAddStyles(report.BodyContainer, 0, ref styleTop);
+
             decimal top = 0;
             for (int pageNum = 0; pageNum < pageRender.Pages.Count; pageNum++)
             {
@@ -39,8 +44,6 @@ namespace Rdl.Render
                 _body.AppendLine("</div>");
                 top += pageRender.PageHeight;
             }
-
-            AddStyles(report);
         }
     }
 }

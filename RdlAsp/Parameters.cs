@@ -295,7 +295,7 @@ namespace RdlAsp
                                             OnParameterError(new ParameterErrorEventArgs(_report, "Invalid date"));
                                             return;
                                         }
-                                        values[i] = dt.ToString("yyyy-MM-dd hh:mm:ss");
+                                        values[i] = dt.ToString("yyyy-MM-dd HH:mm:ss");
                                         break;
                                     case "Boolean":
                                         Boolean bv;

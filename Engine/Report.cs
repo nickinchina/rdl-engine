@@ -380,8 +380,13 @@ namespace Rdl.Engine
         /// </summary>
         public void Run()
         {
+            Render(null, null);
+        }
+
+        internal override void Render(Rdl.Render.Container box, Rdl.Runtime.Context parentContext)
+        {
             Rdl.Runtime.Context context = new Rdl.Runtime.Context(
-                null,
+                parentContext,
                 null,
                 null,
                 null,
@@ -398,19 +403,28 @@ namespace Rdl.Engine
 
             // Set up the default data context.
             context = new Rdl.Runtime.Context(
-                null, _reportDataSet, null, null, null);
+                parentContext, _reportDataSet, null, null, null);
 
-            BodyContainer = new FixedContainer(null, this, new BoxStyle(Style.DefaultStyle, context));
+            if (box == null)
+                BodyContainer = new FixedContainer(null, this, new BoxStyle(Style.DefaultStyle, context));
+            else
+                BodyContainer = box.AddFixedContainer(this, Style.DefaultStyle, context);
             BodyContainer.Name = "ReportBody";
             BodyContainer.Width = _width.points;
             BodyContainer.ContextBase = true;
 
-            PageHeaderContainer = new FixedContainer(null, this, new BoxStyle(Style.DefaultStyle, context));
+            if (box == null)
+                PageHeaderContainer = new FixedContainer(null, this, new BoxStyle(Style.DefaultStyle, context));
+            else
+                PageHeaderContainer = box.AddFixedContainer(this, Style.DefaultStyle, context);
             PageHeaderContainer.Name = "PageHeader";
             PageHeaderContainer.Width = _width.points;
             PageHeaderContainer.ContextBase = true;
 
-            PageFooterContainer = new FixedContainer(null, this, new BoxStyle(Style.DefaultStyle, context));
+            if (box == null)
+                PageFooterContainer = new FixedContainer(null, this, new BoxStyle(Style.DefaultStyle, context));
+            else
+                PageFooterContainer = box.AddFixedContainer(this, Style.DefaultStyle, context);
             PageFooterContainer.Name = "PageFooter";
             PageFooterContainer.Width = _width.points;
             PageFooterContainer.ContextBase = true;
@@ -425,10 +439,6 @@ namespace Rdl.Engine
             _body.Render(BodyContainer, context);
 
             context.LinkToggles();
-        }
-
-        internal override void Render(Rdl.Render.Container box, Rdl.Runtime.Context context)
-        {
         }
 
         /// <exclude/>

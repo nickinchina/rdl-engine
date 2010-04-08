@@ -34,7 +34,8 @@ namespace Rdl.Render
         protected bool _contextBase = false;
         // The baseStyleList is maintained only in the base element.
         // Each element uses an index into this list to locate its style.
-        public int _styleIndex = -1;
+        private int _styleIndex = -1;
+        private int _renderedStyleIndex = -1;
         public int _imageIndex = -1;
         private Toggles _toggles = null;
 
@@ -82,6 +83,12 @@ namespace Rdl.Render
         {
             get { return _styleIndex; }
             set { _styleIndex = value; }
+        }
+
+        public int RenderedStyleIndex
+        {
+            get { return _renderedStyleIndex; }
+            set { _renderedStyleIndex = value; }
         }
 
         public void SetSizes(bool ignoreVisibility)

@@ -90,6 +90,8 @@ namespace Rdl.Engine.Table
                     groupRow.Top = groupTop;
                     groupRow.Name = "GroupRrow";
                     groupRow.ContextBase = true;
+                    groupRow.PageBreakBefore = _grouping.PageBreakAtStart;
+                    groupRow.PageBreakAfter = _grouping.PageBreakAtEnd;
                 }
 
                 if (_header != null)
