@@ -5,7 +5,7 @@ using System.Xml;
 
 namespace Rdl.Engine
 {
-    public class ParameterValue : ReportElement
+    public class ParameterValue : ReportElement, IEquatable<ParameterValue>
     {
         private Expression _value = null;
         private Expression _label = null;
@@ -62,6 +62,34 @@ namespace Rdl.Engine
                 else
                     return _label.ExecAsString(new Rdl.Runtime.Context(null, null, null, null, null));
             }
+        }
+
+        #region IEquatable<ParameterValue> Members
+
+        public bool Equals(ParameterValue other)
+        {
+            if (ReferenceEquals(other, null))
+                return false;
+            if (ReferenceEquals(other, this))
+                return true;
+            return (other.Value == this.Value && other.Label == this.Label);
+        }
+
+        #endregion
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals((ParameterValue)obj);
+        }
+
+        public static bool operator ==(ParameterValue parm1, ParameterValue parm2)
+        {
+            return parm1.Equals(parm2);
+        }
+
+        public static bool operator !=(ParameterValue parm1, ParameterValue parm2)
+        {
+            return !parm1.Equals(parm2);
         }
     }
 }

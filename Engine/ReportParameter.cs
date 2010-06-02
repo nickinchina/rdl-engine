@@ -9,7 +9,7 @@ namespace Rdl.Engine
     {
         private string _name;
         private Type _dataType;
-        private bool _nullable = true;
+        private bool _nullable = false;
         private DefaultValue _defaultValue = null;
         private bool _allowBlank = true;
         private string _prompt = null;
@@ -126,7 +126,9 @@ namespace Rdl.Engine
 
                     if (_validValuesDS.LableField != null)
                         label = context.CurrentRow[_validValuesDS.LableField].ToString();
-                    _validValues.Add(new ParameterValue(value, label));
+                    ParameterValue pv = new ParameterValue(value, label);
+                    if (!_validValues.Contains(pv))
+                        _validValues.Add(pv);
 
                     context.MoveNext();
                 }
@@ -146,7 +148,7 @@ namespace Rdl.Engine
         /// </summary>
         public object Value
         {
-            get { return (_multiValue) ? (object)_value : ((_value == null) ? null : (object)_value[0]); }
+            get { return (_multiValue) ? (object)_value : ((_value == null) ? null : (object)Convert.ChangeType(_value[0], _dataType)); }
             set 
             {
                 if (value is string[])

@@ -181,20 +181,18 @@ namespace RdlAsp
 
         void htmlRender_ImageUrl(object sender, Rdl.Render.RenderToHtml.ImageUrlArgs args)
         {
+            //args.Url = "'image." + _extension + "?source=" + HttpUtility.UrlEncode(args.Source) +
+            //    "&name=" + HttpUtility.UrlEncode(args.ImageName) +
+            //    "&reportSessionID=" + HttpUtility.UrlEncode(_sessionId.ToString()) + "'";
+
             args.Url = "'image." + _extension + "?source=" + HttpUtility.UrlEncode(args.Source) +
                 "&name=" + HttpUtility.UrlEncode(args.ImageName) +
-                "&reportSessionID=" + HttpUtility.UrlEncode(_sessionId.ToString()) + "'";
-            //if (args.Source == "SizedImage" || args.Source == "Chart")
-            //    args.Url += "&width=' + document.getElementById('" + args.ElementName + "').clientWidth + " +
-            //        "'&height=' + document.getElementById('" + args.ElementName + "').clientHeight";
-
-            //if (args.Source == "SizedImage")
-            //    args.Url = "javascript:imageUrl('" + args.ElementName + "'" +
-            //        ", '" + HttpUtility.UrlEncode(args.Source) + "'" +
-            //        ", '" + HttpUtility.UrlEncode(args.ImageName) + "')";
-            //else
-            //    args.Url = "'image." + _extension + "?source=" + HttpUtility.UrlEncode(args.Source) +
-            //        "&name=" + HttpUtility.UrlEncode(args.ImageName);
+                "&reportSessionID=" + HttpUtility.UrlEncode(_sessionId.ToString());
+            if (args.Source == "SizedImage" || args.Source == "Chart")
+                args.Url += "&width=' + document.getElementById('" + args.ElementName + "').clientWidth + " +
+                    "'&height=' + document.getElementById('" + args.ElementName + "').clientHeight";
+            else
+                args.Url += "'";
         }
 
 

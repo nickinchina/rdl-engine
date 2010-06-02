@@ -385,6 +385,7 @@ namespace Rdl.Engine
 
         internal override void Render(Rdl.Render.Container box, Rdl.Runtime.Context parentContext)
         {
+            
             Rdl.Runtime.Context context = new Rdl.Runtime.Context(
                 parentContext,
                 null,
@@ -402,6 +403,8 @@ namespace Rdl.Engine
                 _reportDataSet = _dataSets.FirstDataSet;
 
             // Set up the default data context.
+            if (parentContext != null)
+                parentContext = parentContext.FindContextByDS(_reportDataSet);
             context = new Rdl.Runtime.Context(
                 parentContext, _reportDataSet, null, null, null);
 

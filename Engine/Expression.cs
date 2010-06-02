@@ -40,7 +40,6 @@ namespace Rdl.Engine
         //    else
         //        return _expression;
         //}
-
         public object Exec(Rdl.Runtime.Context context)
         {
             if (_key >= 0)
