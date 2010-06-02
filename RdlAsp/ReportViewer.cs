@@ -306,6 +306,34 @@ function imageUrl(elementName, source, name)
     //return src;
 }
 
+function SelectAll(element) {
+    if (element != null) {
+        var cbs = element.getElementsByTagName('input');
+
+        for (var i = 0; i < cbs.length; i++) 
+            cbs[i].checked = true;
+
+        }
+    }
+
+function SelectNone(element) {
+    if (element != null) {
+        var cbs = element.getElementsByTagName('input');
+
+        for (var i = 0; i < cbs.length; i++) 
+            cbs[i].checked = false;
+        }
+    }
+
+function chkCheckAll_click(checkbox, checkboxlist)
+{
+    var checked = checkbox.checked;
+    if (checked)
+        SelectAll(checkboxlist);
+    else
+        SelectNone(checkboxlist);
+}
+        
 </script>
 
 <asp:Label ID=""LabelReportID"" runat=""server"" Text="""" style=""display:none;""></asp:Label>

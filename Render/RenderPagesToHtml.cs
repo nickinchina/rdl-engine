@@ -28,6 +28,8 @@ namespace Rdl.Render
             RecurseAddStyles(report.PageHeaderContainer, 0, ref styleTop);
             RecurseAddStyles(report.PageFooterContainer, 0, ref styleTop);
             RecurseAddStyles(report.BodyContainer, 0, ref styleTop);
+            for (int pageNum = 0; pageNum < pageRender.Pages.Count; pageNum++)
+                RecurseAddStyles(pageRender.Pages[pageNum], 0, ref styleTop);
 
             decimal top = 0;
             for (int pageNum = 0; pageNum < pageRender.Pages.Count; pageNum++)

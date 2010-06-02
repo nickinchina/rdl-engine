@@ -62,6 +62,8 @@ namespace RdlAsp
         protected Rdl.Engine.Report _report = null;
         private Dictionary<string, Control> _parameterControls = new Dictionary<string, Control>();
         private Button btnView;
+        private LiteralControl chkCheckAll = null;
+        private CheckBoxList checkBoxList = null;
 
         private static readonly object EventViewReport =
             new object();
@@ -76,30 +78,34 @@ namespace RdlAsp
 
             if (_report != null)
             {
-                Controls.Add(new LiteralControl("<div>"));
+                List<Control> requiredControls = new List<Control>();
+                List<Control> optionalControls = new List<Control>();
+
                 foreach (Rdl.Engine.ReportParameter parm in _report.ReportParameters.Values)
                 {
+                    List<Control> controlList = (parm.Nullable) ? optionalControls : requiredControls;
                     if (!parm.Hidden)
                     {
-                        Controls.Add(new LiteralControl("<div style=\"float:left; margin: 5px;\">"));
-                        Label label = new Label();
-                        label.Text = parm.Prompt;
-                        Controls.Add(label);
+                        controlList.Add(new LiteralControl("<div style=\"margin: 5px;\">" + parm.Prompt + "&nbsp"));
 
                         if (parm.ValidValues.Count > 0)
                         {
                             if (parm.MultiValue)
                             {
-                                CheckBoxList lb = new CheckBoxList();
-                                Controls.Add(lb);
+                                checkBoxList = new CheckBoxList();
+                                checkBoxList.ID = parm.Name;
+                                controlList.Add(new LiteralControl("<div style=\"overflow: scroll; height: 100px;\">"));
+                                chkCheckAll = new LiteralControl();
+                                controlList.Add(chkCheckAll);
+                                controlList.Add(checkBoxList);
+                                controlList.Add(new LiteralControl("</div>"));
                                 foreach (Rdl.Engine.ParameterValue value in parm.ValidValues)
-                                    lb.Items.Add(new ListItem(value.Label, value.Value));
-                                lb.ID = parm.Name;
+                                    checkBoxList.Items.Add(new ListItem(value.Label, value.Value));
 
                                 if (parm.DefaultValue != null)
                                 {
                                     foreach (string s in parm.DefaultValue)
-                                        foreach (ListItem li in lb.Items)
+                                        foreach (ListItem li in checkBoxList.Items)
                                             if (li.Value == s)
                                                 li.Selected = true;
                                 }
@@ -107,7 +113,7 @@ namespace RdlAsp
                             else
                             {
                                 DropDownList ddl = new DropDownList();
-                                Controls.Add(ddl);
+                                controlList.Add(ddl);
                                 if (parm.Nullable)
                                     ddl.Items.Add(new ListItem("", ""));
                                 foreach (Rdl.Engine.ParameterValue value in parm.ValidValues)
@@ -127,7 +133,7 @@ namespace RdlAsp
                             {
                                 case "Boolean":
                                     CheckBox cb = new CheckBox();
-                                    Controls.Add(cb);
+                                    controlList.Add(cb);
                                     if (parm.Value != null)
                                         cb.Checked = bool.Parse((string)parm.Value);
                                     else if (parm.DefaultValue != null)
@@ -137,15 +143,15 @@ namespace RdlAsp
                                 case "DateTime":
                                     TextBox tbCal = new TextBox();
                                     tbCal.ID = parm.Name;
-                                    Controls.Add(tbCal);
+                                    controlList.Add(tbCal);
                                     if (parm.DefaultValue != null && parm.DefaultValue.Length > 0)
                                         tbCal.Text = parm.DefaultValue[0];
                                     ImageButton ib = new ImageButton();
-                                    Controls.Add(ib);
+                                    controlList.Add(ib);
                                     ib.ID = parm.Name + "_ib";
                                     ib.ImageUrl = "image." + ReportServer._extension + "?source=resource&name=calendar.bmp";
                                     AjaxControlToolkit.CalendarExtender ce = new AjaxControlToolkit.CalendarExtender();
-                                    Controls.Add(ce);
+                                    controlList.Add(ce);
                                     ce.PopupButtonID = parm.Name + "_ib";
                                     ce.TargetControlID = parm.Name;
                                     ce.ID = parm.Name + "_extender";
@@ -154,7 +160,7 @@ namespace RdlAsp
                                 case "Single":
                                 case "String":
                                     TextBox tb = new TextBox();
-                                    Controls.Add(tb);
+                                    controlList.Add(tb);
                                     tb.ID = parm.Name;
                                     string sValue = string.Empty;
                                     if (parm.MultiValue)
@@ -174,7 +180,7 @@ namespace RdlAsp
                                     else
                                     {
                                         if (parm.Value != null)
-                                            sValue = (string)parm.Value;
+                                            sValue = parm.Value.ToString();
                                         else
                                             if (parm.DefaultValue != null)
                                                 sValue = parm.DefaultValue[0];
@@ -184,17 +190,43 @@ namespace RdlAsp
                             }
 
                         // Add some space before the next control.
-                        Controls.Add(new LiteralControl("</div>"));
+                        controlList.Add(new LiteralControl("</div>"));
                     }
                     //Controls.Add(new LiteralControl("&nbsp&nbsp&nbsp&nbsp"));
                 }
-                Controls.Add(new LiteralControl("</div>"));
+                Panel panel = new Panel();
+                if (requiredControls.Count > 0)
+                {
+                    panel.Controls.Add(new LiteralControl("<div><b>Required Parameters:</b>"));
+                    foreach (Control ctrl in requiredControls)
+                        panel.Controls.Add(ctrl);
+                    panel.Controls.Add(new LiteralControl("</div>"));
+                }
+                if (optionalControls.Count > 0)
+                {
+                    panel.Controls.Add(new LiteralControl("<div><b>Optional Parameters</b>"));
+                    foreach (Control ctrl in optionalControls)
+                        panel.Controls.Add(ctrl);
+                    panel.Controls.Add(new LiteralControl("</div>"));
+                }
                 btnView = new Button();
-                this.Controls.Add(btnView);
+                panel.Controls.Add(btnView);
                 btnView.Text = "View";
                 btnView.ID = "ViewReport";
                 btnView.Click += new EventHandler(btnView_Click);
+
+                panel.DefaultButton = "ViewReport";
+                Controls.Add(panel);
             }
+        }
+
+        protected override void OnPreRender(EventArgs e)
+        {
+            if (chkCheckAll != null)
+            {
+                chkCheckAll.Text = "<input type=\"checkbox\" id=\"chkCheckAll\" onclick=\"chkCheckAll_click(this, document.getElementById('" + checkBoxList.ClientID + "'));\" />Check All";
+            }
+            base.OnPreRender(e);
         }
 
         /// <summary>
@@ -265,7 +297,7 @@ namespace RdlAsp
         void btnView_Click(object sender, EventArgs e)
         {
             EnsureChildControls();
-            foreach (Control ctrl in Controls)
+            foreach (Control ctrl in Controls[0].Controls)
             {
                 Rdl.Engine.ReportParameter parm = null;
                 if (ctrl.ID != null && _report.ReportParameters != null && _report.ReportParameters.ContainsKey(ctrl.ID))
@@ -279,6 +311,11 @@ namespace RdlAsp
                             break;
                         case "TextBox":
                             string[] values;
+                            if (parm.Nullable && ((TextBox)ctrl).Text.Trim() == string.Empty)
+                            {
+                                parm.Value = null;
+                                break;
+                            }
                             if (parm.MultiValue)
                                 values = ((TextBox)ctrl).Text.Split(new char[] { ',' });
                             else

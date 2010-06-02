@@ -80,7 +80,10 @@ namespace Rdl.Render
                 //_styles.AppendLine(" overflow: hidden;");
                 _styles.AppendLine(" margin: 0;");
                 _styles.AppendLine(" padding: 0;");
-                _styles.AppendLine(" word-break: break-all;");
+                // 5/19/2010 word-break: break-all breaks the line in the middle of a word.  word-wrap: break-word
+                // breaks the line on word boundries in IE.
+                //_styles.AppendLine(" word-break: break-all;");
+                _styles.AppendLine("word-wrap: break-word;");
                 _styles.AppendLine("}");
                 _styles.AppendLine("table {");
                 _styles.AppendLine(" position: relative;");
@@ -134,11 +137,12 @@ namespace Rdl.Render
             }
             if ((elmt is TextElement || elmt is FixedContainer || elmt is ImageElement || elmt is ChartElement))
             {
-                style += "width: " + ElementWidth(rpt, elmt) + "pt;";
+                style += "width: " + ElementWidth(rpt, elmt) + "pt;"
+                    + "height: " + ElementHeight(rpt, elmt) + "pt;";
             }
-            if ((elmt is TextElement || elmt is FixedContainer || elmt is ImageElement || elmt is ChartElement))
+            if (elmt is TextElement)
             {
-                style += "height: " + ElementHeight(rpt, elmt) + "pt;";
+                style += "overflow: hidden;";
             }
             if (elmt._imageIndex >= 0 && !(elmt is ImageElement))
             {

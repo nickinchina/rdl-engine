@@ -39,13 +39,15 @@ namespace Rdl.Engine
             get { return _name; }
         }
 
+        static System.Diagnostics.Stopwatch _stopwatch1 = new System.Diagnostics.Stopwatch();
         internal object GetValue(Rdl.Runtime.Context context)
         {
             if (_dataField != null)
             {
                 if (context.CurrentRow == null)
                     return null;
-                return context.CurrentRow[_dataField];
+                object val = context.CurrentRow[_dataField];
+                return val;
             }
             else if (_value != null)
                 return _value.Exec(context);
