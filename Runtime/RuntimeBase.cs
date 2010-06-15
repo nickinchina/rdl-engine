@@ -64,6 +64,11 @@ namespace Rdl.Runtime
             get { return _rpt; }
         }
 
+        public Dictionary<string, ReportItem> ReportItems
+        {
+            get { return _rpt.ReportItems; }
+        }
+
         internal object Exec(Int32 key, Context ctxt)
         {
             lock(_thisLock)

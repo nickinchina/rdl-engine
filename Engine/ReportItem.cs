@@ -180,5 +180,16 @@ namespace Rdl.Engine
             if (tb != null)
                 tb.LinkedToggles.Add(new Toggle(_box, tb));
         }
+
+        public string Value
+        {
+            get
+            {
+                if (!(this is TextBox))
+                    throw new Exception("Attemt to get value from a non textbox report item");
+                else
+                    return ((TextBox)this).Value;
+            }
+        }
     }
 }
