@@ -35,6 +35,16 @@ namespace RdlViewer
             }
         }
 
+        public class ReportViewEventArgs : EventArgs
+        {
+            public ReportViewEventArgs(Rdl.Engine.Report report)
+            {
+                Report = report;
+            }
+
+            public Rdl.Engine.Report Report { get; set; }
+        }
+
         private PageRender _pageRender = null;
         private Rdl.Engine.Report _report = null;
         private Page _currentPage = null;
@@ -46,6 +56,8 @@ namespace RdlViewer
         private List<ToggleElementStruct> _displayedToggleList = null;
         private List<Line> _lineList = new List<Line>();
         private Bitmap _pageBitmap = null;
+        public event EventHandler<ReportViewEventArgs> BeginPrint;
+        public event EventHandler<ReportViewEventArgs> EndPrint;
 
         /// <summary>
         /// Default constructor
@@ -57,6 +69,13 @@ namespace RdlViewer
             _pd = new PrintDocument();
             _pd.PrintPage += new PrintPageEventHandler(pd_PrintPage);
             _pd.BeginPrint += new PrintEventHandler(pd_BeginPrint);
+            _pd.EndPrint += new PrintEventHandler(pd_EndPrint);
+        }
+
+        void pd_EndPrint(object sender, PrintEventArgs e)
+        {
+            if (EndPrint != null)
+                EndPrint(this, new ReportViewEventArgs(_report));
         }
 
         /// <summary>
@@ -518,6 +537,8 @@ namespace RdlViewer
 
         void pd_BeginPrint(object sender, PrintEventArgs e)
         {
+            if (BeginPrint != null)
+                BeginPrint(this, new ReportViewEventArgs(_report));
             _printingPage = 0;
             _pageOffset = 0;
 

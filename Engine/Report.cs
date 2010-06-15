@@ -564,21 +564,23 @@ namespace Rdl.Engine
             Regex regEx = new Regex(
                 @"(?<leading>[^\w_.]+           " +
                 fn + @"\s*?)\(                  " +// The expression is everything inside the first open paren
-                @"     (?<expression>           " + 
-                @"       (?>                    " + 
+                @"     (?<expression>           " +
+                @"       (                   " + 
                 @"          ""(?<string>[^""\\]*(\\.[^""\\]*)*)""" +  // Skip anything inside quotes
                 @"        |                     " +
-                @"          [^()""]+            " + // Match everything except ()"
+                @"          [^()""]+?            " + // Match everything except (),"
                 @"        |                     " +
                 @"          \((?<LEVEL>)        " + // Level up on every (
                 @"        |                     " +
                 @"          \)(?<-LEVEL>)       " + // Level down on every )
-                @"       )*                     " +
+                @"       )*?                     " +
+                @"      )                       " +
                 @"      (?<scope>(,[^\(\),]*)*) " + // optional comma separated additional parameters.
-                @"      (?(LEVEL)(?!))          " + // Only match this element if level = 1
-                @"     )\)"   // Match the closing paren.
+                @"      (?(LEVEL)(?!))          " + // If the level group is defined then this match will fail indicating an unmatched open paren
+                @"     \)"   // Match the closing paren.
                 , RegexOptions.IgnorePatternWhitespace | RegexOptions.IgnoreCase);
 
+            MatchCollection coll = regEx.Matches(source);
            return  regEx.Replace(source, new MatchEvaluator(MatchAggFn));
         }
 
