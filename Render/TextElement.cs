@@ -44,6 +44,7 @@ namespace Rdl.Render
         public string Text
         {
             get { return _text; }
+            set { _text = value; }
         }
 
         public ToggleStateEnum ToggleState

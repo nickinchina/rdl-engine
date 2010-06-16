@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Rdl.Render
 {
@@ -14,6 +15,7 @@ namespace Rdl.Render
         private string _minusGif = "minus.gif";
         protected Rdl.Engine.Report _sourceReport = null;
         private Dictionary<string, Rdl.Render.ChartElement> _charts = new Dictionary<string, ChartElement>();
+        public Dictionary<string, string> elementValues = new Dictionary<string, string>();
 
         public class ImageUrlArgs : EventArgs
         {
@@ -63,11 +65,21 @@ namespace Rdl.Render
             RecurseRender(_sourceReport, _body, _sourceReport.PageFooterContainer, 1, forPrint);
         }
 
+        private string MatchEvaluatorMethod(Match match)
+        {
+            if (elementValues.ContainsKey(match.Groups["name"].Value))
+                return elementValues[match.Groups["name"].Value];
+            else
+                return string.Empty;
+        }
+
         public string Body
         {
             get
             {
-                return _body.ToString();
+                Regex regEx = new Regex("~--(?<name>.*)--~");
+
+                return regEx.Replace(_body.ToString(), MatchEvaluatorMethod);
             }
         }
 
@@ -253,7 +265,12 @@ namespace Rdl.Render
             {
                 TextElement te = elmt as TextElement;
 
-                string text = te.Text;
+                // Save the report item value for filling in to ReportItem references later
+                if (te.ReportElement is Rdl.Engine.ReportItem)
+                    elementValues[((Rdl.Engine.ReportItem)te.ReportElement).Name] =
+                        te.Text;
+
+                string text = te.Text.Replace("\n", "<br />");
                 bodyPart.AppendLine(Spaces(level) + text);
             }
 

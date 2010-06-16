@@ -185,10 +185,7 @@ namespace Rdl.Engine
         {
             get
             {
-                if (!(this is TextBox))
-                    throw new Exception("Attemt to get value from a non textbox report item");
-                else
-                    return ((TextBox)this).Value;
+                return "~--" + Name + "--~";
             }
         }
     }

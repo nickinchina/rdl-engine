@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Rdl.Render
 {
@@ -13,6 +14,7 @@ namespace Rdl.Render
         // of the top of the body of this page.
         private decimal _relativeTop = 0;
         private int _pageNumber = 0;
+        public Dictionary<string, string> elementValues = new Dictionary<string, string>();
 
         internal Page(Rdl.Engine.Report rpt,
             int pageNumber,
@@ -184,6 +186,38 @@ namespace Rdl.Render
             ret += _pageDetailsBox.ToString() + "\r\n";
             ret += _pageFooterBox.ToString() + "\r\n";
             return ret;
+        }
+
+        // Resolve the values of the ReportItem references on this page.
+        public void ResolveReportItemReferences()
+        {
+            RecurseResolveReportItemReferences(_pageHeaderBox);
+            RecurseResolveReportItemReferences(_pageFooterBox);
+            RecurseResolveReportItemReferences(_pageDetailsBox);
+        }
+
+        private string MatchEvaluatorMethod(Match match)
+        {
+            if (elementValues.ContainsKey(match.Groups["name"].Value))
+                return elementValues[match.Groups["name"].Value];
+            else
+                return string.Empty;
+        }
+
+        private void RecurseResolveReportItemReferences(Element elmt)
+        {
+            if (elmt is TextElement)
+            {
+                TextElement te = (TextElement)elmt;
+
+                Regex regEx = new Regex("~--(?<name>.*)--~");
+                te.Text = regEx.Replace(te.Text, MatchEvaluatorMethod);
+            }
+            if (elmt is Container)
+            {
+                foreach( Element child in ((Container)elmt).Children)
+                    RecurseResolveReportItemReferences(child);
+            }
         }
     }
 }

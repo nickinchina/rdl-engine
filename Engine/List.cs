@@ -75,10 +75,13 @@ namespace Rdl.Engine
                     cell = ((Rdl.Render.Container)_box).AddFixedContainer(this, Style, context);
                     cell.Name = "ListItem";
                     cell.MatchParentWidth = true;
-                    if (first && _grouping != null && _grouping.PageBreakAtStart)
+                    // If this isn't the first group item and PageBreakAtStart then break before the container
+                    if (!first && _grouping != null && _grouping.PageBreakAtStart)
                         cell.PageBreakBefore = true;
                     cell.PageBreakBefore = _grouping.PageBreakAtStart;
-                    cell.PageBreakAfter = _grouping.PageBreakAtEnd;
+                    // If this isn't the last group item and PageBreakAtEnd then break after the container
+                    if (_context.GroupIndex < _context.GroupCount - 1 && _grouping != null && _grouping.PageBreakAtEnd)
+                        cell.PageBreakAfter = _grouping.PageBreakAtEnd;
                 }
 
                 _reportItems.Render(cell, _context);

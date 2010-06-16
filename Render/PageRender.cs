@@ -49,6 +49,7 @@ namespace Rdl.Render
             RecurseRender( rpt, rpt.BodyContainer, ref b, ref p, 0, rpt.BodyContainer.Top, 0, 0);
 
             p.AddFooters(rpt, null, true);
+            p.ResolveReportItemReferences();
         }
 
         // Render element elmt onto the page currentPage.
@@ -111,6 +112,7 @@ namespace Rdl.Render
             if (newPage)
             {
                 currentPage.AddFooters(rpt, parent, false);
+                currentPage.ResolveReportItemReferences();
 
                 currentPage = new Page(
                     rpt,
@@ -141,7 +143,16 @@ namespace Rdl.Render
                         //currentPage.FooterSpace += (r.Top - yPos + elementHeight + CalcHeight(r));
             }
             if (elmt is TextElement)
-                newElement = new TextElement((TextElement)elmt);
+            {
+                TextElement te = (TextElement)elmt;
+
+                // Save the report item value for filling in to ReportItem references later
+                if (te.ReportElement is Rdl.Engine.ReportItem)
+                    currentPage.elementValues[((Rdl.Engine.ReportItem)te.ReportElement).Name] =
+                        te.Text;
+
+                newElement = new TextElement(te);
+            }
             if (elmt is ImageElement)
                 newElement = new ImageElement((ImageElement)elmt);
             if (elmt is ChartElement)
@@ -184,6 +195,7 @@ namespace Rdl.Render
                 if (be.PageBreakAfter)
                 {
                     currentPage.AddFooters(rpt, parent, false);
+                    currentPage.ResolveReportItemReferences();
 
                     currentPage = new Page(
                         rpt,
