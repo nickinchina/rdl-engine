@@ -149,10 +149,5 @@ namespace Rdl.Engine
                 _box.Height = height;
             }
         }
-
-        public string Value
-        {
-            get { return _text; }
-        }
     }
 }

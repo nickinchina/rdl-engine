@@ -148,7 +148,26 @@ namespace Rdl.Engine
         /// </summary>
         public object Value
         {
-            get { return (_multiValue) ? (object)_value : ((_value == null) ? null : (object)Convert.ChangeType(_value[0], _dataType)); }
+            get
+            {
+                object ret = null;
+                if (_multiValue)
+                    ret = (object)_value;
+                else if (_value == null)
+                    ret = null;
+                else
+                {
+                    try
+                    {
+                        ret = (object)Convert.ChangeType(_value[0], _dataType);
+                    }
+                    catch (Exception)
+                    {
+                        ret = null;
+                    }
+                }
+                return ret;
+            }
             set 
             {
                 if (value is string[])
