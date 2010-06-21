@@ -167,7 +167,8 @@ namespace Rdl.Engine
                     }
                 }
                 return ret;
-            }
+            }
+
             set 
             {
                 if (value is string[])

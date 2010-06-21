@@ -86,9 +86,6 @@ namespace Rdl.Engine
 
                 _reportItems.Render(cell, _context);
 
-                if (cell != null && _grouping != null && _grouping.PageBreakAtEnd)
-                    cell.PageBreakAfter = true;
-
                 _context.LinkToggles();
                 _context.NextGroup();
             }
