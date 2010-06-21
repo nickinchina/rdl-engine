@@ -37,7 +37,9 @@ namespace Rdl.Render
             _pageHeaderBox.CanGrowVertically = true;
 
             // Add in the page header if appropriate
-            _pageHeaderBox.Children.Add(PageRender.Copy(rpt.PageHeaderContainer, true));
+            if (rpt.PageHeader != null)
+                if (pageNumber > 0 || rpt.PageHeader.PrintOnFirstPage)
+                    _pageHeaderBox.Children.Add(PageRender.Copy(rpt.PageHeaderContainer, true));
             _pageHeaderBox.SetSizes(false);
 
             _pageDetailsBox = AddFixedContainer(rpt, rpt.Style, null);
@@ -53,6 +55,7 @@ namespace Rdl.Render
 
             if (breakAt != null)
                 AddHeaders(breakAt);
+            AddFooters(rpt, _pageFooterBox);
 
             _pageDetailsBox.Height = Height - _pageHeaderBox.Height - _pageFooterBox.Height;
             _pageDetailsBox.Top = _pageHeaderBox.Height;
@@ -89,14 +92,14 @@ namespace Rdl.Render
             }
         }
 
-        internal void AddFooters(Rdl.Engine.Report rpt, Container b, bool lastPage)
+        internal void AddFooters(Rdl.Engine.Report rpt, Container b)
         {
             decimal top = 0;
             _pageFooterBox.Top = _pageHeaderBox.Height + _pageDetailsBox.Height;
             if (b != null)
                 RecurseAddFooters(b, ref top);
 
-            if (rpt.PageFooter != null && (!lastPage || rpt.PageFooter.PrintOnLastPage))
+            if (rpt.PageFooter != null)
             {
                 Container pageFooter = PageRender.Copy(rpt.PageFooterContainer, true);
                 pageFooter.Top = top;
@@ -104,6 +107,16 @@ namespace Rdl.Render
                 top += pageFooter.Height;
             }
             _pageFooterBox.Height = top;
+        }
+
+        public void RemoveLastPageHeadersAndFooters(Rdl.Engine.Report rpt)
+        {
+            if (rpt.PageHeader != null)
+                if (!rpt.PageHeader.PrintOnLastPage)
+                    _childElements.Remove(_pageHeaderBox);
+            if (rpt.PageFooter != null)
+                if (!rpt.PageFooter.PrintOnLastPage)
+                    _childElements.Remove(_pageFooterBox);
         }
 
         private void RecurseAddFooters(Container b, ref decimal top)
