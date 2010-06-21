@@ -48,7 +48,8 @@ namespace Rdl.Render
             _pageList.Add(p);
             RecurseRender( rpt, rpt.BodyContainer, ref b, ref p, 0, rpt.BodyContainer.Top, 0, 0);
 
-            p.AddFooters(rpt, null, true);
+            //p.AddFooters(rpt, null, true);
+            p.RemoveLastPageHeadersAndFooters(rpt);
             p.ResolveReportItemReferences();
         }
 
@@ -111,7 +112,7 @@ namespace Rdl.Render
 
             if (newPage)
             {
-                currentPage.AddFooters(rpt, parent, false);
+                //currentPage.AddFooters(rpt, parent, false);
                 currentPage.ResolveReportItemReferences();
 
                 currentPage = new Page(
@@ -194,7 +195,7 @@ namespace Rdl.Render
 
                 if (be.PageBreakAfter)
                 {
-                    currentPage.AddFooters(rpt, parent, false);
+                    //currentPage.AddFooters(rpt, parent, false);
                     currentPage.ResolveReportItemReferences();
 
                     currentPage = new Page(
