@@ -8,24 +8,56 @@ namespace Rdl.Engine
     public class Expression : ReportElement
     {
         private string _expression = string.Empty;
+        private bool _replaceAggregates = true;
         private Int32 _key = -1;
+        private bool _initialized = false;
 
-        public Expression(XmlNode node, ReportElement parent) : base(node, parent)
+        public Expression(XmlNode node, ReportElement parent)
+            : base(node, parent)
         {
+            // replaceAggregates needs to be set before the attributes are parsed,
+            // so we delay parsing the attributes until after the base class is
+            // instantiated.
+            _initialized = true;
+            ParseAttributes(node);
+        }
+
+        public Expression(XmlNode node, ReportElement parent, bool replaceAggregates)
+            : base(node, parent)
+        {
+            _replaceAggregates = replaceAggregates;
+            _initialized = true;
+            ParseAttributes(node);
         }
 
         public Expression(string expression, ReportElement parent)
             : base(null, parent)
         {
             _expression = expression;
+            _initialized = true;
+        }
+
+        public Expression(string expression, ReportElement parent, bool replaceAggregates)
+            : base(null, parent)
+        {
+            _expression = expression;
+            _initialized = true;
+        }
+
+        public XmlNode foo(XmlNode node, bool replaceAggregates)
+        {
+            _replaceAggregates = replaceAggregates;
+            return node;
         }
 
         protected override void ParseAttribute(XmlNode attr)
         {
+            if (!_initialized)
+                return;
             _expression = attr.InnerText;
             if (_expression.Length > 0)
                 if (_expression[0] == '=')
-                    _key = Report.AddFunction(_expression.Substring(1).Replace("\n", string.Empty).Replace("\r", string.Empty));
+                    _key = Report.AddFunction(_expression.Substring(1).Replace("\n", string.Empty).Replace("\r", string.Empty), _replaceAggregates);
         }
 
         public bool Empty

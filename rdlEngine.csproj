@@ -201,6 +201,7 @@
     <Compile Include="Render\Element.cs" />
     <Compile Include="Render\FixedContainer.cs" />
     <Compile Include="Render\FlowContainer.cs" />
+    <Compile Include="Render\GenericRender.cs" />
     <Compile Include="Render\ImageData.cs" />
     <Compile Include="Render\ImageElement.cs" />
     <Compile Include="Render\Page.cs" />

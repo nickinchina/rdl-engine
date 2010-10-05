@@ -136,7 +136,7 @@ namespace Rdl.Engine
             {
                 Rdl.Render.ImageElement ie = (Rdl.Render.ImageElement)_box;
 
-                ie._imageIndex = Report.AddImage(this, context);
+                ie._imageIndex = ie.Render.AddImage(this, context);
 
                 //if (_sizing == ImageSizingEnum.Autosize)
                 //{

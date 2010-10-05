@@ -159,7 +159,10 @@ namespace Rdl.Engine
                 {
                     try
                     {
-                        ret = (object)Convert.ChangeType(_value[0], _dataType);
+                        if (_value[0] == string.Empty)
+                            ret = null;
+                        else
+                            ret = (object)Convert.ChangeType(_value[0], _dataType);
                     }
                     catch (Exception)
                     {

@@ -205,6 +205,7 @@ namespace Rdl.Engine.Chart
         /// <param name="categories"></param>
         /// <param name="g"></param>
         /// <param name="font"></param>
+        /// <param name="offset"></param>
         /// <returns></returns>
         private int GetMaxCategoriesWidth(Categories categories, Graphics g, Font font, int offset)
         {

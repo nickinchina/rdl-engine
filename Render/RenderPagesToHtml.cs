@@ -6,17 +6,17 @@ namespace Rdl.Render
 {
     public class RenderPagesToHtml : RenderToHtml
     {
-        public void Render(Rdl.Engine.Report report, PageRender pageRender, bool forPrint)
+        public void Render(Rdl.Render.GenericRender report, PageRender pageRender, bool forPrint)
         {
             _sourceReport = report;
             _styles.AppendLine("@page {");
-            _styles.AppendLine("    size: " + (pageRender.PageWidth / 72m).ToString() + " in " +
-                (pageRender.PageHeight / 72m).ToString() + " in;");
-            _styles.AppendLine("    margin-left: " + (pageRender.LeftMargin / 72m).ToString() + " in;");
-            _styles.AppendLine("    margin-right: " + (pageRender.RightMargin / 72m).ToString() + " in;");
-            _styles.AppendLine("    margin-top: " + (pageRender.TopMargin / 72m).ToString() + " in;");
-            _styles.AppendLine("    margin-bottom: " + (pageRender.BottomMargin / 72m).ToString() + " in;");
-            _styles.AppendLine("    padding: 0 in;");
+            _styles.AppendLine("    size: " + (pageRender.PageWidth / 72m).ToString() + "in " +
+                (pageRender.PageHeight / 72m).ToString() + "in;");
+            _styles.AppendLine("    margin-left: " + (pageRender.LeftMargin / 72m).ToString() + "in;");
+            _styles.AppendLine("    margin-right: " + (pageRender.RightMargin / 72m).ToString() + "in;");
+            _styles.AppendLine("    margin-top: " + (pageRender.TopMargin / 72m).ToString() + "in;");
+            _styles.AppendLine("    margin-bottom: " + (pageRender.BottomMargin / 72m).ToString() + "in;");
+            _styles.AppendLine("    padding: 0in;");
             _styles.AppendLine("}");
 
             _styles.AppendLine(".pagediv {");
@@ -25,11 +25,11 @@ namespace Rdl.Render
             _styles.AppendLine("}");
 
             int styleTop = AddStyles(report, 0);
-            RecurseAddStyles(report.PageHeaderContainer, 0, ref styleTop);
-            RecurseAddStyles(report.PageFooterContainer, 0, ref styleTop);
-            RecurseAddStyles(report.BodyContainer, 0, ref styleTop);
-            for (int pageNum = 0; pageNum < pageRender.Pages.Count; pageNum++)
-                RecurseAddStyles(pageRender.Pages[pageNum], 0, ref styleTop);
+            //RecurseAddStyles(report.PageHeaderContainer, 0, ref styleTop);
+            //RecurseAddStyles(report.PageFooterContainer, 0, ref styleTop);
+            //RecurseAddStyles(report.BodyContainer, 0, ref styleTop);
+            //for (int pageNum = 0; pageNum < pageRender.Pages.Count; pageNum++)
+            //    RecurseAddStyles(pageRender.Pages[pageNum], 0, ref styleTop);
 
             decimal top = 0;
             for (int pageNum = 0; pageNum < pageRender.Pages.Count; pageNum++)

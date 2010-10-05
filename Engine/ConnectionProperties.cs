@@ -26,7 +26,7 @@ namespace Rdl.Engine
                     _dataProvider = attr.InnerText;
                     break;
                 case "connectstring":
-                    _connectString = new Expression(attr, this);
+                    _connectString = new Expression(attr, this, false);
                     break;
                 case "integratedsecurity":
                     _integratedSecurity = bool.Parse(attr.InnerText);

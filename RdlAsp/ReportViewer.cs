@@ -66,7 +66,7 @@ namespace RdlAsp
                         {
                             string reportName = ae.DrillThroughReportName;
                             if (!reportName.Contains("\\"))
-                                reportName = _htmlReport.SourceReport.ReportPath + reportName;
+                                reportName = _htmlReport.SourceReport.Report.ReportPath + reportName;
                             if (!reportName.Contains(".rdl"))
                             {
                                 if (File.Exists(reportName + ".rdl"))
@@ -81,7 +81,7 @@ namespace RdlAsp
                             FileStream fs = new FileStream(reportName,
                                 FileMode.Open, FileAccess.Read, FileShare.Read);
                             rpt.Load(fs,
-                                _htmlReport.SourceReport.ReportPath);
+                                _htmlReport.SourceReport.Report.ReportPath);
                             fs.Close();
                             fs.Dispose();
 
@@ -90,12 +90,12 @@ namespace RdlAsp
                                 rpt.ReportParameters[parm.Name].Value = parm.Value;
                                 rpt.ReportParameters[parm.Name].Hidden = true;
                             }
-                            rpt.Run();
+                            Rdl.Render.GenericRender render = rpt.Run();
 
                             _reportSessionID = "RenderedReport_" + (reportIndex++).ToString();
                             ((HiddenField)FindControl("tbReportID")).Value = _reportSessionID;
 
-                            SetReport(rpt);
+                            SetReport(render);
                             return;
                         }
                     }
@@ -152,7 +152,7 @@ namespace RdlAsp
         /// Sets the report to view in the control
         /// </summary>
         /// <param name="report"></param>
-        public void SetReport(Rdl.Engine.Report report)
+        public void SetReport(Rdl.Render.GenericRender report)
         {
             // Render the report to streaming html
             _htmlReport = new Rdl.Render.RenderToHtml();
@@ -182,13 +182,6 @@ namespace RdlAsp
                 "function ToggleStateCallback(arguments) {" + cbReference + "}", true);
         }
 
-        #region ICallbackEventHandler Members
-
-        public string GetCallbackResult()
-        {
-            return _htmlReport.Body;
-        }
-
         void htmlRender_ImageUrl(object sender, Rdl.Render.RenderToHtml.ImageUrlArgs args)
         {
             args.Url = "'image." + ReportServer._extension + "?source=" + HttpUtility.UrlEncode(args.Source) +
@@ -199,6 +192,13 @@ namespace RdlAsp
                     "'&height=' + document.getElementById('" + args.ElementName + "').clientHeight";
             else
                 args.Url += "'";
+        }
+
+        #region ICallbackEventHandler Members
+
+        public string GetCallbackResult()
+        {
+            return _htmlReport.Body;
         }
 
         public void RaiseCallbackEvent(string eventArgument)

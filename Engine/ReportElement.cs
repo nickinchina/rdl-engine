@@ -30,6 +30,11 @@ namespace Rdl.Engine
             if (this is Report)
                 _report = this as Report;
 
+            ParseAttributes(node);
+        }
+
+        protected void ParseAttributes(XmlNode node)
+        {
             // Parse all of the attributes and child nodes.
             if (node != null)
             {

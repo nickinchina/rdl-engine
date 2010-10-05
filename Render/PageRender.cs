@@ -20,20 +20,22 @@ namespace Rdl.Render
         private decimal _top = 0;
         private decimal _left = 0;
 
-        public void Render(Rdl.Engine.Report rpt)
+        public void Render(Rdl.Render.GenericRender rpt)
         {
             rpt.SetSizes(false);
 
-            TopMargin = rpt.TopMargin.points;
-            BottomMargin = rpt.BottomMargin.points;
-            LeftMargin = rpt.LeftMargin.points;
-            RightMargin = rpt.RightMargin.points;
-            PageWidth = rpt.PageWidth.points;
-            PageHeight = rpt.PageHeight.points;
-            _top = rpt.TopMargin.points;
-            _left = rpt.LeftMargin.points;
-            _width = rpt.PageWidth.points - rpt.RightMargin.points - rpt.LeftMargin.points;
-            _height = rpt.PageHeight.points - rpt.TopMargin.points - rpt.BottomMargin.points;
+            TopMargin = rpt.Report.TopMargin.points;
+            BottomMargin = rpt.Report.BottomMargin.points;
+            LeftMargin = rpt.Report.LeftMargin.points;
+            RightMargin = rpt.Report.RightMargin.points;
+            PageWidth = rpt.Report.PageWidth.points;
+            // Give the height a bit of breathing room because if we try to be exact
+            // some browsers will put in extra blank pages.
+            PageHeight = rpt.Report.PageHeight.points - 7.2m;
+            _top = rpt.Report.TopMargin.points;
+            _left = rpt.Report.LeftMargin.points;
+            _width = rpt.Report.PageWidth.points - rpt.Report.RightMargin.points - rpt.Report.LeftMargin.points;
+            _height = rpt.Report.PageHeight.points - rpt.Report.TopMargin.points - rpt.Report.BottomMargin.points;
 
             _pageList = new List<Page>();
             Container b = null;
@@ -60,7 +62,7 @@ namespace Rdl.Render
         // currentPage will refer to the current page being built.  It will be updated
         //      inside this routine if elmt spans pages.
         private void RecurseRender(
-            Rdl.Engine.Report rpt,
+            Rdl.Render.GenericRender rpt,
             Element elmt, // The current element from the source document
             ref Container parent,   // The parent element in the page.
             ref Page currentPage,   // The current page.

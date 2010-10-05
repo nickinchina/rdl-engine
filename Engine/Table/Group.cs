@@ -91,7 +91,8 @@ namespace Rdl.Engine.Table
                     groupRow.Name = "GroupRrow";
                     groupRow.ContextBase = true;
                     groupRow.PageBreakBefore = _grouping.PageBreakAtStart;
-                    groupRow.PageBreakAfter = _grouping.PageBreakAtEnd;
+                    // Don't break page on last group item.
+                    groupRow.PageBreakAfter = (context.GroupIndex + 1 < context.GroupCount) ? _grouping.PageBreakAtEnd : false;
                 }
 
                 if (_header != null)

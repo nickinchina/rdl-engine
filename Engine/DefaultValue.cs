@@ -25,7 +25,7 @@ namespace Rdl.Engine
                 case "values":
                     _values = new List<Expression>();
                     foreach (XmlNode child in attr.ChildNodes)
-                        _values.Add(new Expression(child, this));
+                        _values.Add(new Expression(child, this, false));
                     break;
                 default:
                     break;
@@ -51,7 +51,7 @@ namespace Rdl.Engine
                 while (context.CurrentRow != null)
                 {
                     _values.Add(new Expression(
-                        context.CurrentRow[_dataSetReference.ValueField].ToString(), this));
+                        context.CurrentRow[_dataSetReference.ValueField].ToString(), this, false));
 
                     context.MoveNext();
                 }

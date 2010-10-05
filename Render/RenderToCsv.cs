@@ -19,7 +19,7 @@ namespace Rdl.Render
 
         private List<TextLine> _rows;
 
-        public string Render(Rdl.Engine.Report report)
+        public string Render(Rdl.Render.GenericRender report)
         {
             report.SetSizes(true);
 

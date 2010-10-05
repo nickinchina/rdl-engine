@@ -24,10 +24,10 @@ namespace Rdl.Engine
                     _name = attr.InnerText;
                     break;
                 case "value":
-                    _value = new Expression(attr, this);
+                    _value = new Expression(attr, this, false);
                     break;
                 case "omit":
-                    _omit = new Expression(attr, this);
+                    _omit = new Expression(attr, this, false);
                     break;
                 default:
                     break;
