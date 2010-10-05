@@ -24,9 +24,9 @@ namespace Rdl.Render
             get { return _context; }
         }
 
-        public System.Drawing.Image RenderChart(int width, int height)
+        public System.Drawing.Image RenderChart(int width, int height, decimal xMult, decimal yMult)
         {
-            return ((Rdl.Engine.Chart.Chart)_reportElement).RenderChart(_context, width, height);
+            return ((Rdl.Engine.Chart.Chart)_reportElement).RenderChart(_context, width, height, xMult, yMult);
         }
     }
 }
