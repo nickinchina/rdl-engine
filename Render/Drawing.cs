@@ -8,11 +8,9 @@ namespace Rdl.Render
     public class Drawing
     {
         public static void DrawBorder(System.Drawing.Graphics g, System.Drawing.Rectangle rect,
-            Rdl.Render.BorderWidth bw, Rdl.Render.BorderStyle bs, Rdl.Render.BorderColor bc)
+            Rdl.Render.BorderWidth bw, Rdl.Render.BorderStyle bs, Rdl.Render.BorderColor bc,
+            decimal xMult, decimal yMult)
         {
-            decimal xMult = (decimal)g.DpiX / 72;
-            decimal yMult = (decimal)g.DpiY / 72;
-
             // TBD, we need to define background images to correspond with 
             // the different border styles.
             if (bw.Left.points > 0 && bs.Left != Rdl.Engine.BorderStyle.BorderStyleEnum.None)

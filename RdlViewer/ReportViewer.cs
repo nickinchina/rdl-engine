@@ -110,7 +110,6 @@ namespace RdlViewer
 
                 for (int i = 0; i < _pageRender.Pages.Count; i++)
                 {
-                    sw.WriteLine("Page " + i.ToString());
                     sw.Write(_pageRender.Pages[i].ToString(0));
                     sw.WriteLine("\n");
                 }
@@ -294,7 +293,8 @@ namespace RdlViewer
 
         private Bitmap PaintPage(Graphics g, Rdl.Render.Page rdlPage, bool print, decimal xMult, decimal yMult)
         {
-            Bitmap bp = new Bitmap((int)((float)rdlPage.Width * g.DpiX / 72), (int)((float)rdlPage.Height * g.DpiY / 72));
+            Bitmap bp = new Bitmap((int)(rdlPage.Width * xMult), (int)(rdlPage.Height * yMult));
+            _pageBitmap = bp;
 
             foreach (Rdl.Render.Element elmt in rdlPage.Children)
             {
@@ -322,18 +322,8 @@ namespace RdlViewer
 
             int t = (int)((top + elmt.Top) * yMult) + destOffset.Y;
             int l = (int)((left + elmt.Left) * xMult) + destOffset.X;
-            int w;
-            int h;
-            if (elmt is Rdl.Render.ImageElement && _report.ImageList[elmt._imageIndex].Sizing == Rdl.Engine.Image.ImageSizingEnum.Autosize)
-            {
-                w = (int)elmt.Width;
-                h = (int)elmt.Height;
-            }
-            else
-            {
-                w = (int)(elmt.Width * xMult);
-                h = (int)(elmt.Height * yMult);
-            }
+            int w = (int)(elmt.Width * xMult); 
+            int h = (int)(elmt.Height * yMult);
 
             Rectangle clipRect = new Rectangle(l, t, w, h);
 
@@ -348,7 +338,7 @@ namespace RdlViewer
 
                 if (elmt.Style != null && elmt.Style.BorderWidth != null)
                     Rdl.Render.Drawing.DrawBorder(g, new System.Drawing.Rectangle(l, t, w, h),
-                        elmt.Style.BorderWidth, elmt.Style.BorderStyle, elmt.Style.BorderColor);
+                        elmt.Style.BorderWidth, elmt.Style.BorderStyle, elmt.Style.BorderColor, xMult, yMult);
             }
 
             if (elmt.Style != null)
@@ -408,6 +398,7 @@ namespace RdlViewer
                     );
             }
 
+
             if (elmt._imageIndex >= 0)
             {
                 g.DrawImage(_report.ImageList[elmt._imageIndex].GetSizedImage(w, h),
@@ -417,7 +408,7 @@ namespace RdlViewer
             if (elmt is ChartElement)
             {
                 ChartElement cc = elmt as ChartElement;
-                g.DrawImage(cc.RenderChart(w, h), new Rectangle(l, t, w, h));
+                g.DrawImage(cc.RenderChart(w, h, xMult, yMult), new Rectangle(l, t, w, h));
             }
 
             if (elmt is Rdl.Render.Container)
@@ -518,6 +509,12 @@ namespace RdlViewer
                 _pd.Print();
         }
 
+        public string PrinterName
+        {
+            get { return _pd.PrinterSettings.PrinterName; }
+            set { _pd.PrinterSettings.PrinterName = value; }
+        }
+
         private void buttonPrint_Click(object sender, EventArgs e)
         {
             Print(true);
@@ -545,23 +542,23 @@ namespace RdlViewer
             int pageWidth, pageHeight;
             if (_pageRender.PageHeight > _pageRender.PageWidth)
             {
-                pageWidth = (int)(_pageRender.PageWidth * 100) / 72;
-                pageHeight = (int)(_pageRender.PageHeight * 100) / 72;
+                pageWidth = (int)(_pageRender.PageWidth);
+                pageHeight = (int)(_pageRender.PageHeight);
                 _pd.DefaultPageSettings.Landscape = false;
             }
             else
             {
-                pageWidth = (int)(_pageRender.PageHeight * 100) / 72;
-                pageHeight = (int)(_pageRender.PageWidth * 100) / 72;
+                pageWidth = (int)(_pageRender.PageHeight);
+                pageHeight = (int)(_pageRender.PageWidth);
                 _pd.DefaultPageSettings.Landscape = true;
             }
             foreach (PaperSize ps in _pd.PrinterSettings.PaperSizes)
                 if (ps.Width == pageWidth && ps.Height == pageHeight)
                     _pd.PrinterSettings.DefaultPageSettings.PaperSize = ps;
-            _pd.DefaultPageSettings.Margins = new Margins((int)_pageRender.LeftMargin,
-                0,
-                (int)_pageRender.TopMargin,
-                0);
+            //_pd.DefaultPageSettings.Margins = new Margins((int)_pageRender.LeftMargin,
+            //    0,
+            //    (int)_pageRender.TopMargin,
+            //    0);
         }
 
         void pd_QueryPageSettings(object sender, QueryPageSettingsEventArgs e)
@@ -579,9 +576,11 @@ namespace RdlViewer
             foreach (Rdl.Render.Element elmt in _pageRender.Pages[_printingPage].Children)
             {
                 RecursePaintPanel(e.Graphics,
-                    1,1,true,
+                    (decimal)1,
+                    (decimal)1,
+                    true,
                     elmt,
-                    new Point((int)_pageRender.LeftMargin - _pageOffset, (int)_pageRender.TopMargin),
+                    new Point((int)(_pageRender.LeftMargin - _pageOffset), (int)_pageRender.TopMargin),
                     0m, 0m);
             }
 
