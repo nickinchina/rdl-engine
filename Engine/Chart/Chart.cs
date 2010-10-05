@@ -224,7 +224,7 @@ namespace Rdl.Engine.Chart
             get { return _palette; }
         }
 
-        public System.Drawing.Image RenderChart(Rdl.Runtime.Context context, int width, int height)
+        public System.Drawing.Image RenderChart(Rdl.Runtime.Context context, int width, int height, decimal xMult, decimal yMult)
         {
             if (width <= 0 || height <= 0)
                 return null;
@@ -237,9 +237,6 @@ namespace Rdl.Engine.Chart
             int l = 0;
             int w = width;
             int h = height;
-
-            decimal xMult = (decimal)g.DpiX / 72;
-            decimal yMult = (decimal)g.DpiY / 72;
 
             if (context.Rows.Count == 0)
             {
@@ -258,7 +255,8 @@ namespace Rdl.Engine.Chart
                 Rdl.Render.Drawing.DrawBorder(g, new System.Drawing.Rectangle(l, t, w, h),
                     new Rdl.Render.BorderWidth(Style.BorderWidth, context), 
                     new Rdl.Render.BorderStyle(Style.BorderStyle, context), 
-                    new Rdl.Render.BorderColor(Style.BorderColor, context));
+                    new Rdl.Render.BorderColor(Style.BorderColor, context),
+                    xMult, yMult);
 
             if (Style != null)
             {
@@ -288,7 +286,7 @@ namespace Rdl.Engine.Chart
             }
 
             // Draw in the Legend
-            DrawLegend(context, g, bm, ref l, ref t, ref w, ref h, (_type == TypeEnum.Pie));
+            DrawLegend(context, g, bm, ref l, ref t, ref w, ref h, (_type == TypeEnum.Pie), xMult, yMult);
 
             // Draw the chart.
             switch (_type)
@@ -319,7 +317,7 @@ namespace Rdl.Engine.Chart
         }
 
         private void DrawLegend(Rdl.Runtime.Context context, System.Drawing.Graphics g, Bitmap bm,
-            ref int l, ref int t, ref int w, ref int h, bool includeGroups)
+            ref int l, ref int t, ref int w, ref int h, bool includeGroups, decimal xMult, decimal yMult)
         {
             if (_legend == null)
                 return;
@@ -424,7 +422,8 @@ namespace Rdl.Engine.Chart
                 Rdl.Render.Drawing.DrawBorder(g, new System.Drawing.Rectangle(left, top, (width*columns), height),
                     new Rdl.Render.BorderWidth(_legend.Style.BorderWidth, context),
                     new Rdl.Render.BorderStyle(_legend.Style.BorderStyle, context),
-                    new Rdl.Render.BorderColor(_legend.Style.BorderColor, context));
+                    new Rdl.Render.BorderColor(_legend.Style.BorderColor, context),
+                    xMult, yMult);
 
 
             // Draw the text onto the chart legend area.

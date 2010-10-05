@@ -138,12 +138,13 @@ namespace Rdl.Engine
                     System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(bm);
                     g.PageUnit = System.Drawing.GraphicsUnit.Point;
                     System.Drawing.SizeF textSize = g.MeasureString(
-                        _text, font, (int)width);
+                        _text, font, (int)(width - _box.Style.PaddingLeft.points - _box.Style.PaddingRight.points));
 
-                    if (_canGrow && (decimal)textSize.Height > height)
-                        height = (decimal)textSize.Height;
-                    if (_canShrink && (decimal)textSize.Height < height)
-                        height = (decimal)textSize.Height;
+                    decimal h = (decimal)textSize.Height + _box.Style.PaddingTop.points + _box.Style.PaddingBottom.points;
+                    if (_canGrow && h > height)
+                        height = h;
+                    if (_canShrink && h < height)
+                        height = h;
                 }
                 _box.Width = width;
                 _box.Height = height;
