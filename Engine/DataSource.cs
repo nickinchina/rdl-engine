@@ -118,6 +118,16 @@ namespace Rdl.Engine
             return null;
         }
 
+        public void Close()
+        {
+            if (_connectionProperties.DataProvider == "SQL")
+            {
+                _sqlConn.Close();
+                _sqlConn.Dispose();
+                _sqlConn = null;
+            }
+        }
+
         public string Name
         {
             get { return _name; }

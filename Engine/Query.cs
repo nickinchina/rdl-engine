@@ -117,6 +117,8 @@ namespace Rdl.Engine
 
                 da.Fill(dsRet, name);
             }
+
+            ds.Close();
         }
     }
 }
