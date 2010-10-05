@@ -16,7 +16,7 @@ namespace Rdl.Render
         private int _pageNumber = 0;
         public Dictionary<string, string> elementValues = new Dictionary<string, string>();
 
-        internal Page(Rdl.Engine.Report rpt,
+        internal Page(Rdl.Render.GenericRender rpt,
             int pageNumber,
             decimal width, 
             decimal height,
@@ -31,24 +31,24 @@ namespace Rdl.Render
             _pageNumber = pageNumber;
             _relativeTop = relativeTop;
 
-            _pageHeaderBox = AddFixedContainer(rpt, rpt.Style, null);
+            _pageHeaderBox = AddFixedContainer(rpt.Report, rpt.Report.Style, null);
             _pageHeaderBox.Width = Width;
             _pageHeaderBox.Name = "PageHeader";
             _pageHeaderBox.CanGrowVertically = true;
 
             // Add in the page header if appropriate
-            if (rpt.PageHeader != null)
-                if (pageNumber > 0 || rpt.PageHeader.PrintOnFirstPage)
+            if (rpt.Report.PageHeader != null)
+                if (pageNumber > 0 || rpt.Report.PageHeader.PrintOnFirstPage)
                     _pageHeaderBox.Children.Add(PageRender.Copy(rpt.PageHeaderContainer, true));
             _pageHeaderBox.SetSizes(false);
 
-            _pageDetailsBox = AddFixedContainer(rpt, rpt.Style, null);
+            _pageDetailsBox = AddFixedContainer(rpt.Report, rpt.Report.Style, null);
             _pageDetailsBox.Width = Width;
             _pageDetailsBox.Height = Height;
             _pageDetailsBox.Name = "PageDetails";
             _pageDetailsBox.CanGrowVertically = false;
 
-            _pageFooterBox = AddFixedContainer(rpt, rpt.Style, null);
+            _pageFooterBox = AddFixedContainer(rpt.Report, rpt.Report.Style, null);
             _pageFooterBox.Width = Width;
             _pageFooterBox.Name = "PageFooter";
             _pageFooterBox.CanGrowVertically = true;
@@ -92,14 +92,14 @@ namespace Rdl.Render
             }
         }
 
-        internal void AddFooters(Rdl.Engine.Report rpt, Container b)
+        internal void AddFooters(Rdl.Render.GenericRender rpt, Container b)
         {
             decimal top = 0;
             _pageFooterBox.Top = _pageHeaderBox.Height + _pageDetailsBox.Height;
             if (b != null)
                 RecurseAddFooters(b, ref top);
 
-            if (rpt.PageFooter != null)
+            if (rpt.Report.PageFooter != null)
             {
                 Container pageFooter = PageRender.Copy(rpt.PageFooterContainer, true);
                 pageFooter.Top = top;
@@ -109,13 +109,13 @@ namespace Rdl.Render
             _pageFooterBox.Height = top;
         }
 
-        public void RemoveLastPageHeadersAndFooters(Rdl.Engine.Report rpt)
+        public void RemoveLastPageHeadersAndFooters(Rdl.Render.GenericRender rpt)
         {
-            if (rpt.PageHeader != null)
-                if (!rpt.PageHeader.PrintOnLastPage)
+            if (rpt.Report.PageHeader != null)
+                if (!rpt.Report.PageHeader.PrintOnLastPage)
                     _childElements.Remove(_pageHeaderBox);
-            if (rpt.PageFooter != null)
-                if (!rpt.PageFooter.PrintOnLastPage)
+            if (rpt.Report.PageFooter != null)
+                if (!rpt.Report.PageFooter.PrintOnLastPage)
                     _childElements.Remove(_pageFooterBox);
         }
 

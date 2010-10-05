@@ -12,7 +12,7 @@ namespace Rdl.Render
         private int[] _rowsToLines;
         private string[] _lines = new string[1];
 
-        public string Render(Rdl.Engine.Report report)
+        public string Render(Rdl.Render.GenericRender report)
         {
             report.SetSizes(true);
 

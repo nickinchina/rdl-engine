@@ -37,7 +37,7 @@ namespace Rdl.Engine
                     _commandType = (CommandTypeEnum)Enum.Parse(typeof(CommandTypeEnum), attr.InnerText, true);
                     break;
                 case "commandtext":
-                    _commandText = new Expression(attr, this);
+                    _commandText = new Expression(attr, this, false);
                     break;
                 case "queryparameters":
                     foreach(XmlNode child in attr.ChildNodes)

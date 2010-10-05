@@ -67,15 +67,9 @@ namespace Rdl.Engine
         private string _xmlNameSpace = string.Empty;
         private Dictionary<string, EmbeddedImage> _embeddedImages = new Dictionary<string, EmbeddedImage>();
         private string _reportPath = string.Empty;
-        private List<Rdl.Render.BoxStyle> _styleList = new List<Rdl.Render.BoxStyle>();
-        private List<Rdl.Render.ImageData> _imageList = new List<ImageData>();
 
         private List<string> _functions = new List<string>();
         internal Rdl.Runtime.RuntimeBase Rtb = null;
-
-        public Rdl.Render.Container BodyContainer = null;
-        public Rdl.Render.Container PageHeaderContainer = null;
-        public Rdl.Render.Container PageFooterContainer = null;
 
         /// <summary>
         /// Used with the <see cref="InitializeDataSet"/> event.
@@ -204,9 +198,9 @@ namespace Rdl.Engine
                 LoadModule(cp, codeModule);
 
             // Replace the aggregate function calls with deletage calls.
-            int ct = _functions.Count;
-            for (int i = 0; i < ct; i++)
-                _functions[i] = ReplaceAggregatesWithDelegates(_functions[i]);
+            //int ct = _functions.Count;
+            //for (int i = 0; i < ct; i++)
+            //    _functions[i] = ReplaceAggregatesWithDelegates(_functions[i]);
 
             // Build the source code for the named functions.
             string addFns = string.Empty;
@@ -378,14 +372,13 @@ namespace Rdl.Engine
         /// then be used by one or more of the rendering classes to produce 
         /// a report in an output format.
         /// </summary>
-        public void Run()
+        public Rdl.Render.GenericRender Run()
         {
-            Render(null, null);
+            return Render(null, null);
         }
 
-        internal override void Render(Rdl.Render.Container box, Rdl.Runtime.Context parentContext)
+        internal new Rdl.Render.GenericRender Render(Rdl.Render.Container box, Rdl.Runtime.Context parentContext)
         {
-            
             Rdl.Runtime.Context context = new Rdl.Runtime.Context(
                 parentContext,
                 null,
@@ -408,92 +401,27 @@ namespace Rdl.Engine
             context = new Rdl.Runtime.Context(
                 parentContext, _reportDataSet, null, null, null);
 
+            Rdl.Render.GenericRender render;
             if (box == null)
-                BodyContainer = new FixedContainer(null, this, new BoxStyle(Style.DefaultStyle, context));
+            {
+                render = new Rdl.Render.GenericRender(this, context);
+                box = render.BodyContainer;
+            }
             else
-                BodyContainer = box.AddFixedContainer(this, Style.DefaultStyle, context);
-            BodyContainer.Name = "ReportBody";
-            BodyContainer.Width = _width.points;
-            BodyContainer.ContextBase = true;
-
-            if (box == null)
-                PageHeaderContainer = new FixedContainer(null, this, new BoxStyle(Style.DefaultStyle, context));
-            else
-                PageHeaderContainer = box.AddFixedContainer(this, Style.DefaultStyle, context);
-            PageHeaderContainer.Name = "PageHeader";
-            PageHeaderContainer.Width = _width.points;
-            PageHeaderContainer.ContextBase = true;
-
-            if (box == null)
-                PageFooterContainer = new FixedContainer(null, this, new BoxStyle(Style.DefaultStyle, context));
-            else
-                PageFooterContainer = box.AddFixedContainer(this, Style.DefaultStyle, context);
-            PageFooterContainer.Name = "PageFooter";
-            PageFooterContainer.Width = _width.points;
-            PageFooterContainer.ContextBase = true;
+                render = box.Render;
 
             if (_pageHeader != null)
-                _pageHeader.Render(PageHeaderContainer, context);
+                _pageHeader.Render(render.PageHeaderContainer, context);
 
             if (_pageFooter != null)
-                _pageFooter.Render(PageFooterContainer, context);
+                _pageFooter.Render(render.PageFooterContainer, context);
 
             // Render the report.
-            _body.Render(BodyContainer, context);
+            _body.Render(box, context);
 
             context.LinkToggles();
-        }
 
-        /// <exclude/>
-        public void SetSizes(bool ignoreVisibility)
-        {
-            PageHeaderContainer.SetSizes(ignoreVisibility);
-            PageFooterContainer.SetSizes(ignoreVisibility);
-            BodyContainer.SetSizes(ignoreVisibility);
-        }
-
-        internal int AddStyle(BoxStyle style)
-        {
-            for (int i = 0; i < _styleList.Count; i++)
-                if (_styleList[i].GetType() == style.GetType() && _styleList[i].Equals(style))
-                    return i;
-
-            _styleList.Add(style);
-            return _styleList.Count - 1;
-        }
-        
-        public List<Rdl.Render.BoxStyle> StyleList
-        {
-            get{return _styleList;}
-        }
-
-        internal int AddImage(Image image, Rdl.Runtime.Context context)
-        {
-            if (image._imageIndex >= 0)
-                return image._imageIndex;
-
-            System.Drawing.Image img = image.GetImage(context);
-
-            // Search for the image in the image list.
-            for (int i = 0; i < _imageList.Count; i++)
-                if (_imageList[i].CompareTo(img))
-                    return i;
-
-            ImageData id = new ImageData();
-            id.imageData = img;
-            id.MimeType = image.MIMEType(context);
-            if (image is Rdl.Engine.BackgroundImage)
-                id.ImageRepeat = ((Rdl.Engine.BackgroundImage)image).ImageRepeat(context);
-            id.Sizing = image.Sizing;
-
-            _imageList.Add(id);
-            return _imageList.Count - 1;
-        }
-
-        /// <exclude/>
-        public List<Rdl.Render.ImageData> ImageList
-        {
-            get{return _imageList;}
+            return render;
         }
 
         private static void LoadModule(CompilerParameters cp, string module)
@@ -518,8 +446,10 @@ namespace Rdl.Engine
         }
 
         /// <exclude/>
-        public Int32 AddFunction(string body)
+        public Int32 AddFunction(string body, bool replaceAggregates)
         {
+            if (replaceAggregates)
+                body = ReplaceAggregatesWithDelegates(" " + body);
             Int32 index = _functions.Count;
             string fnName = "fn_" + index.ToString();
             string fn = "Private Function " + fnName + "() as Object\n" +
@@ -552,7 +482,7 @@ namespace Rdl.Engine
 
         private string MatchAggFn(Match m)
         {
-            int fn = AddFunction(m.Groups["expression"].Value);
+            int fn = AddFunction(m.Groups["expression"].Value, true);
             return m.Groups["leading"].Value + "(AddressOf fn_" + fn.ToString() + m.Groups["scope"].Value + " )";
         }
 
@@ -617,6 +547,11 @@ namespace Rdl.Engine
         public string Language(Rdl.Runtime.Context context)
         {
             return _language.ExecAsString(context);
+        }
+
+        public Size Width
+        {
+            get { return _width; }
         }
 
         /// <exclude/>

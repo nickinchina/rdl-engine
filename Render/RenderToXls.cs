@@ -17,7 +17,7 @@ namespace Rdl.Render
         private Workbook _workbook = null;
         private Worksheet _ws = null;
 
-        public byte[] Render(Rdl.Engine.Report report)
+        public byte[] Render(Rdl.Render.GenericRender report)
         {
             report.SetSizes(true);
 

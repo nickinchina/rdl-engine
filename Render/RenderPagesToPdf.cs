@@ -16,7 +16,7 @@ namespace Rdl.Render
         private Bitmap _bm;
         private Graphics _g;
 
-        public string Render(Rdl.Engine.Report rpt, PageRender pageRender)
+        public string Render(Rdl.Render.GenericRender rpt, PageRender pageRender)
         {
             _doc = new Document();
             _pageRender = pageRender;
@@ -45,7 +45,7 @@ namespace Rdl.Render
                 Pdf.Page pdfPage = _doc.Pages.AddPage(_doc,
                     new Rectangle(0, 0, (int)_pageRender.PageWidth, (int)_pageRender.PageHeight));
 
-                Render.Page renderedPage = pageRender.Pages[pageNum];
+                Page renderedPage = pageRender.Pages[pageNum];
 
                 Pdf.ContentStream cs = pdfPage.AddContents(_doc);
 

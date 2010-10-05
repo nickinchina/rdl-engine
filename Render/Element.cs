@@ -31,20 +31,23 @@ namespace Rdl.Render
         // if the element spans more than one page.
         protected List<Element> _repeatList = new List<Element>();
         internal Rdl.Engine.ReportElement _reportElement;
+        protected GenericRender _genericRender;
         protected bool _contextBase = false;
         // The baseStyleList is maintained only in the base element.
         // Each element uses an index into this list to locate its style.
         private int _styleIndex = -1;
-        private int _renderedStyleIndex = -1;
+        //private int _renderedStyleIndex = -1;
         public int _imageIndex = -1;
         private Toggles _toggles = null;
 
         internal Element(Container parent, Rdl.Engine.ReportElement reportElement, BoxStyle style)
         {
             _parentElement = parent;
+            if (_parentElement != null)
+                _genericRender = _parentElement._genericRender;
             _reportElement = reportElement;
             if (style != null && reportElement != null)
-                _styleIndex = reportElement.Report.AddStyle(style);
+                _styleIndex = Render.AddStyle(style);
             _toggles = new Toggles(this);
         }
 
@@ -69,6 +72,7 @@ namespace Rdl.Render
             _pageBreakBefore = e._pageBreakBefore;
             _fixed = e._fixed;
             _toggles = new Toggles(e._toggles);
+            _genericRender = e._genericRender;
         }
 
         public Container BaseElement()
@@ -85,11 +89,21 @@ namespace Rdl.Render
             set { _styleIndex = value; }
         }
 
-        public int RenderedStyleIndex
+        internal void SetGenericRender(GenericRender render)
         {
-            get { return _renderedStyleIndex; }
-            set { _renderedStyleIndex = value; }
+            _genericRender = render;
         }
+
+        public GenericRender Render
+        {
+            get { return _genericRender; }
+        }
+
+        //public int RenderedStyleIndex
+        //{
+        //    get { return _renderedStyleIndex; }
+        //    set { _renderedStyleIndex = value; }
+        //}
 
         public void SetSizes(bool ignoreVisibility)
         {
@@ -372,7 +386,7 @@ namespace Rdl.Render
             get 
             {
                 if (StyleIndex >= 0)
-                    return ReportElement.Report.StyleList[StyleIndex];
+                    return Render.StyleList[StyleIndex];
                 else
                     return null;
             }

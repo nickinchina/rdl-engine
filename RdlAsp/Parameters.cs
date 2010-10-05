@@ -317,7 +317,12 @@ namespace RdlAsp
                                 break;
                             }
                             if (parm.MultiValue)
-                                values = ((TextBox)ctrl).Text.Split(new char[] { ',' });
+                            {
+                                if (((TextBox)ctrl).Text.Trim().Length > 0)
+                                    values = ((TextBox)ctrl).Text.Split(new char[] { ',' });
+                                else
+                                    values = new string[0];
+                            }
                             else
                                 values = new string[1] { ((TextBox)ctrl).Text };
 
@@ -327,7 +332,7 @@ namespace RdlAsp
                                 {
                                     case "DateTime":
                                         DateTime dt;
-                                        if (!DateTime.TryParse(((TextBox)ctrl).Text, out dt))
+                                        if (!DateTime.TryParse(values[i], out dt))
                                         {
                                             OnParameterError(new ParameterErrorEventArgs(_report, "Invalid date"));
                                             return;
@@ -336,7 +341,7 @@ namespace RdlAsp
                                         break;
                                     case "Boolean":
                                         Boolean bv;
-                                        if (!Boolean.TryParse(((TextBox)ctrl).Text, out bv))
+                                        if (!Boolean.TryParse(values[i], out bv))
                                         {
                                             OnParameterError(new ParameterErrorEventArgs(_report, "Invalid Boolean value"));
                                             return;
@@ -345,7 +350,7 @@ namespace RdlAsp
                                         break;
                                     case "Int32":
                                         Int32 iv;
-                                        if (!Int32.TryParse(((TextBox)ctrl).Text, out iv))
+                                        if (!Int32.TryParse(values[i], out iv))
                                         {
                                             OnParameterError(new ParameterErrorEventArgs(_report, "Invalid numeric value"));
                                             return;
@@ -354,7 +359,7 @@ namespace RdlAsp
                                         break;
                                     case "Single":
                                         Single sv;
-                                        if (!Single.TryParse(((TextBox)ctrl).Text, out sv))
+                                        if (!Single.TryParse(values[i], out sv))
                                         {
                                             OnParameterError(new ParameterErrorEventArgs(_report, "Invalid numeric value"));
                                             return;
@@ -362,10 +367,6 @@ namespace RdlAsp
                                         values[i] = sv.ToString();
                                         break;
                                     default:
-                                        if (parm.MultiValue)
-                                            parm.Value = ((TextBox)ctrl).Text.Split(new char[] { ',' });
-                                        else
-                                            parm.Value = ((TextBox)ctrl).Text;
                                         break;
                                 }
                             }

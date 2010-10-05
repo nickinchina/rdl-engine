@@ -26,10 +26,10 @@ namespace Rdl.Engine
             switch (attr.Name.ToLower())
             {
                 case "value":
-                    _value = new Expression(attr, this);
+                    _value = new Expression(attr, this, false);
                     break;
                 case "label":
-                    _label = new Expression(attr, this);
+                    _label = new Expression(attr, this, false);
                     break;
                 default:
                     break;

@@ -104,7 +104,7 @@ namespace Rdl.Render
             FixedContainer child = new FixedContainer(this, reportElement, new BoxStyle(style, context));
             _childElements.Add(child);
             if (style != null && style.BackgroundImage != null)
-                _imageIndex = reportElement.Report.AddImage(style.BackgroundImage, context);
+                _imageIndex = Render.AddImage(style.BackgroundImage, context);
             return child;
         }
 
@@ -113,7 +113,7 @@ namespace Rdl.Render
             FlowContainer child = new FlowContainer(this, reportElement, new BoxStyle(style, context));
             child.FlowDirection = direction;
             if (style != null && style.BackgroundImage != null)
-                _imageIndex = reportElement.Report.AddImage(style.BackgroundImage, context);
+                _imageIndex = Render.AddImage(style.BackgroundImage, context);
             _childElements.Add(child);
             return child;
         }
@@ -122,7 +122,7 @@ namespace Rdl.Render
         {
             ChartElement child = new ChartElement(this, reportElement, new BoxStyle(style, context), context);
             if (style != null && style.BackgroundImage != null)
-                _imageIndex = reportElement.Report.AddImage(style.BackgroundImage, context);
+                _imageIndex = Render.AddImage(style.BackgroundImage, context);
             _childElements.Add(child);
             return child;
         }
@@ -131,7 +131,7 @@ namespace Rdl.Render
         {
             Table.Container child = new Table.Container(this, reportElement, new BoxStyle(style, context));
             if (style != null && style.BackgroundImage != null)
-                _imageIndex = reportElement.Report.AddImage(style.BackgroundImage, context);
+                _imageIndex = Render.AddImage(style.BackgroundImage, context);
             _childElements.Add(child);
             return child;
         }
@@ -140,7 +140,7 @@ namespace Rdl.Render
         {
             TextElement child = new TextElement(this, reportElement, name, text, new TextStyle(style, context), context);
             if (style != null && style.BackgroundImage != null)
-                _imageIndex = reportElement.Report.AddImage(style.BackgroundImage, context);
+                _imageIndex = Render.AddImage(style.BackgroundImage, context);
             _childElements.Add(child);
             return child;
         }
