@@ -422,6 +422,8 @@ namespace Rdl.Render
                 else
                     ret += " TTB";
             ret += "  " + _name;
+            if (this.ReportElement is Engine.ReportItem)
+                ret += " " + ((Engine.ReportItem)this.ReportElement).Name;
             if (this is TextElement)
                 ret += "  " + ((TextElement)this).Text;
             if (this is Table.Cell)
@@ -430,6 +432,10 @@ namespace Rdl.Render
                 ret += string.Format("  ({0},{1},({2},{3}))", c.Row, c.Column, c.RowSpan, c.ColSpan);
             }
             ret += "  (" + Left.ToString() + ", " + Top.ToString() + ", " + Width.ToString() + ", " + Height.ToString() + ")";
+            if (Style != null && Style.BorderWidth != null)
+                ret += " border( (" + Style.BorderWidth.Left.points.ToString() + ", " + Style.BorderWidth.Top.points.ToString() + ", " + Style.BorderWidth.Right.points.ToString() + ", " + Style.BorderWidth.Bottom.points.ToString() +
+                    ") (" + Style.BorderStyle.Left.ToString() + ", " + Style.BorderStyle.Top.ToString() + ", " + Style.BorderStyle.Right.ToString() + ", " + Style.BorderStyle.Bottom.ToString() + ") )";
+
             ret += Toggles.ToString();
             ret += "\r\n";
             if (this is Container)

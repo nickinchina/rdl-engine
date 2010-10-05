@@ -95,7 +95,7 @@ namespace Rdl.Render
         internal void AddFooters(Rdl.Render.GenericRender rpt, Container b)
         {
             decimal top = 0;
-            _pageFooterBox.Top = _pageHeaderBox.Height + _pageDetailsBox.Height;
+            //_pageFooterBox.Top = _pageHeaderBox.Height + _pageDetailsBox.Height;
             if (b != null)
                 RecurseAddFooters(b, ref top);
 
@@ -107,7 +107,7 @@ namespace Rdl.Render
                 top += pageFooter.Height;
             }
             _pageFooterBox.Height = top;
-        }
+            _pageFooterBox.Top = Height - top;        }
 
         public void RemoveLastPageHeadersAndFooters(Rdl.Render.GenericRender rpt)
         {
@@ -198,7 +198,7 @@ namespace Rdl.Render
             ret += _pageHeaderBox.ToString() + "\r\n";
             ret += _pageDetailsBox.ToString() + "\r\n";
             ret += _pageFooterBox.ToString() + "\r\n";
-            return ret;
+            ret += "Page " + _pageNumber.ToString() + "\r\n";            ret += "Width:" + Width.ToString() + " Height:" + Height.ToString() + "\r\n";            return ret;
         }
 
         // Resolve the values of the ReportItem references on this page.
