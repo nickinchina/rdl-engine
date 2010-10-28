@@ -112,11 +112,13 @@ namespace RdlAsp
             {
                 body = body.Replace("<%report%>", _htmlReport.Body);
                 body = body.Replace("<%buttons%>", htmlButtons);
+                body = body.Replace("<%script%>", _htmlReport.Script);
             }
             else
             {
                 body = body.Replace("<%report%>", string.Empty);
                 body = body.Replace("<%buttons%>", string.Empty);
+                body = body.Replace("<%script%>", string.Empty);
             }
             body = body.Replace("<%btnAction%>", FindControl("btnAction").ClientID);
             body = body.Replace("<%tbAction%>", FindControl("tbAction").ClientID);
@@ -168,11 +170,6 @@ namespace RdlAsp
                     "<style type='text/css'>\n" +
                     _htmlReport.Style +
                     "</style>"));
-
-                Page.ClientScript.RegisterStartupScript(this.GetType(), "ReportScript",
-                    "<script language=\"javascript\">\n" +
-                    _htmlReport.Script +
-                    "</script>");
             }
 
             string cbReference = Page.ClientScript.GetCallbackEventReference(
@@ -220,9 +217,15 @@ namespace RdlAsp
 
         private string html = @"
 <script language=""javascript"">
+function LoadImages()
+{
+<%script%>    
+}
+
 function ToggleStateData(value)
 {
     document.getElementById('ReportContentDiv').innerHTML = value;
+    LoadImages();
 }
 
 function ToggleState(tb_id)
@@ -346,6 +349,10 @@ function chkCheckAll_click(checkbox, checkboxlist)
 <div id=""ReportContentDiv"" style=""position: static; overflow: visible;"">
     <%report%>
 </div>
+
+<script language=""javascript"">
+LoadImages();
+</script>
 ";
 
         private string htmlButtons = @"
