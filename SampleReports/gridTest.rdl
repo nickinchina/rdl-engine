@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2005/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <DataSources>
+    <DataSource Name="NorthwindConnectionString">
+      <ConnectionProperties>
+        <IntegratedSecurity>true</IntegratedSecurity>
+        <ConnectString>Data Source=TAPROCESS;Initial Catalog=Northwind;Trusted_Connection=true;</ConnectString>
+        <DataProvider>SQL</DataProvider>
+      </ConnectionProperties>
+      <rd:DataSourceID>a2d7c109-abe5-41f9-b673-1513b53c7267</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <BottomMargin>1in</BottomMargin>
+  <RightMargin>1in</RightMargin>
+  <rd:DrawGrid>true</rd:DrawGrid>
+  <InteractiveWidth>8.5in</InteractiveWidth>
+  <rd:SnapToGrid>true</rd:SnapToGrid>
+  <Body>
+    <ReportItems>
+      <Matrix Name="matrix1">
+        <MatrixColumns>
+          <MatrixColumn>
+            <Width>1.25in</Width>
+          </MatrixColumn>
+          <MatrixColumn>
+            <Width>0.5in</Width>
+          </MatrixColumn>
+        </MatrixColumns>
+        <Left>0.125in</Left>
+        <RowGroupings>
+          <RowGrouping>
+            <Width>0.75in</Width>
+            <DynamicRows>
+              <ReportItems>
+                <Textbox Name="textbox2">
+                  <rd:DefaultName>textbox2</rd:DefaultName>
+                  <ZIndex>4</ZIndex>
+                  <Style>
+                    <PaddingLeft>2pt</PaddingLeft>
+                    <PaddingBottom>2pt</PaddingBottom>
+                    <PaddingRight>2pt</PaddingRight>
+                    <PaddingTop>2pt</PaddingTop>
+                  </Style>
+                  <CanGrow>true</CanGrow>
+                  <Value>=Fields!Region.Value</Value>
+                </Textbox>
+              </ReportItems>
+              <Grouping Name="matrix1_RowGroup2">
+                <GroupExpressions>
+                  <GroupExpression>=Fields!Region.Value</GroupExpression>
+                </GroupExpressions>
+              </Grouping>
+            </DynamicRows>
+          </RowGrouping>
+          <RowGrouping>
+            <Width>1in</Width>
+            <DynamicRows>
+              <ReportItems>
+                <Textbox Name="LastName">
+                  <rd:DefaultName>LastName</rd:DefaultName>
+                  <ZIndex>3</ZIndex>
+                  <Style>
+                    <PaddingLeft>2pt</PaddingLeft>
+                    <PaddingBottom>2pt</PaddingBottom>
+                    <PaddingRight>2pt</PaddingRight>
+                    <PaddingTop>2pt</PaddingTop>
+                  </Style>
+                  <CanGrow>true</CanGrow>
+                  <Value>=Fields!LastName.Value</Value>
+                </Textbox>
+              </ReportItems>
+              <Subtotal>
+                <ReportItems>
+                  <Textbox Name="textbox5">
+                    <rd:DefaultName>textbox5</rd:DefaultName>
+                    <Style>
+                      <PaddingLeft>2pt</PaddingLeft>
+                      <PaddingBottom>2pt</PaddingBottom>
+                      <PaddingRight>2pt</PaddingRight>
+                      <PaddingTop>2pt</PaddingTop>
+                    </Style>
+                    <CanGrow>true</CanGrow>
+                    <Value>Total</Value>
+                  </Textbox>
+                </ReportItems>
+              </Subtotal>
+              <Visibility>
+                <ToggleItem>textbox2</ToggleItem>
+                <Hidden>true</Hidden>
+              </Visibility>
+              <Grouping Name="matrix1_LastName">
+                <GroupExpressions>
+                  <GroupExpression>=Fields!LastName.Value</GroupExpression>
+                </GroupExpressions>
+              </Grouping>
+            </DynamicRows>
+          </RowGrouping>
+        </RowGroupings>
+        <ColumnGroupings>
+          <ColumnGrouping>
+            <DynamicColumns>
+              <ReportItems>
+                <Textbox Name="CategoryName_1">
+                  <rd:DefaultName>CategoryName_1</rd:DefaultName>
+                  <ZIndex>7</ZIndex>
+                  <Style>
+                    <BorderStyle>
+                      <Default>Solid</Default>
+                    </BorderStyle>
+                    <PaddingLeft>2pt</PaddingLeft>
+                    <PaddingBottom>2pt</PaddingBottom>
+                    <PaddingRight>2pt</PaddingRight>
+                    <PaddingTop>2pt</PaddingTop>
+                  </Style>
+                  <CanGrow>true</CanGrow>
+                  <Value>=Fields!CategoryName.Value</Value>
+                </Textbox>
+              </ReportItems>
+              <Grouping Name="matrix1_ColumnGroup1">
+                <GroupExpressions>
+                  <GroupExpression>=Fields!CategoryName.Value</GroupExpression>
+                </GroupExpressions>
+              </Grouping>
+            </DynamicColumns>
+            <Height>0.3125in</Height>
+          </ColumnGrouping>
+          <ColumnGrouping>
+            <Height>12pt</Height>
+            <StaticColumns>
+              <StaticColumn>
+                <ReportItems>
+                  <Textbox Name="test1">
+                    <ZIndex>6</ZIndex>
+                    <CanGrow>true</CanGrow>
+                    <Value>Test Value</Value>
+                  </Textbox>
+                </ReportItems>
+              </StaticColumn>
+              <StaticColumn>
+                <ReportItems>
+                  <Textbox Name="textbox3">
+                    <rd:DefaultName>textbox3</rd:DefaultName>
+                    <ZIndex>5</ZIndex>
+                    <CanGrow>true</CanGrow>
+                    <Value>foo bar</Value>
+                  </Textbox>
+                </ReportItems>
+              </StaticColumn>
+            </StaticColumns>
+          </ColumnGrouping>
+        </ColumnGroupings>
+        <DataSetName>NorthwindDataSet_Orders</DataSetName>
+        <Top>0.125in</Top>
+        <Width>3.5in</Width>
+        <Corner>
+          <ReportItems>
+            <Textbox Name="textbox1">
+              <rd:DefaultName>textbox1</rd:DefaultName>
+              <ZIndex>8</ZIndex>
+              <Style>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingBottom>2pt</PaddingBottom>
+                <FontWeight>700</FontWeight>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+              </Style>
+              <CanGrow>true</CanGrow>
+              <Value>This is a test of the corner element to make sure the size is appropriate.</Value>
+            </Textbox>
+          </ReportItems>
+        </Corner>
+        <Height>1.10417in</Height>
+        <MatrixRows>
+          <MatrixRow>
+            <Height>0.3125in</Height>
+            <MatrixCells>
+              <MatrixCell>
+                <ReportItems>
+                  <Textbox Name="OrderID">
+                    <rd:DefaultName>OrderID</rd:DefaultName>
+                    <ZIndex>2</ZIndex>
+                    <Style>
+                      <BorderStyle>
+                        <Default>Solid</Default>
+                      </BorderStyle>
+                      <TextAlign>Right</TextAlign>
+                      <PaddingLeft>2pt</PaddingLeft>
+                      <PaddingBottom>2pt</PaddingBottom>
+                      <PaddingRight>2pt</PaddingRight>
+                      <PaddingTop>2pt</PaddingTop>
+                    </Style>
+                    <CanGrow>true</CanGrow>
+                    <Value>=Count(Fields!OrderID.Value)</Value>
+                  </Textbox>
+                </ReportItems>
+              </MatrixCell>
+              <MatrixCell>
+                <ReportItems>
+                  <Image Name="image1">
+                    <Sizing>Fit</Sizing>
+                    <ZIndex>1</ZIndex>
+                    <Source>Embedded</Source>
+                    <Style />
+                    <Value>focusfactornumber1</Value>
+                  </Image>
+                </ReportItems>
+              </MatrixCell>
+            </MatrixCells>
+          </MatrixRow>
+        </MatrixRows>
+      </Matrix>
+    </ReportItems>
+    <Height>2in</Height>
+  </Body>
+  <rd:ReportID>4850aab7-3531-477a-9270-d7b0202d8e07</rd:ReportID>
+  <LeftMargin>1in</LeftMargin>
+  <EmbeddedImages>
+    <EmbeddedImage Name="focusfactornumber1">
+      <ImageData>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</ImageData>
+      <MIMEType>image/jpeg</MIMEType>
+    </EmbeddedImage>
+  </EmbeddedImages>
+  <DataSets>
+    <DataSet Name="NorthwindDataSet_Orders">
+      <rd:DataSetInfo>
+        <rd:TableAdapterGetDataMethod>GetData</rd:TableAdapterGetDataMethod>
+        <rd:DataSetName>NorthwindDataSet</rd:DataSetName>
+        <rd:TableAdapterFillMethod>Fill</rd:TableAdapterFillMethod>
+        <rd:TableAdapterName>OrdersTableAdapter</rd:TableAdapterName>
+        <rd:TableName>Orders</rd:TableName>
+      </rd:DataSetInfo>
+      <Query>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+        <CommandText>select T1.*, T2.LastName, T2.FirstName, T5.CategoryName, T2.Region
+from Orders T1
+   join Employees T2 on T1.EmployeeID = T2.EmployeeID
+  join [Order Details] T3 on T1.OrderID = T3.OrderID
+  join Products T4 on T3.ProductID = T4.ProductID
+  join Categories T5 on T4.CategoryID = T5.CategoryID</CommandText>
+        <DataSourceName>NorthwindConnectionString</DataSourceName>
+      </Query>
+      <Fields>
+        <Field Name="OrderID">
+          <rd:TypeName>System.Int32</rd:TypeName>
+          <DataField>OrderID</DataField>
+        </Field>
+        <Field Name="CustomerID">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>CustomerID</DataField>
+        </Field>
+        <Field Name="EmployeeID">
+          <rd:TypeName>System.Int32</rd:TypeName>
+          <DataField>EmployeeID</DataField>
+        </Field>
+        <Field Name="OrderDate">
+          <rd:TypeName>System.DateTime</rd:TypeName>
+          <DataField>OrderDate</DataField>
+        </Field>
+        <Field Name="RequiredDate">
+          <rd:TypeName>System.DateTime</rd:TypeName>
+          <DataField>RequiredDate</DataField>
+        </Field>
+        <Field Name="ShippedDate">
+          <rd:TypeName>System.DateTime</rd:TypeName>
+          <DataField>ShippedDate</DataField>
+        </Field>
+        <Field Name="ShipVia">
+          <rd:TypeName>System.Int32</rd:TypeName>
+          <DataField>ShipVia</DataField>
+        </Field>
+        <Field Name="Freight">
+          <rd:TypeName>System.Decimal</rd:TypeName>
+          <DataField>Freight</DataField>
+        </Field>
+        <Field Name="ShipName">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>ShipName</DataField>
+        </Field>
+        <Field Name="ShipAddress">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>ShipAddress</DataField>
+        </Field>
+        <Field Name="ShipCity">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>ShipCity</DataField>
+        </Field>
+        <Field Name="ShipRegion">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>ShipRegion</DataField>
+        </Field>
+        <Field Name="ShipPostalCode">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>ShipPostalCode</DataField>
+        </Field>
+        <Field Name="ShipCountry">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>ShipCountry</DataField>
+        </Field>
+        <Field Name="LastName">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>LastName</DataField>
+        </Field>
+        <Field Name="FirstName">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>FirstName</DataField>
+        </Field>
+        <Field Name="CategoryName">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>CategoryName</DataField>
+        </Field>
+        <Field Name="Region">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>Region</DataField>
+        </Field>
+      </Fields>
+    </DataSet>
+  </DataSets>
+  <Width>6.5in</Width>
+  <InteractiveHeight>11in</InteractiveHeight>
+  <Language>en-US</Language>
+  <TopMargin>1in</TopMargin>
+</Report>
