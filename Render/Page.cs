@@ -30,6 +30,7 @@ namespace Rdl.Render
             Name = "Page";
             _pageNumber = pageNumber;
             _relativeTop = relativeTop;
+            _genericRender = rpt;
 
             _pageHeaderBox = AddFixedContainer(rpt.Report, rpt.Report.Style, null);
             _pageHeaderBox.Width = Width;

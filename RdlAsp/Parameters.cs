@@ -83,7 +83,7 @@ namespace RdlAsp
 
                 foreach (Rdl.Engine.ReportParameter parm in _report.ReportParameters.Values)
                 {
-                    List<Control> controlList = (parm.Nullable) ? optionalControls : requiredControls;
+                    List<Control> controlList = (parm.Nullable || parm.AllowBlank) ? optionalControls : requiredControls;
                     if (!parm.Hidden)
                     {
                         controlList.Add(new LiteralControl("<div style=\"margin: 5px;\">" + parm.Prompt + "&nbsp"));
@@ -319,7 +319,11 @@ namespace RdlAsp
                             if (parm.MultiValue)
                             {
                                 if (((TextBox)ctrl).Text.Trim().Length > 0)
+                                {
                                     values = ((TextBox)ctrl).Text.Split(new char[] { ',' });
+                                    for (int i = 0; i < values.Length; i++)
+                                        values[i] = values[i].Trim();
+                                }
                                 else
                                     values = new string[0];
                             }

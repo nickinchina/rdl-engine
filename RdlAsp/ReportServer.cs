@@ -79,8 +79,9 @@ namespace RdlAsp
                         {
                             MemoryStream ms = new MemoryStream();
 
-                            System.Drawing.Image img = cc.RenderChart(int.Parse(context.Request.QueryString["width"]),
-                                int.Parse(context.Request.QueryString["height"]));
+                            System.Drawing.Image img = cc.RenderChart(
+                                int.Parse(context.Request.QueryString["width"]),
+                                int.Parse(context.Request.QueryString["height"]), 1, 1);
                             if (img != null)
                             {
                                 img.Save(ms, System.Drawing.Imaging.ImageFormat.Gif);
@@ -91,12 +92,13 @@ namespace RdlAsp
                     }
                     break;
                 case "XlsExport":
+                case "XlsExportAll":
                     {
                         byte[] xlsReport = null;
                         try
                         {
                             Rdl.Render.RenderToXls xlsRender = new Rdl.Render.RenderToXls();
-                            xlsReport = xlsRender.Render(_renderedReport.SourceReport);
+                            xlsReport = xlsRender.Render(_renderedReport.SourceReport, path=="XlsExportAll");
                         }
                         catch (System.Security.SecurityException)
                         {

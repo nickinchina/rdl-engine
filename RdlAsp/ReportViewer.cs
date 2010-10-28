@@ -256,12 +256,17 @@ function ExportOnChange(selectedIndex)
     }
     if (selectedIndex == 3)
     {
+        var url = 'XlsExportAll." + ReportServer._extension + @"?ReportSessionID=<%ReportSessionID%>';
+        window.location = url;
+    }
+    if (selectedIndex == 4)
+    {
         var url = 'TxtExport." + ReportServer._extension + @"?ReportSessionID=<%ReportSessionID%>';
         window.location = url;
         //window.open(url,'_blank','');
         //window.opener=top;
     }
-    if (selectedIndex == 4)
+    if (selectedIndex == 5)
     {
         var url = 'CsvExport." + ReportServer._extension + @"?ReportSessionID=<%ReportSessionID%>';
         window.location = url;
@@ -348,6 +353,7 @@ Export To:<select id=""Export"" onchange=""ExportOnChange(this.selectedIndex)"">
     <option selected=""selected"">---</option>
     <option>PDF</option>
     <option>Excel</option>
+    <option>Excel all data</option>
     <option>Text</option>
     <option>CSV</option>
 </select>

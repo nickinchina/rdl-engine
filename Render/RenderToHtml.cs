@@ -48,6 +48,7 @@ namespace Rdl.Render
             //RecurseAddStyles(report.PageFooterContainer, 0, ref styleTop);
             //RecurseAddStyles(report.BodyContainer, 0, ref styleTop);
             //int styleBase = AddStyles(report);
+            _styles.AppendLine("a { color: inherit; background-color: inherit;}");
 
             RenderBody(forPrint);
 

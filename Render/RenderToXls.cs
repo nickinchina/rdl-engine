@@ -17,14 +17,14 @@ namespace Rdl.Render
         private Workbook _workbook = null;
         private Worksheet _ws = null;
 
-        public byte[] Render(Rdl.Render.GenericRender report)
+        public byte[] Render(Rdl.Render.GenericRender report, bool renderAll)
         {
-            report.SetSizes(true);
+            report.SetSizes(renderAll);
 
             _workbook = new Workbook();
             _ws = _workbook.Worksheets.Add("Report");
 
-            RecurseBuildRowsCols(report.BodyContainer, 0, 0);
+            RecurseBuildRowsCols(report.BodyContainer, 0, 0, renderAll);
             _rows.Add(0);
             _rows.Sort(delegate(decimal d1, decimal d2) { return decimal.Compare(d1, d2); });
             _cols.Add(0);
@@ -36,38 +36,49 @@ namespace Rdl.Render
             for (int i = 1; i < _cols.Count; i++)
                 _ws.Columns[i-1].Width = (int)((_cols[i] - _cols[i-1]) * _colWidth);
 
-            RecurseRender(report.BodyContainer, 0, 0);
+            RecurseRender(report.BodyContainer, 0, 0, renderAll);
 
             MemoryStream ms = new MemoryStream();
             BIFF8Writer.WriteWorkbookToStream(_workbook, ms);
             return ms.ToArray();
         }
 
-        private void RecurseBuildRowsCols(Element elmt, decimal top, decimal left)
+        private void RecurseBuildRowsCols(Element elmt, decimal top, decimal left, bool renderAll)
         {
             top += elmt.Top;
             left += elmt.Left;
+
+            if (!renderAll)
+                if (elmt is Container && !((Container)elmt).IsVisible)
+                    return;
 
             //if (_rows.Find(delegate(decimal d) { return d == top; }) == decimal.Zero)
             //    _rows.Add(top);
-            if (top != 0 && _rows.Find(delegate(decimal d) { return d == top; }) == decimal.Zero)
-                _rows.Add(top);
+            if (elmt is TextElement)
+            {
+                if (top != 0 && _rows.Find(delegate(decimal d) { return d == top; }) == decimal.Zero)
+                    _rows.Add(top);
 
-            if (left != 0 && _cols.Find(delegate(decimal d) { return d == left; }) == decimal.Zero)
-                _cols.Add(left);
-            if (left + elmt.Width != 0 && _cols.Find(delegate(decimal d) { return d == left + elmt.Width ; }) == decimal.Zero)
-                _cols.Add(left + elmt.Width);
+                if (left != 0 && _cols.Find(delegate(decimal d) { return d == left; }) == decimal.Zero)
+                    _cols.Add(left);
+                if (left + elmt.Width != 0 && _cols.Find(delegate(decimal d) { return d == left + elmt.Width; }) == decimal.Zero)
+                    _cols.Add(left + elmt.Width);
+            }
 
             if (elmt is Container)
                 foreach (Element child in ((Container)elmt).Children)
-                    RecurseBuildRowsCols(child, top, left);
+                    RecurseBuildRowsCols(child, top, left, renderAll);
         }
 
 
-        private void RecurseRender(Element elmt, decimal top, decimal left)
+        private void RecurseRender(Element elmt, decimal top, decimal left, bool renderAll)
         {
             top += elmt.Top;
             left += elmt.Left;
+
+            if (!renderAll)
+                if (elmt is Container && !((Container)elmt).IsVisible)
+                    return;
 
             if (elmt is TextElement)
             {
@@ -139,7 +150,7 @@ namespace Rdl.Render
 
             if (elmt is Container)
                 foreach (Element child in ((Container)elmt).Children)
-                    RecurseRender(child, top, left);
+                    RecurseRender(child, top, left, renderAll);
         }
 
         private CellBorderLineStyle ExcelBorderStyleFromRdlBorderStyle(Rdl.Engine.BorderStyle.BorderStyleEnum bs)
