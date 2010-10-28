@@ -46,7 +46,7 @@ namespace RdlViewer
         }
 
         private PageRender _pageRender = null;
-        private Rdl.Engine.Report _report = null;
+        private Rdl.Render.GenericRender _report = null;
         private Page _currentPage = null;
         private int _currentPageNum = 0;
         private Font[] _fonts;
@@ -75,14 +75,14 @@ namespace RdlViewer
         void pd_EndPrint(object sender, PrintEventArgs e)
         {
             if (EndPrint != null)
-                EndPrint(this, new ReportViewEventArgs(_report));
+                EndPrint(this, new ReportViewEventArgs(_report.Report));
         }
 
         /// <summary>
         /// Sets the report to view in the viewer control
         /// </summary>
         /// <param name="report"></param>
-        public void SetReport( Rdl.Engine.Report report )
+        public void SetReport( Rdl.Render.GenericRender report )
         {
             _report = report;
 
@@ -535,7 +535,7 @@ namespace RdlViewer
         void pd_BeginPrint(object sender, PrintEventArgs e)
         {
             if (BeginPrint != null)
-                BeginPrint(this, new ReportViewEventArgs(_report));
+                BeginPrint(this, new ReportViewEventArgs(_report.Report));
             _printingPage = 0;
             _pageOffset = 0;
 

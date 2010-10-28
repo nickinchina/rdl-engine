@@ -282,7 +282,7 @@ namespace Rdl.Render
                     "<img id=\"img_" + elmt.Name + "\" alt=\"\" border=\"0\" src=\"\">");
                 _script.AppendLine(Spaces(level) +
                     "document.getElementById('img_" + elmt.Name + "').src = " +
-                    GetImageUrl(elmt.Name, "SizedImage", elmt._imageIndex.ToString()) + ";" 
+                    GetImageUrl(elmt.Name, "SizedImage", elmt._imageIndex.ToString()) + ";"
                     );
             }
 
