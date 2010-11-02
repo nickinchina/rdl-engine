@@ -1,0 +1,306 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2005/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <DataSources>
+    <DataSource Name="NorthWind">
+      <ConnectionProperties>
+        <IntegratedSecurity>true</IntegratedSecurity>
+        <ConnectString>Data Source=taprocess;Initial Catalog=Northwind</ConnectString>
+        <DataProvider>SQL</DataProvider>
+      </ConnectionProperties>
+      <rd:DataSourceID>a86968c1-7c51-4e00-8521-efa4b32cec95</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <BottomMargin>1in</BottomMargin>
+  <RightMargin>1in</RightMargin>
+  <rd:DrawGrid>true</rd:DrawGrid>
+  <InteractiveWidth>8.5in</InteractiveWidth>
+  <rd:SnapToGrid>true</rd:SnapToGrid>
+  <Body>
+    <ReportItems>
+      <Textbox Name="textbox6">
+        <Left>2.875in</Left>
+        <Top>2.25in</Top>
+        <rd:DefaultName>textbox6</rd:DefaultName>
+        <ZIndex>2</ZIndex>
+        <Width>1in</Width>
+        <Style>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingBottom>2pt</PaddingBottom>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+        </Style>
+        <CanGrow>true</CanGrow>
+        <Height>0.25in</Height>
+        <Value>test</Value>
+      </Textbox>
+      <Rectangle Name="rectangle1">
+        <Left>0.625in</Left>
+        <ReportItems>
+          <Table Name="table1">
+            <Footer>
+              <TableRows>
+                <TableRow>
+                  <TableCells>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox8">
+                          <rd:DefaultName>textbox8</rd:DefaultName>
+                          <ZIndex>5</ZIndex>
+                          <Style>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingBottom>2pt</PaddingBottom>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                          </Style>
+                          <CanGrow>true</CanGrow>
+                          <Value />
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox9">
+                          <rd:DefaultName>textbox9</rd:DefaultName>
+                          <ZIndex>4</ZIndex>
+                          <Style>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingBottom>2pt</PaddingBottom>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                          </Style>
+                          <CanGrow>true</CanGrow>
+                          <Value />
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox10">
+                          <rd:DefaultName>textbox10</rd:DefaultName>
+                          <ZIndex>3</ZIndex>
+                          <Style>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingBottom>2pt</PaddingBottom>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                          </Style>
+                          <CanGrow>true</CanGrow>
+                          <Value />
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                  </TableCells>
+                  <Height>0.25in</Height>
+                </TableRow>
+              </TableRows>
+            </Footer>
+            <DataSetName>NorthWind</DataSetName>
+            <Top>0.25in</Top>
+            <Details>
+              <TableRows>
+                <TableRow>
+                  <TableCells>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox5">
+                          <rd:DefaultName>textbox5</rd:DefaultName>
+                          <ZIndex>2</ZIndex>
+                          <Style>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingBottom>2pt</PaddingBottom>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                          </Style>
+                          <CanGrow>true</CanGrow>
+                          <Value />
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="ProductName">
+                          <rd:DefaultName>ProductName</rd:DefaultName>
+                          <ZIndex>1</ZIndex>
+                          <Style>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingBottom>2pt</PaddingBottom>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                          </Style>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Fields!ProductName.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox7">
+                          <rd:DefaultName>textbox7</rd:DefaultName>
+                          <Style>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingBottom>2pt</PaddingBottom>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                          </Style>
+                          <CanGrow>true</CanGrow>
+                          <Value />
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                  </TableCells>
+                  <Height>0.25in</Height>
+                </TableRow>
+              </TableRows>
+            </Details>
+            <Header>
+              <TableRows>
+                <TableRow>
+                  <TableCells>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox2">
+                          <rd:DefaultName>textbox2</rd:DefaultName>
+                          <ZIndex>8</ZIndex>
+                          <Style>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingBottom>2pt</PaddingBottom>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                          </Style>
+                          <CanGrow>true</CanGrow>
+                          <Value />
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox3">
+                          <rd:DefaultName>textbox3</rd:DefaultName>
+                          <ZIndex>7</ZIndex>
+                          <Style>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingBottom>2pt</PaddingBottom>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                          </Style>
+                          <CanGrow>true</CanGrow>
+                          <Value>Product Name</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox4">
+                          <rd:DefaultName>textbox4</rd:DefaultName>
+                          <ZIndex>6</ZIndex>
+                          <Style>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingBottom>2pt</PaddingBottom>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                          </Style>
+                          <CanGrow>true</CanGrow>
+                          <Value />
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                  </TableCells>
+                  <Height>0.25in</Height>
+                </TableRow>
+              </TableRows>
+            </Header>
+            <TableColumns>
+              <TableColumn>
+                <Width>0.66667in</Width>
+              </TableColumn>
+              <TableColumn>
+                <Width>0.66667in</Width>
+              </TableColumn>
+              <TableColumn>
+                <Width>0.66667in</Width>
+              </TableColumn>
+            </TableColumns>
+          </Table>
+        </ReportItems>
+        <Top>1in</Top>
+        <ZIndex>1</ZIndex>
+        <Width>2in</Width>
+        <Height>1in</Height>
+      </Rectangle>
+      <Textbox Name="textbox1">
+        <rd:DefaultName>textbox1</rd:DefaultName>
+        <Style>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingBottom>2pt</PaddingBottom>
+          <FontFamily>Tahoma</FontFamily>
+          <FontWeight>700</FontWeight>
+          <FontSize>20pt</FontSize>
+          <Color>SteelBlue</Color>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+        </Style>
+        <CanGrow>true</CanGrow>
+        <Height>0.36in</Height>
+        <Value>RectangleTest</Value>
+      </Textbox>
+    </ReportItems>
+    <Height>3.25in</Height>
+  </Body>
+  <rd:ReportID>593d9eb3-a8f7-42c8-b9fc-97c437a87e8e</rd:ReportID>
+  <LeftMargin>1in</LeftMargin>
+  <DataSets>
+    <DataSet Name="NorthWind">
+      <Query>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+        <CommandText>select * from Products</CommandText>
+        <DataSourceName>NorthWind</DataSourceName>
+      </Query>
+      <Fields>
+        <Field Name="ProductID">
+          <rd:TypeName>System.Int32</rd:TypeName>
+          <DataField>ProductID</DataField>
+        </Field>
+        <Field Name="ProductName">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>ProductName</DataField>
+        </Field>
+        <Field Name="SupplierID">
+          <rd:TypeName>System.Int32</rd:TypeName>
+          <DataField>SupplierID</DataField>
+        </Field>
+        <Field Name="CategoryID">
+          <rd:TypeName>System.Int32</rd:TypeName>
+          <DataField>CategoryID</DataField>
+        </Field>
+        <Field Name="QuantityPerUnit">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>QuantityPerUnit</DataField>
+        </Field>
+        <Field Name="UnitPrice">
+          <rd:TypeName>System.Decimal</rd:TypeName>
+          <DataField>UnitPrice</DataField>
+        </Field>
+        <Field Name="UnitsInStock">
+          <rd:TypeName>System.Int16</rd:TypeName>
+          <DataField>UnitsInStock</DataField>
+        </Field>
+        <Field Name="UnitsOnOrder">
+          <rd:TypeName>System.Int16</rd:TypeName>
+          <DataField>UnitsOnOrder</DataField>
+        </Field>
+        <Field Name="ReorderLevel">
+          <rd:TypeName>System.Int16</rd:TypeName>
+          <DataField>ReorderLevel</DataField>
+        </Field>
+        <Field Name="Discontinued">
+          <rd:TypeName>System.Boolean</rd:TypeName>
+          <DataField>Discontinued</DataField>
+        </Field>
+      </Fields>
+    </DataSet>
+  </DataSets>
+  <Width>10in</Width>
+  <InteractiveHeight>11in</InteractiveHeight>
+  <Language>en-US</Language>
+  <TopMargin>1in</TopMargin>
+</Report>

@@ -1,0 +1,267 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{FB39C9AF-F9C1-4505-B7FE-4DB0F8CCB691}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Rdl</RootNamespace>
+    <AssemblyName>RdlEngine</AssemblyName>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\RdlEngine.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Infragistics2.Excel.v6.2">
+      <HintPath>.\Infragistics2.Excel.v6.2.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="EmbeddedImage.cs" />
+    <Compile Include="Engine\Chart\Axis.cs" />
+    <Compile Include="Engine\Chart\CategoryAxis.cs" />
+    <Compile Include="Engine\Chart\CategoryGrouping.cs" />
+    <Compile Include="Engine\Chart\Chart.cs" />
+    <Compile Include="Engine\Chart\ChartElement.cs" />
+    <Compile Include="Engine\Chart\ChartSeries.cs" />
+    <Compile Include="Engine\Chart\DataLabel.cs" />
+    <Compile Include="Engine\Chart\DataPoint.cs" />
+    <Compile Include="Engine\Chart\DynamicCategory.cs" />
+    <Compile Include="Engine\Chart\DynamicSeries.cs" />
+    <Compile Include="Engine\Chart\GridLines.cs" />
+    <Compile Include="Engine\Chart\Legend.cs" />
+    <Compile Include="Engine\Chart\Marker.cs" />
+    <Compile Include="Engine\Chart\Palette.cs" />
+    <Compile Include="Engine\Chart\RayTrace\Color.cs" />
+    <Compile Include="Engine\Chart\RayTrace\Common.cs" />
+    <Compile Include="Engine\Chart\RayTrace\Engine.cs" />
+    <Compile Include="Engine\Chart\RayTrace\Material.cs" />
+    <Compile Include="Engine\Chart\RayTrace\Matrix.cs" />
+    <Compile Include="Engine\Chart\RayTrace\Primitives\Box.cs" />
+    <Compile Include="Engine\Chart\RayTrace\Primitives\Plane.cs" />
+    <Compile Include="Engine\Chart\RayTrace\Point3.cs" />
+    <Compile Include="Engine\Chart\RayTrace\Primitive.cs" />
+    <Compile Include="Engine\Chart\RayTrace\Ray.cs" />
+    <Compile Include="Engine\Chart\RayTrace\Scene.cs" />
+    <Compile Include="Engine\Chart\RayTrace\Primitives\Sphere.cs" />
+    <Compile Include="Engine\Chart\RayTrace\Vector3.cs" />
+    <Compile Include="Engine\Chart\SeriesGrouping.cs" />
+    <Compile Include="Engine\Chart\StaticCategory.cs" />
+    <Compile Include="Engine\Chart\StaticSeries.cs" />
+    <Compile Include="Engine\Chart\ThreeDProperties.cs" />
+    <Compile Include="Engine\Chart\Title.cs" />
+    <Compile Include="Engine\Chart\Type\Bar.cs" />
+    <Compile Include="Engine\Chart\Type\Column.cs" />
+    <Compile Include="Engine\Chart\Type\Line.cs" />
+    <Compile Include="Engine\Chart\Type\Pie.cs" />
+    <Compile Include="Engine\Chart\ValueAxis.cs" />
+    <Compile Include="Engine\Line.cs" />
+    <Compile Include="Engine\List.cs" />
+    <Compile Include="Engine\Matrix\ColumnGrouping.cs" />
+    <Compile Include="Engine\Matrix\DynamicColumns.cs" />
+    <Compile Include="Engine\Matrix\DynamicRows.cs" />
+    <Compile Include="Engine\Matrix\Matrix.cs" />
+    <Compile Include="Engine\Matrix\Cell.cs" />
+    <Compile Include="Engine\Matrix\Column.cs" />
+    <Compile Include="Engine\Matrix\MatrixElement.cs" />
+    <Compile Include="Engine\Matrix\Row.cs" />
+    <Compile Include="Engine\Matrix\Rows.cs" />
+    <Compile Include="Engine\Matrix\RowGrouping.cs" />
+    <Compile Include="Engine\Matrix\StaticColumns.cs" />
+    <Compile Include="Engine\Matrix\StaticRows.cs" />
+    <Compile Include="Engine\PageHeaderFooter.cs" />
+    <Compile Include="Engine\SubReport.cs" />
+    <Compile Include="Engine\Matrix\SubTotal.cs" />
+    <Compile Include="Engine\Table\TableElement.cs" />
+    <Compile Include="Engine\Toggle.cs" />
+    <Compile Include="Pdf\Catalog.cs" />
+    <Compile Include="Pdf\ContentStream.cs" />
+    <Compile Include="Pdf\Document.cs" />
+    <Compile Include="Pdf\Font.cs" />
+    <Compile Include="Pdf\FontDescriptor.cs" />
+    <Compile Include="Pdf\FontWidths.cs" />
+    <Compile Include="Pdf\MyStringBuilder.cs" />
+    <Compile Include="Pdf\PdfObject.cs" />
+    <Compile Include="Pdf\Page.cs" />
+    <Compile Include="Pdf\PageTree.cs" />
+    <Compile Include="Engine\Action.cs" />
+    <Compile Include="Engine\BackgroundImage.cs" />
+    <Compile Include="Engine\Body.cs" />
+    <Compile Include="Engine\BorderColor.cs" />
+    <Compile Include="Engine\BorderStyle.cs" />
+    <Compile Include="Engine\BorderWidth.cs" />
+    <Compile Include="Engine\ConnectionProperties.cs" />
+    <Compile Include="Engine\DataRegion.cs" />
+    <Compile Include="Engine\DataSet.cs" />
+    <Compile Include="Engine\DataSetReference.cs" />
+    <Compile Include="Engine\DataSource.cs" />
+    <Compile Include="Engine\DataSets.cs" />
+    <Compile Include="Engine\DefaultValue.cs" />
+    <Compile Include="Engine\Drillthrough.cs" />
+    <Compile Include="Engine\Enums.cs" />
+    <Compile Include="Engine\Expression.cs" />
+    <Compile Include="Engine\Field.cs" />
+    <Compile Include="Engine\Filter.cs" />
+    <Compile Include="Engine\Filters.cs" />
+    <Compile Include="Engine\Grouping.cs" />
+    <Compile Include="Engine\Image.cs" />
+    <Compile Include="Engine\Parameter.cs" />
+    <Compile Include="Engine\ParameterValue.cs" />
+    <Compile Include="Engine\Query.cs" />
+    <Compile Include="Engine\QueryParameter.cs" />
+    <Compile Include="Engine\Rectangle.cs" />
+    <Compile Include="Engine\Report.cs" />
+    <Compile Include="Pdf\WinGdi.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Engine\ReportElement.cs" />
+    <Compile Include="Engine\ReportItem.cs" />
+    <Compile Include="Engine\ReportItems.cs" />
+    <Compile Include="Engine\ReportParameter.cs" />
+    <Compile Include="Engine\Size.cs" />
+    <Compile Include="Engine\SortBy.cs" />
+    <Compile Include="Engine\Style.cs" />
+    <Compile Include="Engine\Table\Table.cs" />
+    <Compile Include="Engine\Table\Cell.cs" />
+    <Compile Include="Engine\Table\Column.cs" />
+    <Compile Include="Engine\Table\Details.cs" />
+    <Compile Include="Engine\Table\Footer.cs" />
+    <Compile Include="Engine\Table\Group.cs" />
+    <Compile Include="Engine\Table\Header.cs" />
+    <Compile Include="Engine\Table\Row.cs" />
+    <Compile Include="Engine\TextBox.cs" />
+    <Compile Include="Engine\ToggleImage.cs" />
+    <Compile Include="Engine\UserSort.cs" />
+    <Compile Include="Engine\Visibility.cs" />
+    <Compile Include="RdlResource.Designer.cs" />
+    <Compile Include="Render\ActionElement.cs" />
+    <Compile Include="Render\BorderColor.cs" />
+    <Compile Include="Render\BorderStyle.cs" />
+    <Compile Include="Render\BorderWidth.cs" />
+    <Compile Include="Render\BoxStyle.cs" />
+    <Compile Include="Render\ChartContainer.cs" />
+    <Compile Include="Render\Container.cs" />
+    <Compile Include="Render\Drawing.cs" />
+    <Compile Include="Render\Element.cs" />
+    <Compile Include="Render\FixedContainer.cs" />
+    <Compile Include="Render\FlowContainer.cs" />
+    <Compile Include="Render\GenericRender.cs" />
+    <Compile Include="Render\ImageData.cs" />
+    <Compile Include="Render\ImageElement.cs" />
+    <Compile Include="Render\Page.cs" />
+    <Compile Include="Render\PageRender.cs" />
+    <Compile Include="Render\RenderPagesToHtml.cs" />
+    <Compile Include="Render\RenderToCsv.cs" />
+    <Compile Include="Render\RenderToHtml.cs" />
+    <Compile Include="Render\RenderPagesToPdf.cs" />
+    <Compile Include="Render\RenderToText.cs" />
+    <Compile Include="Render\RenderToXls.cs" />
+    <Compile Include="Render\Table\Cell.cs" />
+    <Compile Include="Render\Table\Column.cs" />
+    <Compile Include="Render\Table\Columns.cs" />
+    <Compile Include="Render\Table\Container.cs" />
+    <Compile Include="Render\Table\Row.cs" />
+    <Compile Include="Render\Table\Rows.cs" />
+    <Compile Include="Render\TextStyle.cs" />
+    <Compile Include="Render\TextElement.cs" />
+    <Compile Include="Render\Toggles.cs" />
+    <Compile Include="Runtime\AggregateFunctions.cs" />
+    <Compile Include="Runtime\Aggregates.cs" />
+    <Compile Include="Runtime\Compare.cs" />
+    <Compile Include="Runtime\Context.cs" />
+    <Compile Include="Runtime\CredentialsPromptEventArgs.cs" />
+    <Compile Include="Runtime\Fields.cs" />
+    <Compile Include="Runtime\Globals.cs" />
+    <Compile Include="Runtime\InitializeDataSetEventArgs.cs" />
+    <Compile Include="Runtime\Parameters.cs" />
+    <Compile Include="Runtime\RuntimeBase.cs" />
+    <Compile Include="Runtime\User.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="RdlResource.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
