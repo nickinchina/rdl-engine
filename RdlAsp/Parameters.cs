@@ -62,8 +62,12 @@ namespace RdlAsp
         protected Rdl.Engine.Report _report = null;
         private Dictionary<string, Control> _parameterControls = new Dictionary<string, Control>();
         private Button btnView;
-        private LiteralControl chkCheckAll = null;
-        private CheckBoxList checkBoxList = null;
+        private struct CheckBoxListControls
+        {
+            public LiteralControl chkCheckAll;
+            public CheckBoxList checkBoxList;
+        }
+        private List<CheckBoxListControls> checkBoxListControls = new List<CheckBoxListControls>();
 
         private static readonly object EventViewReport =
             new object();
@@ -73,8 +77,12 @@ namespace RdlAsp
         protected override void CreateChildControls()
         {
             Controls.Clear();
+            checkBoxListControls.Clear();
             if (_report == null)
                 _report = (Rdl.Engine.Report)Page.Session["RdlReport"];
+            if (_report != null)
+                foreach (Rdl.Engine.ReportParameter r in _report.ReportParameters.Values)
+                    r.LoadValidValues(_report);
 
             if (_report != null)
             {
@@ -92,15 +100,19 @@ namespace RdlAsp
                         {
                             if (parm.MultiValue)
                             {
-                                checkBoxList = new CheckBoxList();
+                                CheckBoxList checkBoxList = new CheckBoxList();
                                 checkBoxList.ID = parm.Name;
                                 controlList.Add(new LiteralControl("<div style=\"overflow: scroll; height: 100px;\">"));
-                                chkCheckAll = new LiteralControl();
+                                LiteralControl chkCheckAll = new LiteralControl();
                                 controlList.Add(chkCheckAll);
                                 controlList.Add(checkBoxList);
                                 controlList.Add(new LiteralControl("</div>"));
                                 foreach (Rdl.Engine.ParameterValue value in parm.ValidValues)
                                     checkBoxList.Items.Add(new ListItem(value.Label, value.Value));
+                                CheckBoxListControls chkControls = new CheckBoxListControls();
+                                chkControls.checkBoxList = checkBoxList;
+                                chkControls.chkCheckAll = chkCheckAll;
+                                checkBoxListControls.Add(chkControls);
 
                                 if (parm.DefaultValue != null)
                                 {
@@ -119,12 +131,19 @@ namespace RdlAsp
                                 foreach (Rdl.Engine.ParameterValue value in parm.ValidValues)
                                     ddl.Items.Add(new ListItem(value.Label, value.Value));
                                 ddl.ID = parm.Name;
+                                ddl.AutoPostBack = true;
 
                                 if (parm.DefaultValue != null)
                                 {
                                     foreach (ListItem li in ddl.Items)
                                         if (li.Value == parm.DefaultValue[0])
-                                            ddl.Text = li.Text;
+                                            ddl.SelectedValue = li.Value;
+                                }
+                                if (parm.Value != null)
+                                {
+                                    foreach (ListItem li in ddl.Items)
+                                        if (li.Value == parm.Value.ToString())
+                                            ddl.SelectedValue = li.Value;
                                 }
                             }
                         }
@@ -218,13 +237,86 @@ namespace RdlAsp
                 panel.DefaultButton = "ViewReport";
                 Controls.Add(panel);
             }
+            ChildControlsCreated = true;
+        }
+
+        private void ReloadChildControls()
+        {
+            if (_report == null)
+                _report = (Rdl.Engine.Report)Page.Session["RdlReport"];
+            if (_report != null)
+                foreach (Rdl.Engine.ReportParameter r in _report.ReportParameters.Values)
+                    r.LoadValidValues(_report);
+
+            if (_report != null)
+            {
+                foreach (Rdl.Engine.ReportParameter parm in _report.ReportParameters.Values)
+                {
+                    if (!parm.Hidden)
+                    {
+                        if (parm.ValidValues.Count > 0)
+                        {
+                            if (parm.MultiValue)
+                            {
+                                CheckBoxList checkBoxList = (CheckBoxList)FindControl(parm.Name);
+                                bool reload = false;
+                                if (checkBoxList.Items.Count != parm.ValidValues.Count)
+                                    reload = true;
+                                else
+                                    for (int i = 0; i < parm.ValidValues.Count; i++)
+                                        if (parm.ValidValues[i].Label != checkBoxList.Items[i].Text)
+                                            reload = true;
+                                if (reload)
+                                {
+                                    checkBoxList.Items.Clear();
+                                    foreach (Rdl.Engine.ParameterValue value in parm.ValidValues)
+                                        checkBoxList.Items.Add(new ListItem(value.Label, value.Value));
+
+                                    if (parm.DefaultValue != null)
+                                    {
+                                        foreach (string s in parm.DefaultValue)
+                                            foreach (ListItem li in checkBoxList.Items)
+                                                if (li.Value == s)
+                                                    li.Selected = true;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                DropDownList ddl = (DropDownList)FindControl(parm.Name);
+                                bool reload = false;
+                                if (ddl.Items.Count != parm.ValidValues.Count)
+                                    reload = true;
+                                else
+                                    for (int i = 0; i < parm.ValidValues.Count; i++)
+                                        if (parm.ValidValues[i].Label != ddl.Items[i].Text)
+                                            reload = true;
+                                if (reload)
+                                {
+                                    ddl.Items.Clear();
+                                    foreach (Rdl.Engine.ParameterValue value in parm.ValidValues)
+                                        ddl.Items.Add(new ListItem(value.Label, value.Value));
+
+                                    if (parm.DefaultValue != null)
+                                    {
+                                        foreach (string s in parm.DefaultValue)
+                                            foreach (ListItem li in ddl.Items)
+                                                if (li.Value == s)
+                                                    li.Selected = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         protected override void OnPreRender(EventArgs e)
         {
-            if (chkCheckAll != null)
+            foreach(CheckBoxListControls chkControls in checkBoxListControls)
             {
-                chkCheckAll.Text = "<input type=\"checkbox\" id=\"chkCheckAll\" onclick=\"chkCheckAll_click(this, document.getElementById('" + checkBoxList.ClientID + "'));\" />Check All";
+                chkControls.chkCheckAll.Text = "<input type=\"checkbox\" id=\"chkCheckAll\" onclick=\"chkCheckAll_click(this, document.getElementById('" + chkControls.checkBoxList.ClientID + "'));\" />Check All";
             }
             base.OnPreRender(e);
         }
@@ -296,114 +388,6 @@ namespace RdlAsp
 
         void btnView_Click(object sender, EventArgs e)
         {
-            EnsureChildControls();
-            foreach (Control ctrl in Controls[0].Controls)
-            {
-                Rdl.Engine.ReportParameter parm = null;
-                if (ctrl.ID != null && _report.ReportParameters != null && _report.ReportParameters.ContainsKey(ctrl.ID))
-                    parm = _report.ReportParameters[ctrl.ID];
-                if (parm != null)
-                {
-                    switch (ctrl.GetType().Name)
-                    {
-                        case "CheckBox":
-                            parm.Value = ((CheckBox)ctrl).Checked;
-                            break;
-                        case "TextBox":
-                            string[] values;
-                            if (parm.Nullable && ((TextBox)ctrl).Text.Trim() == string.Empty)
-                            {
-                                parm.Value = null;
-                                break;
-                            }
-                            if (parm.MultiValue)
-                            {
-                                if (((TextBox)ctrl).Text.Trim().Length > 0)
-                                {
-                                    values = ((TextBox)ctrl).Text.Split(new char[] { ',' });
-                                    for (int i = 0; i < values.Length; i++)
-                                        values[i] = values[i].Trim();
-                                }
-                                else
-                                    values = new string[0];
-                            }
-                            else
-                                values = new string[1] { ((TextBox)ctrl).Text };
-
-                            for (int i = 0; i < values.Length; i++)
-                            {
-                                switch (parm.DataType.Name)
-                                {
-                                    case "DateTime":
-                                        DateTime dt;
-                                        if (!DateTime.TryParse(values[i], out dt))
-                                        {
-                                            OnParameterError(new ParameterErrorEventArgs(_report, "Invalid date"));
-                                            return;
-                                        }
-                                        values[i] = dt.ToString("yyyy-MM-dd HH:mm:ss");
-                                        break;
-                                    case "Boolean":
-                                        Boolean bv;
-                                        if (!Boolean.TryParse(values[i], out bv))
-                                        {
-                                            OnParameterError(new ParameterErrorEventArgs(_report, "Invalid Boolean value"));
-                                            return;
-                                        }
-                                        values[i] = bv.ToString();
-                                        break;
-                                    case "Int32":
-                                        Int32 iv;
-                                        if (!Int32.TryParse(values[i], out iv))
-                                        {
-                                            OnParameterError(new ParameterErrorEventArgs(_report, "Invalid numeric value"));
-                                            return;
-                                        }
-                                        values[i] = iv.ToString();
-                                        break;
-                                    case "Single":
-                                        Single sv;
-                                        if (!Single.TryParse(values[i], out sv))
-                                        {
-                                            OnParameterError(new ParameterErrorEventArgs(_report, "Invalid numeric value"));
-                                            return;
-                                        }
-                                        values[i] = sv.ToString();
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            }
-                            if (parm.MultiValue)
-                                parm.Value = values;
-                            else
-                                parm.Value = values[0];
-                            break;
-                        case "DropDownList":
-                            if (((DropDownList)ctrl).Text == string.Empty)
-                            {
-                                if (parm.Nullable)
-                                    parm.Value = null;
-                                else
-                                    parm.Value = string.Empty;
-                                break;
-                            }
-                            foreach (Rdl.Engine.ParameterValue value in parm.ValidValues)
-                                if (value.Label == ((DropDownList)ctrl).SelectedItem.Text)
-                                    parm.Value = value.Value;
-                            break;
-                        case "CheckBoxList":
-                            List<object> valueArray = new List<object>();
-                            foreach (ListItem li in ((CheckBoxList)ctrl).Items)
-                                if (li.Selected)
-                                    foreach (Rdl.Engine.ParameterValue value in parm.ValidValues)
-                                        if (value.Label == li.Text)
-                                            valueArray.Add(value.Value);
-                            parm.Value = valueArray.ToArray();
-                            break;
-                    }
-                }
-            }
             OnViewReport(new ViewReportEventArgs(_report));
         }
 
@@ -415,11 +399,132 @@ namespace RdlAsp
         {
             // Load the valid values into the report parameters.
             _report = report;
-            if (report != null)
-                foreach (Rdl.Engine.ReportParameter r in report.ReportParameters.Values)
-                    r.LoadValidValues(report);
             Page.Session["RdlReport"] = _report;
             ChildControlsCreated = false;
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            if (Page.IsPostBack)
+            {
+                EnsureChildControls();
+                if (Controls.Count == 0)
+                    return;
+                foreach (Control ctrl in Controls[0].Controls)
+                {
+                    Rdl.Engine.ReportParameter parm = null;
+                    if (ctrl.ID != null && _report.ReportParameters != null && _report.ReportParameters.ContainsKey(ctrl.ID))
+                        parm = _report.ReportParameters[ctrl.ID];
+                    if (parm != null)
+                    {
+                        switch (ctrl.GetType().Name)
+                        {
+                            case "CheckBox":
+                                parm.Value = ((CheckBox)ctrl).Checked;
+                                break;
+                            case "TextBox":
+                                string[] values;
+                                if (parm.Nullable && ((TextBox)ctrl).Text.Trim() == string.Empty)
+                                {
+                                    parm.Value = null;
+                                    break;
+                                }
+                                if (parm.MultiValue)
+                                {
+                                    if (((TextBox)ctrl).Text.Trim().Length > 0)
+                                    {
+                                        values = ((TextBox)ctrl).Text.Split(new char[] { ',' });
+                                        for (int i = 0; i < values.Length; i++)
+                                            values[i] = values[i].Trim();
+                                    }
+                                    else
+                                        values = new string[0];
+                                }
+                                else
+                                    values = new string[1] { ((TextBox)ctrl).Text };
+
+                                for (int i = 0; i < values.Length; i++)
+                                {
+                                    switch (parm.DataType.Name)
+                                    {
+                                        case "DateTime":
+                                            DateTime dt;
+                                            if (!DateTime.TryParse(values[i], out dt))
+                                            {
+                                                OnParameterError(new ParameterErrorEventArgs(_report, "Invalid date"));
+                                                return;
+                                            }
+                                            values[i] = dt.ToString("yyyy-MM-dd HH:mm:ss");
+                                            break;
+                                        case "Boolean":
+                                            Boolean bv;
+                                            if (!Boolean.TryParse(values[i], out bv))
+                                            {
+                                                OnParameterError(new ParameterErrorEventArgs(_report, "Invalid Boolean value"));
+                                                return;
+                                            }
+                                            values[i] = bv.ToString();
+                                            break;
+                                        case "Int32":
+                                            Int32 iv;
+                                            if (!Int32.TryParse(values[i], out iv))
+                                            {
+                                                OnParameterError(new ParameterErrorEventArgs(_report, "Invalid numeric value"));
+                                                return;
+                                            }
+                                            values[i] = iv.ToString();
+                                            break;
+                                        case "Single":
+                                            Single sv;
+                                            if (!Single.TryParse(values[i], out sv))
+                                            {
+                                                OnParameterError(new ParameterErrorEventArgs(_report, "Invalid numeric value"));
+                                                return;
+                                            }
+                                            values[i] = sv.ToString();
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                }
+                                if (parm.MultiValue)
+                                    parm.Value = values;
+                                else
+                                    parm.Value = values[0];
+                                break;
+                            case "DropDownList":
+                                if (((DropDownList)ctrl).Text == string.Empty)
+                                {
+                                    if (parm.Nullable)
+                                        parm.Value = null;
+                                    else
+                                        parm.Value = string.Empty;
+                                    break;
+                                }
+                                foreach (Rdl.Engine.ParameterValue value in parm.ValidValues)
+                                    if (value.Label == ((DropDownList)ctrl).SelectedItem.Text)
+                                        parm.Value = value.Value;
+                                break;
+                            case "CheckBoxList":
+                                List<object> valueArray = new List<object>();
+                                foreach (ListItem li in ((CheckBoxList)ctrl).Items)
+                                    if (li.Selected)
+                                        foreach (Rdl.Engine.ParameterValue value in parm.ValidValues)
+                                            if (value.Label == li.Text)
+                                                valueArray.Add(value.Value);
+                                parm.Value = valueArray.ToArray();
+                                break;
+                        }
+                    }
+                }
+                ReloadChildControls();
+                // Call CreateChildControls again because the valid values of parameters may have changed based on values loaded
+                // in the postback.
+                //Page.Response.Redirect(Page.Request.RawUrl);
+                //ChildControlsCreated = false;
+                //EnsureChildControls();
+            }
         }
     }
 }

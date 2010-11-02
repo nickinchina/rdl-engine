@@ -46,7 +46,7 @@ namespace Rdl.Engine
                     throw new Exception("Invalid label field " + _dataSetReference.LableField + " in DefaultValue");
 
                 System.Data.DataSet dsTemp = new System.Data.DataSet();
-                ds.Initialize(dsTemp, new Rdl.Runtime.Context(null, null, null, null, null));
+                ds.Initialize(dsTemp);
                 Rdl.Runtime.Context context = new Rdl.Runtime.Context(null, ds, null, null, null);
                 while (context.CurrentRow != null)
                 {

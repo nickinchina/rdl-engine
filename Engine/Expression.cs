@@ -57,7 +57,9 @@ namespace Rdl.Engine
             _expression = attr.InnerText;
             if (_expression.Length > 0)
                 if (_expression[0] == '=')
-                    _key = Report.AddFunction(_expression.Substring(1).Replace("\n", string.Empty).Replace("\r", string.Empty), _replaceAggregates);
+                    _key = Report.AddFunction(_expression.Substring(1).Replace("\n", string.Empty).Replace("\r", string.Empty),
+                        this.FindName(),
+                        _replaceAggregates);
         }
 
         public bool Empty

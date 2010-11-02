@@ -386,8 +386,8 @@ namespace Rdl.Engine
                 null,
                 null);
 
-            // Initialize the data sets.
-            _dataSets.Initialize(context);
+            // Initialize the data sets. // Initialized in RunTimeBase
+            //_dataSets.Initialize();
 
             // Set the default DataSet for the report
             if (_dataSchema != null)
@@ -446,14 +446,18 @@ namespace Rdl.Engine
         }
 
         /// <exclude/>
-        public Int32 AddFunction(string body, bool replaceAggregates)
+        public Int32 AddFunction(string body, string name, bool replaceAggregates)
         {
             if (replaceAggregates)
                 body = ReplaceAggregatesWithDelegates(" " + body);
             Int32 index = _functions.Count;
             string fnName = "fn_" + index.ToString();
             string fn = "Private Function " + fnName + "() as Object\n" +
+                "Try\n" +
                 "   " + fnName + " = " + body + "\n" +
+                "Catch err As Exception\n" +
+                "   Throw New Exception( \"" + name + "\" + vbCrLf + \"" + body.Replace("\"", "\"\"") + "\", err)\n" +
+                "End Try\n" +
                 "End Function\n";
             _functions.Add(fn);
             return index;
@@ -482,7 +486,7 @@ namespace Rdl.Engine
 
         private string MatchAggFn(Match m)
         {
-            int fn = AddFunction(m.Groups["expression"].Value, true);
+            int fn = AddFunction(m.Groups["expression"].Value, "Aggregate", true);
             return m.Groups["leading"].Value + "(AddressOf fn_" + fn.ToString() + m.Groups["scope"].Value + " )";
         }
 

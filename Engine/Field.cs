@@ -56,7 +56,7 @@ namespace Rdl.Engine
 
         internal bool IsMissing(Rdl.Runtime.Context context)
         {
-            return !context.DataSet.Table.Columns.Contains(_dataField);
+            return !context.DataSet.GetTable(context).Columns.Contains(_dataField);
         }
     }
 }

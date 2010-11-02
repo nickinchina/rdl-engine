@@ -79,7 +79,7 @@ namespace RdlAsp
                         {
                             MemoryStream ms = new MemoryStream();
 
-                            System.Drawing.Image img = cc.RenderChart(
+                            System.Drawing.Image img = cc.RenderChart( int.Parse(context.Request.QueryString["width"]),
                                 int.Parse(context.Request.QueryString["height"]), 1, 1);
                             if (img != null)
                             {

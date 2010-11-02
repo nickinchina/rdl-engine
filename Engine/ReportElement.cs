@@ -164,5 +164,13 @@ namespace Rdl.Engine
             return null;
         }
 
+        public string FindName()
+        {
+            if (this is ReportItem)
+                return ((ReportItem)this).Name;
+            if (Parent != null)
+                return Parent.FindName();
+            return string.Empty;
+        }
     }
 }

@@ -115,6 +115,8 @@ namespace Rdl.Engine
                 System.Data.SqlClient.SqlDataAdapter da =
                     new System.Data.SqlClient.SqlDataAdapter(cmm);
 
+                if (dsRet.Tables[name] != null)
+                    dsRet.Tables[name].Clear();
                 da.Fill(dsRet, name);
             }
 

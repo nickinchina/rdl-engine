@@ -28,10 +28,10 @@ namespace Rdl.Engine
             }
         }
 
-        public void Initialize(Rdl.Runtime.Context context)
+        public void Initialize()
         {
             foreach (DataSet ds in _dataSets.Values)
-                ds.Initialize(_ds, context);
+                ds.Initialize(_ds);
 
             //// Find parent/child relationships
             //foreach (DataSet ds1 in _dataSets.Values)

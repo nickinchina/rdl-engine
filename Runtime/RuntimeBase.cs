@@ -44,6 +44,7 @@ namespace Rdl.Runtime
             Parameters = new Parameters(_rpt);
             Globals = new Globals(_rpt);
             User = new User(_rpt);
+            rpt.DataSets.Initialize();
         }
 
         public void AddFunction(RdlExpressionDeletage expression)

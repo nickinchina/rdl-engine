@@ -116,9 +116,11 @@ namespace Rdl.Engine
                 if (_validValuesDS.LableField != null && ds.Fields[_validValuesDS.LableField] == null)
                     throw new Exception("Invalid label field " + _validValuesDS.LableField + " in ReportParameter");
 
-                System.Data.DataSet dsTemp = new System.Data.DataSet();
-                ds.Initialize(dsTemp, new Rdl.Runtime.Context(null, null, null, null, null));
+                //System.Data.DataSet dsTemp = new System.Data.DataSet();
+                //ds.Initialize(dsTemp);
+                ds.Reset();
                 Rdl.Runtime.Context context = new Rdl.Runtime.Context(null, ds, null, null, null);
+                ValidValues.Clear();
                 while (context.CurrentRow != null)
                 {
                     string value = context.CurrentRow[_validValuesDS.ValueField].ToString();

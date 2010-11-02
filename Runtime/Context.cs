@@ -65,7 +65,7 @@ namespace Rdl.Runtime
             {
                 _dataSet = dataSet;
                 if (parentContext == null)
-                    foreach (System.Data.DataRow row in dataSet.Table.Rows)
+                    foreach (System.Data.DataRow row in dataSet.GetTable(this).Rows)
                         TestAddRow(row);
                 else
                     foreach (System.Data.DataRow row in parentContext.Rows)

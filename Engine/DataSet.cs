@@ -16,6 +16,7 @@ namespace Rdl.Engine
         private Enums.Auto _kanatypeSensitivity = Enums.Auto.False;
         private Enums.Auto _widthSensitivity = Enums.Auto.False;
         private Filters _filters = null;
+        private System.Data.DataSet _ds = null;
 
         private System.Data.DataTable _table = null;
 
@@ -64,22 +65,31 @@ namespace Rdl.Engine
             }
         }
 
-        public void Initialize(System.Data.DataSet ds, Rdl.Runtime.Context context)
+        public void Initialize(System.Data.DataSet ds)
+        {
+            _ds = ds;
+        }
+
+        private void Load(Rdl.Runtime.Context context)
         {
             Rdl.Runtime.InitializeDataSetEventArgs args = new Rdl.Runtime.InitializeDataSetEventArgs();
             args.DataSetName = _name;
-
             Report.OnInitializeDataSet(args);
             if (args.dt != null)
                 _table = args.dt;
             else
             {
                 // Clear the table prior to populating it.
-                if (ds.Tables.Contains(_name))
-                    ds.Tables[_name].Clear();
-                _query.Exec(ds, _name, context);
-                _table = ds.Tables[_name];
+                if (_ds.Tables.Contains(_name))
+                    _ds.Tables[_name].Clear();
+                _query.Exec(_ds, _name, context);
+                _table = _ds.Tables[_name];
             }
+        }
+
+        public void Reset()
+        {
+            _table = null;
         }
 
         public string Name
@@ -92,9 +102,11 @@ namespace Rdl.Engine
             get { return _fields; }
         }
 
-        public System.Data.DataTable Table
+        public System.Data.DataTable GetTable(Rdl.Runtime.Context context)
         {
-            get { return _table; }
+            if (_table == null)
+                Load(context);
+            return _table;
         }
 
         public Int32 Rows
