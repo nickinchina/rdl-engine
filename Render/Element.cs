@@ -107,7 +107,12 @@ namespace Rdl.Render
 
         public void SetSizes(bool ignoreVisibility)
         {
+            // Sizes are calculated in two passes to allow for the MatchParentHeight / With property
+            // The first pass is SetParentSizes to calculate the size of each element
+            // based on the sizes of the children
             SetParentSizes(ignoreVisibility);
+            // The second pass sets the children to the parent size if the
+            // MatchParentHeight property is set.
             SetChildSizes(ignoreVisibility);
         }
 

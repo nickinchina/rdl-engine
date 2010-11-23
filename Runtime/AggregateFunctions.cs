@@ -19,35 +19,41 @@ namespace Rdl.Runtime
         public object Sum(AggrFn fn, string scope, bool runningValue)
         {
             Context ctxt = _currentContext;
-            if (scope != null && scope != string.Empty)
-                ctxt = ctxt.FindContextByGroupName(scope);
-            int rowIndex = ctxt.RowIndex;
-            bool dec = false;
-            decimal decValue = 0;
-            double doubValue = 0;
-
-            int top = (runningValue) ? rowIndex : ctxt.Rows.Count - 1;
-            for (int i = 0; i <= top; i++)
+            PushContextState();
+            try
             {
-                ctxt.RowIndex = i;
+                if (scope != null && scope != string.Empty)
+                    ctxt = ctxt.FindContextByGroupName(scope, _rpt);
+                bool dec = false;
+                decimal decValue = 0;
+                double doubValue = 0;
 
-                object value = fn();
-                if (value != null && !Convert.IsDBNull(value))
+                int top = (runningValue) ? ctxt.RowIndex : ctxt.Rows.Count - 1;
+                for (int i = 0; i <= top; i++)
                 {
-                    if (value is decimal && !dec)
-                    {
-                        dec = true;
-                        decValue = Convert.ToDecimal(doubValue);
-                    }
-                    if (dec)
-                        decValue += Convert.ToDecimal(value);
-                    else
-                        doubValue += Convert.ToDouble(value);
-                }
-            }
+                    ctxt.RowIndex = i;
 
-            ctxt.RowIndex = rowIndex;
-            return (dec) ? (object)decValue : (object)doubValue;
+                    object value = fn();
+                    if (value != null && !Convert.IsDBNull(value))
+                    {
+                        if (value is decimal && !dec)
+                        {
+                            dec = true;
+                            decValue = Convert.ToDecimal(doubValue);
+                        }
+                        if (dec)
+                            decValue += Convert.ToDecimal(value);
+                        else
+                            doubValue += Convert.ToDouble(value);
+                    }
+                }
+
+                return (dec) ? (object)decValue : (object)doubValue;
+            }
+            finally
+            {
+                PopContextState();
+            }
         }
 
         public object Avg(AggrFn fn)
@@ -63,37 +69,43 @@ namespace Rdl.Runtime
         public object Avg(AggrFn fn, string scope, bool runningValue)
         {
             Context ctxt = _currentContext;
-            if (scope != null && scope != string.Empty)
-                ctxt = ctxt.FindContextByGroupName(scope);
-            int rowIndex = ctxt.RowIndex;
-            int ct = 0;
-            bool dec = false;
-            decimal decValue = 0;
-            double doubValue = 0;
-
-            int top = (runningValue) ? rowIndex : ctxt.Rows.Count - 1;
-            for (int i = 0; i <= top; i++)
+            PushContextState();
+            try
             {
-                ctxt.RowIndex = i;
+                if (scope != null && scope != string.Empty)
+                    ctxt = ctxt.FindContextByGroupName(scope, _rpt);
+                int ct = 0;
+                bool dec = false;
+                decimal decValue = 0;
+                double doubValue = 0;
 
-                object value = fn();
-                if (value != null && !Convert.IsDBNull(value))
+                int top = (runningValue) ? ctxt.RowIndex : ctxt.Rows.Count - 1;
+                for (int i = 0; i <= top; i++)
                 {
-                    if (value is decimal && !dec)
-                    {
-                        dec = true;
-                        decValue = Convert.ToDecimal(doubValue);
-                    }
-                    if (dec)
-                        decValue += Convert.ToDecimal(value);
-                    else
-                        doubValue += Convert.ToDouble(value);
-                    ct++;
-                }
-            }
+                    ctxt.RowIndex = i;
 
-            ctxt.RowIndex = rowIndex;
-            return (dec) ? (object)(decValue / ct) : (object)(doubValue / ct);
+                    object value = fn();
+                    if (value != null && !Convert.IsDBNull(value))
+                    {
+                        if (value is decimal && !dec)
+                        {
+                            dec = true;
+                            decValue = Convert.ToDecimal(doubValue);
+                        }
+                        if (dec)
+                            decValue += Convert.ToDecimal(value);
+                        else
+                            doubValue += Convert.ToDouble(value);
+                        ct++;
+                    }
+                }
+
+                return (dec) ? (object)(decValue / ct) : (object)(doubValue / ct);
+            }
+            finally
+            {
+                PopContextState();
+            }
         }
 
         public object Max(AggrFn fn)
@@ -109,28 +121,34 @@ namespace Rdl.Runtime
         public object Max(AggrFn fn, string scope, bool runningValue)
         {
             Context ctxt = _currentContext;
-            if (scope != null && scope != string.Empty)
-                ctxt = ctxt.FindContextByGroupName(scope);
-            int rowIndex = ctxt.RowIndex;
-            object maxVal = null;
-
-            int top = (runningValue) ? rowIndex : ctxt.Rows.Count - 1;
-            for (int i = 0; i <= top; i++)
+            PushContextState();
+            try
             {
-                ctxt.RowIndex = i;
+                if (scope != null && scope != string.Empty)
+                    ctxt = ctxt.FindContextByGroupName(scope, _rpt);
+                object maxVal = null;
 
-                object value = fn();
-                if (value != null && !Convert.IsDBNull(value))
+                int top = (runningValue) ? ctxt.RowIndex : ctxt.Rows.Count - 1;
+                for (int i = 0; i <= top; i++)
                 {
-                    if (maxVal == null)
-                        maxVal = value;
-                    else if (Compare.CompareTo(value, maxVal) > 0)
-                        maxVal = value;
-                }
-            }
+                    ctxt.RowIndex = i;
 
-            ctxt.RowIndex = rowIndex;
-            return maxVal;
+                    object value = fn();
+                    if (value != null && !Convert.IsDBNull(value))
+                    {
+                        if (maxVal == null)
+                            maxVal = value;
+                        else if (Compare.CompareTo(value, maxVal) > 0)
+                            maxVal = value;
+                    }
+                }
+
+                return maxVal;
+            }
+            finally
+            {
+                PopContextState();
+            }
         }
 
         public object Min(AggrFn fn)
@@ -145,29 +163,35 @@ namespace Rdl.Runtime
 
         public object Min(AggrFn fn, string scope, bool runningValue)
         {
+            PushContextState();
             Context ctxt = _currentContext;
-            if (scope != null && scope != string.Empty)
-                ctxt = ctxt.FindContextByGroupName(scope);
-            int rowIndex = ctxt.RowIndex;
-            object maxVal = null;
-
-            int top = (runningValue) ? rowIndex : ctxt.Rows.Count - 1;
-            for (int i = 0; i <= top; i++)
+            try
             {
-                ctxt.RowIndex = i;
+                if (scope != null && scope != string.Empty)
+                    ctxt = ctxt.FindContextByGroupName(scope, _rpt);
+                object maxVal = null;
 
-                object value = fn();
-                if (value != null && !Convert.IsDBNull(value))
+                int top = (runningValue) ? ctxt.RowIndex : ctxt.Rows.Count - 1;
+                for (int i = 0; i <= top; i++)
                 {
-                    if (maxVal == null)
-                        maxVal = value;
-                    else if (Compare.CompareTo(value, maxVal) < 0)
-                        maxVal = value;
-                }
-            }
+                    ctxt.RowIndex = i;
 
-            ctxt.RowIndex = rowIndex;
-            return maxVal;
+                    object value = fn();
+                    if (value != null && !Convert.IsDBNull(value))
+                    {
+                        if (maxVal == null)
+                            maxVal = value;
+                        else if (Compare.CompareTo(value, maxVal) < 0)
+                            maxVal = value;
+                    }
+                }
+
+                return maxVal;
+            }
+            finally
+            {
+                PopContextState();
+            }
         }
 
         public int Count(AggrFn fn)
@@ -183,23 +207,29 @@ namespace Rdl.Runtime
         public int Count(AggrFn fn, string scope, bool runningValue)
         {
             Context ctxt = _currentContext;
-            if (scope != null && scope != string.Empty)
-                ctxt = ctxt.FindContextByGroupName(scope);
-            int rowIndex = ctxt.RowIndex;
-            int ct = 0;
-
-            int top = (runningValue) ? rowIndex : ctxt.Rows.Count - 1;
-            for (int i = 0; i <= top; i++)
+            PushContextState();
+            try
             {
-                ctxt.RowIndex = i;
+                if (scope != null && scope != string.Empty)
+                    ctxt = ctxt.FindContextByGroupName(scope, _rpt);
+                int ct = 0;
 
-                object value = fn();
-                if (value != null && !Convert.IsDBNull(value))
-                    ct++;
+                int top = (runningValue) ? ctxt.RowIndex : ctxt.Rows.Count - 1;
+                for (int i = 0; i <= top; i++)
+                {
+                    ctxt.RowIndex = i;
+
+                    object value = fn();
+                    if (value != null && !Convert.IsDBNull(value))
+                        ct++;
+                }
+
+                return ct;
             }
-
-            ctxt.RowIndex = rowIndex;
-            return ct;
+            finally
+            {
+                PopContextState();
+            }
         }
 
         public int CountDistinct(AggrFn fn)
@@ -215,29 +245,34 @@ namespace Rdl.Runtime
         public int CountDistinct(AggrFn fn, string scope, bool runningValue)
         {
             Context ctxt = _currentContext;
-            if (scope != null && scope != string.Empty)
-                ctxt = ctxt.FindContextByGroupName(scope);
-            List<object> valueList = new List<object>();
-            int rowIndex = ctxt.RowIndex;
-
-            int top = (runningValue) ? rowIndex : ctxt.Rows.Count - 1;
-            for (int i = 0; i <= top; i++)
+            PushContextState();
+            try
             {
-                ctxt.RowIndex = i;
-                object value = fn();
-                if (value != null && !Convert.IsDBNull(value))
-                    valueList.Add(value);
+                if (scope != null && scope != string.Empty)
+                    ctxt = ctxt.FindContextByGroupName(scope, _rpt);
+                List<object> valueList = new List<object>();
+
+                int top = (runningValue) ? ctxt.RowIndex : ctxt.Rows.Count - 1;
+                for (int i = 0; i <= top; i++)
+                {
+                    ctxt.RowIndex = i;
+                    object value = fn();
+                    if (value != null && !Convert.IsDBNull(value))
+                        valueList.Add(value);
+                }
+                valueList.Sort(delegate(object v1, object v2) { return (Compare.CompareTo(v1, v2)); });
+
+                int ct = (valueList.Count == 0) ? 0 : 1;
+                for (int i = 0; i < valueList.Count - 1; i++)
+                    if (Compare.CompareTo(valueList[i], valueList[i + 1]) != 0)
+                        ct++;
+
+                return ct;
             }
-            valueList.Sort(delegate(object v1, object v2) {return (Compare.CompareTo(v1, v2));});
-
-            int ct = (valueList.Count == 0) ? 0 : 1;
-            for (int i = 0; i < valueList.Count - 1; i++)
-                if (Compare.CompareTo(valueList[i], valueList[i+1]) != 0)
-                    ct++;
-
-            ctxt.RowIndex = rowIndex;
-
-            return ct;
+            finally
+            {
+                PopContextState();
+            }
         }
 
         public int CountRows()
@@ -249,7 +284,7 @@ namespace Rdl.Runtime
         {
             Context ctxt = _currentContext;
             if (scope != null && scope != string.Empty)
-                ctxt = ctxt.FindContextByGroupName(scope);
+                ctxt = ctxt.FindContextByGroupName(scope, _rpt);
             return ctxt.Rows.Count;
         }
 
@@ -262,7 +297,7 @@ namespace Rdl.Runtime
         {
             Context ctxt = _currentContext;
             if (scope != null && scope != string.Empty)
-                ctxt = ctxt.FindContextByGroupName(scope);
+                ctxt = ctxt.FindContextByGroupName(scope, _rpt);
 
             if (ctxt == null)
                 throw new Exception("Unable to find context " + scope + " in RowNumber");
@@ -283,32 +318,38 @@ namespace Rdl.Runtime
         public float StDev(AggrFn fn, string scope, bool runningValue)
         {
             Context ctxt = _currentContext;
-            if (scope != null && scope != string.Empty)
-                ctxt = ctxt.FindContextByGroupName(scope);
-            int rowIndex = ctxt.RowIndex;
-            int ct = 0;
-            double sum1 = 0;
-            double sum2 = 0;
-
-            int top = (runningValue) ? rowIndex : ctxt.Rows.Count - 1;
-            for (int i = 0; i <= top; i++)
+            PushContextState();
+            try
             {
-                ctxt.RowIndex = i;
+                if (scope != null && scope != string.Empty)
+                    ctxt = ctxt.FindContextByGroupName(scope, _rpt);
+                int ct = 0;
+                double sum1 = 0;
+                double sum2 = 0;
 
-                object value = fn();
-                if (value != null && !Convert.IsDBNull(value))
+                int top = (runningValue) ? ctxt.RowIndex : ctxt.Rows.Count - 1;
+                for (int i = 0; i <= top; i++)
                 {
-                    sum1 += Convert.ToDouble(value);
-                    sum2 += (Convert.ToDouble(value) * Convert.ToDouble(value));
-                    ct++;
-                }
-            }
+                    ctxt.RowIndex = i;
 
-            ctxt.RowIndex = rowIndex;
-            if (ct > 0)
-                return (float)(Math.Sqrt((ct * sum2) - (sum1 * sum1)) / ct);
-            else
-                return 0;
+                    object value = fn();
+                    if (value != null && !Convert.IsDBNull(value))
+                    {
+                        sum1 += Convert.ToDouble(value);
+                        sum2 += (Convert.ToDouble(value) * Convert.ToDouble(value));
+                        ct++;
+                    }
+                }
+
+                if (ct > 0)
+                    return (float)(Math.Sqrt((ct * sum2) - (sum1 * sum1)) / ct);
+                else
+                    return 0;
+            }
+            finally
+            {
+                PopContextState();
+            }
         }
 
         public float StDevP(AggrFn fn)
@@ -324,32 +365,38 @@ namespace Rdl.Runtime
         public float StDevP(AggrFn fn, string scope, bool runningValue)
         {
             Context ctxt = _currentContext;
-            if (scope != null && scope != string.Empty)
-                ctxt = ctxt.FindContextByGroupName(scope);
-            int rowIndex = ctxt.RowIndex;
-            int ct = 0;
-            double sum1 = 0;
-            double sum2 = 0;
-
-            int top = (runningValue) ? rowIndex : ctxt.Rows.Count - 1;
-            for (int i = 0; i <= top; i++)
+            PushContextState();
+            try
             {
-                ctxt.RowIndex = i;
+                if (scope != null && scope != string.Empty)
+                    ctxt = ctxt.FindContextByGroupName(scope, _rpt);
+                int ct = 0;
+                double sum1 = 0;
+                double sum2 = 0;
 
-                object value = fn();
-                if (value != null && !Convert.IsDBNull(value))
+                int top = (runningValue) ? ctxt.RowIndex : ctxt.Rows.Count - 1;
+                for (int i = 0; i <= top; i++)
                 {
-                    sum1 += Convert.ToDouble(value);
-                    sum2 += (Convert.ToDouble(value) * Convert.ToDouble(value));
-                    ct++;
-                }
-            }
+                    ctxt.RowIndex = i;
 
-            ctxt.RowIndex = rowIndex;
-            if (ct > 1)
-                return (float)(Math.Sqrt((ct * sum2) - (sum1 * sum1)) / (ct - 1));
-            else
-                return 0;
+                    object value = fn();
+                    if (value != null && !Convert.IsDBNull(value))
+                    {
+                        sum1 += Convert.ToDouble(value);
+                        sum2 += (Convert.ToDouble(value) * Convert.ToDouble(value));
+                        ct++;
+                    }
+                }
+
+                if (ct > 1)
+                    return (float)(Math.Sqrt((ct * sum2) - (sum1 * sum1)) / (ct - 1));
+                else
+                    return 0;
+            }
+            finally
+            {
+                PopContextState();
+            }
         }
 
         public object First(AggrFn fn)
@@ -359,21 +406,26 @@ namespace Rdl.Runtime
 
         public object First(AggrFn fn, string scope)
         {
-            Context ctxt = _currentContext;
-            if (scope != null && scope != string.Empty)
-                ctxt = ctxt.FindContextByGroupName(scope);
-            int rowIndex = ctxt.RowIndex;
-
-            if (ctxt.Rows.Count > 0)
+            try
             {
-                ctxt.RowIndex = 0;
-                object value = fn();
-                ctxt.RowIndex = rowIndex;
+                PushContextState();
+                if (scope != null && scope != string.Empty)
+                    _currentContext = _currentContext.FindContextByGroupName(scope, _rpt);
 
-                return value;
+                if (_currentContext.Rows.Count > 0)
+                {
+                    _currentContext.RowIndex = 0;
+                    object value = fn();
+
+                    return value;
+                }
+                else
+                    return null;
             }
-            else
-                return null;
+            finally
+            {
+                PopContextState();
+            }
         }
 
         public object Last(AggrFn fn)
@@ -384,20 +436,26 @@ namespace Rdl.Runtime
         public object Last(AggrFn fn, string scope)
         {
             Context ctxt = _currentContext;
-            if (scope != null && scope != string.Empty)
-                ctxt = ctxt.FindContextByGroupName(scope);
-            int rowIndex = ctxt.RowIndex;
-
-            if (ctxt.Rows.Count > 0)
+            PushContextState();
+            try
             {
-                ctxt.RowIndex = ctxt.Rows.Count-1;
-                object value = fn();
-                ctxt.RowIndex = rowIndex;
+                if (scope != null && scope != string.Empty)
+                    ctxt = ctxt.FindContextByGroupName(scope, _rpt);
 
-                return value;
+                if (ctxt.Rows.Count > 0)
+                {
+                    ctxt.RowIndex = ctxt.Rows.Count - 1;
+                    object value = fn();
+
+                    return value;
+                }
+                else
+                    return null;
             }
-            else
-                return null;
+            finally
+            {
+                PopContextState();
+            }
         }
 
         public object Previous(AggrFn fn)
@@ -408,46 +466,57 @@ namespace Rdl.Runtime
         public object Previous(AggrFn fn, string scope)
         {
             Context ctxt = _currentContext;
-            if (scope != null && scope != string.Empty)
-                ctxt = ctxt.FindContextByGroupName(scope);
-            int rowIndex = ctxt.RowIndex;
-
-            if (ctxt.RowIndex > 0)
+            PushContextState();
+            try
             {
-                ctxt.RowIndex--; ;
-                object value = fn();
-                ctxt.RowIndex = rowIndex;
+                if (scope != null && scope != string.Empty)
+                    ctxt = ctxt.FindContextByGroupName(scope, _rpt);
 
-                return value;
+                if (ctxt.RowIndex > 0)
+                {
+                    ctxt.RowIndex--; ;
+                    object value = fn();
+
+                    return value;
+                }
+                else
+                    return null;
             }
-            else
-                return null;
-        }
-
-        public object RunningValue(AggrFn fn, string function)
-        {
-            return RunningValue(fn, null);
-        }
-
-        public object RunningValue(AggrFn fn, string function, string scope)
-        {
-            switch (function.ToLower())
+            finally
             {
-                case "sum":
+                PopContextState();
+            }
+        }
+
+        public enum RunningValueFunction
+        {
+            Sum = 1, Avg, Max, Min, Count, CountDistinct, StDev, StDevP
+        };
+
+        public object RunningValue(AggrFn fn, RunningValueFunction function)
+        {
+            return RunningValue(fn, function);
+        }
+
+        public object RunningValue(AggrFn fn, RunningValueFunction function, string scope)
+        {
+            switch (function)
+            {
+                case RunningValueFunction.Sum:
                     return Sum(fn, scope, true);
-                case "avg":
+                case RunningValueFunction.Avg:
                     return Avg(fn, scope, true);
-                case "max":
+                case RunningValueFunction.Max:
                     return Max(fn, scope, true);
-                case "min":
+                case RunningValueFunction.Min:
                     return Min(fn, scope, true);
-                case "count":
+                case RunningValueFunction.Count:
                     return Count(fn, scope, true);
-                case "countdistinct":
+                case RunningValueFunction.CountDistinct:
                     return CountDistinct(fn, scope, true);
-                case "stdev":
+                case RunningValueFunction.StDev:
                     return StDev(fn, scope, true);
-                case "stdevp":
+                case RunningValueFunction.StDevP:
                     return StDevP(fn, scope, true);
                 default:
                     throw new Exception("Unknown function " + function + " in RunningValue");

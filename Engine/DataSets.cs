@@ -80,7 +80,12 @@ namespace Rdl.Engine
 
         public DataSet this[string key]
         {
-            get { return _dataSets[key]; }
+            get {
+                if (_dataSets.ContainsKey(key))
+                    return _dataSets[key];
+                else
+                    return null;
+            }
         }
 
         public DataSet FirstDataSet
