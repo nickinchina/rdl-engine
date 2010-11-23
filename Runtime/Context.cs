@@ -389,18 +389,20 @@ namespace Rdl.Runtime
             return 0;
         }
 
-        public Context FindContextByGroupName(string name)
+        public Context FindContextByGroupName(string name, Rdl.Engine.Report rpt)
         {
+            if (rpt.DataSets[name] != null)
+                return new Context(null, rpt.DataSets[name], null, null, null);
             if (_grouping != null)
                 if (_grouping.Name == name)
                     return this;
             if (_reportItemName == name)
                 return this;
             if (_parentContext != null)
-                return (_parentContext.FindContextByGroupName(name));
+                return (_parentContext.FindContextByGroupName(name, rpt));
             else if (_dataSet.Name == name)
                 return this;
-            return null;
+            throw new Exception("Invalid context name " + name);
         }
 
         internal Context FindContextByDS(Rdl.Engine.DataSet ds)

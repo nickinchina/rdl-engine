@@ -51,7 +51,8 @@ namespace Rdl.Render
                 {
                     // diff is the space between the bottom of element i and the top of element j.
                     diff = childElements[j]._top - (childElements[i]._top + childElements[i]._height);
-                    if (diff >= 0 && childElements[j].Height > 0)
+                    if (diff >= 0 && childElements[j].Height > 0 &&
+                            childElements[j]._renderedTop < childElements[i].Top + childElements[i].Height + diff)
                         childElements[j]._renderedTop = childElements[i].Top + childElements[i].Height + diff;
                 }
                 if (childElements[i].Height > 0)
@@ -67,7 +68,8 @@ namespace Rdl.Render
                 {
                     // diff is the space between the bottom of element i and the top of element j.
                     diff = childElements[j]._left - (childElements[i]._left + childElements[i]._width);
-                    if (diff >= 0 && childElements[j].Width > 0)
+                    if (diff >= 0 && childElements[j].Width > 0 &&
+                            childElements[j]._renderedLeft < childElements[i].Left + childElements[i].Width + diff)
                         childElements[j]._renderedLeft = childElements[i].Left + childElements[i].Width + diff;
                 }
                 if (childElements[i].Width > 0)

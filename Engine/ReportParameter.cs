@@ -230,7 +230,10 @@ namespace Rdl.Engine
             get
             {
                 if (_multiValue)
-                    return ((Array)_value).Length;
+                    if (_value == null)
+                        return 0;
+                    else
+                        return ((Array)_value).Length;
                 return 1;
             }
         }

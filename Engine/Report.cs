@@ -483,7 +483,17 @@ namespace Rdl.Engine
         private string MatchAggFn(Match m)
         {
             int fn = AddFunction(m.Groups["expression"].Value, true);
-            return m.Groups["leading"].Value + "(AddressOf fn_" + fn.ToString() + m.Groups["scope"].Value + " )";
+            if (m.Groups["leading"].Value.Trim() == "RunningValue")
+            {
+                string[] splitParms = m.Groups["scope"].Value.Split(new char[] { ',' });
+                // The second parameter of RunningValue needs the RunningValueFunction enum prepended onto it.
+                return "RunningValue(AddressOf fn_" + fn.ToString() + ", RunningValueFunction." +
+                    splitParms[1].Trim() +
+                    ((splitParms.Length > 2) ? ", " + splitParms[2] : string.Empty) +
+                    ")";
+            }
+            else
+                return m.Groups["leading"].Value + "(AddressOf fn_" + fn.ToString() + m.Groups["scope"].Value + " )";
         }
 
         private string ReplaceAggFn(string source, string fn)

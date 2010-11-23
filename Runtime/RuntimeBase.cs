@@ -27,6 +27,13 @@ namespace Rdl.Runtime
         private object _thisLock = new object();
         private System.Threading.Mutex mutex = new System.Threading.Mutex(false);
 
+        public struct SaveContextState
+        {
+            internal Context context;
+            internal ContextState contextState;
+        }
+        private Stack<SaveContextState> _contextStack = new Stack<SaveContextState>();
+
         public delegate object AggrFn();
 
         /// <summary>
@@ -133,5 +140,23 @@ namespace Rdl.Runtime
             }
         }
 
+        internal void PushContextState()
+        {
+            SaveContextState scs = new SaveContextState();
+            scs.context = _currentContext;
+            if (_currentContext != null)
+                scs.contextState = _currentContext.ContextState;
+            _contextStack.Push(scs);
+        }
+
+        internal void PopContextState()
+        {
+            SaveContextState scs = _contextStack.Pop();
+            if (scs.context != null)
+            {
+                _currentContext = scs.context;
+                _currentContext.ContextState = scs.contextState;
+            }
+        }
     }
 }

@@ -102,7 +102,7 @@ namespace Rdl.Engine
 
             if (_hideDuplicates != null)
             {
-                int gi = context.FindContextByGroupName(_hideDuplicates).GroupIndex;
+                int gi = context.FindContextByGroupName(_hideDuplicates, this.Report).GroupIndex;
                 if (_text == _lastValue)
                 {
                     if (gi == _lastGroupIndex)

@@ -335,7 +335,7 @@ namespace Rdl.Render
 
         private decimal ElementWidth(Rdl.Render.GenericRender rpt, Element elmt)
         {
-            decimal width = elmt.Width;
+            decimal width = elmt.TotalWidth(false);
             BoxStyle bs = rpt.StyleList[elmt.StyleIndex];
             if (bs.BorderStyle.Left != Rdl.Engine.BorderStyle.BorderStyleEnum.None)
                 width -= bs.BorderWidth.Left.points;
@@ -348,7 +348,7 @@ namespace Rdl.Render
 
         private decimal ElementHeight(Rdl.Render.GenericRender rpt, Element elmt)
         {
-            decimal height = elmt.Height;
+            decimal height = elmt.TotalHeight(false);
             BoxStyle bs = rpt.StyleList[elmt.StyleIndex];
             if (bs.BorderStyle.Top != Rdl.Engine.BorderStyle.BorderStyleEnum.None)
                 height -= bs.BorderWidth.Top.points;

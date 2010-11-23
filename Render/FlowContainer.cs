@@ -56,6 +56,19 @@ namespace Rdl.Render
                 else
                     _renderedWidth = Math.Max(_renderedWidth, child.Left + child.Width);
             }
+
+            // Set the positions of all children based on the height of each element
+            decimal height = 0;
+            decimal width = 0;
+            foreach (Element child in _childElements)
+            {
+                if (FlowDirection == FlowDirectionEnum.TopDown)
+                    child._renderedTop = height;
+                else
+                    child._renderedLeft = width;
+                height += child.Height;
+                width += child.Width;
+            }
         }
 
         internal override void SetChildSizes(bool ignoreVisibility)
@@ -70,31 +83,44 @@ namespace Rdl.Render
             decimal width;
             if (FillElement != null)
             {
+                // Calculate the total size of the children
                 height = 0;
                 width = 0;
                 foreach (Element child in _childElements)
+                {
+                    height += child.Height;
+                    width += child.Width;
+                }
+                // Get the difference between the size of the container and the size of the children
+                decimal dHeight = _renderedHeight - height;
+                decimal dWidth = _renderedWidth - width;
+
+                // Adjust the positions of the children to allow the specific FillElement
+                // to fill the open space.
+                height = 0;
+                width = 0;
+                foreach (Element child in _childElements)
+                {
+                    if (FlowDirection == FlowDirectionEnum.TopDown)
+                        child._renderedTop = height;
+                    else
+                        child._renderedLeft = width;
+
                     if (child != FillElement)
                     {
                         height += child.Height;
                         width += child.Width;
                     }
-                if (FlowDirection == FlowDirectionEnum.TopDown)
-                    FillElement._renderedHeight = _renderedHeight - height;
-                else
-                    FillElement._renderedWidth = _renderedWidth - width;
-                FillElement.SetChildSizes(ignoreVisibility);
-            }
-
-            height = 0;
-            width = 0;
-            foreach (Element child in _childElements)
-            {
-                if (FlowDirection == FlowDirectionEnum.TopDown)
-                    child._renderedTop = height;
-                else
-                    child._renderedLeft = width;
-                height += child.Height;
-                width += child.Width;
+                    else
+                    {
+                        // Add the difference between the rendered size of the container
+                        // and the total size of the children.
+                        if (FlowDirection == FlowDirectionEnum.TopDown)
+                            height += child.Height + _renderedHeight - dHeight;
+                        else
+                            width += child.Width + _renderedWidth - dWidth;
+                    }
+                }
             }
         }
 
