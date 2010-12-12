@@ -1,0 +1,1268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2005/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <DataSources>
+    <DataSource Name="DummyDataSource">
+      <ConnectionProperties>
+        <ConnectString />
+        <DataProvider>SQL</DataProvider>
+      </ConnectionProperties>
+      <rd:DataSourceID>451ba7d5-7a14-41cd-b5f9-40c483d14839</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <BottomMargin>1in</BottomMargin>
+  <RightMargin>0.5in</RightMargin>
+  <PageWidth>11in</PageWidth>
+  <rd:DrawGrid>true</rd:DrawGrid>
+  <InteractiveWidth>8.5in</InteractiveWidth>
+  <rd:SnapToGrid>true</rd:SnapToGrid>
+  <Body>
+    <ReportItems>
+      <Table Name="table1">
+        <DataSetName>dsReport_PaymentDetail</DataSetName>
+        <TableGroups>
+          <TableGroup>
+            <Footer>
+              <TableRows>
+                <TableRow>
+                  <TableCells>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox13">
+                          <rd:DefaultName>textbox13</rd:DefaultName>
+                          <ZIndex>2</ZIndex>
+                          <Style>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingBottom>2pt</PaddingBottom>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                          </Style>
+                          <CanGrow>true</CanGrow>
+                          <Value />
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox16">
+                          <ZIndex>1</ZIndex>
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingBottom>2pt</PaddingBottom>
+                            <FontWeight>600</FontWeight>
+                            <FontSize>8pt</FontSize>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                          </Style>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Fields!MediaVendorName.Value</Value>
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Rectangle Name="rectangle8">
+                          <ReportItems>
+                            <Textbox Name="textbox60">
+                              <Left>2.75in</Left>
+                              <ZIndex>1</ZIndex>
+                              <Width>0.75in</Width>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontWeight>600</FontWeight>
+                                <FontSize>8pt</FontSize>
+                                <Format>C</Format>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Value>=Sum(Fields!AmountDue.Value)</Value>
+                            </Textbox>
+                            <Textbox Name="textbox14">
+                              <rd:DefaultName>textbox14</rd:DefaultName>
+                              <Width>0.625in</Width>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontWeight>600</FontWeight>
+                                <FontSize>8pt</FontSize>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Value>Total Due</Value>
+                            </Textbox>
+                          </ReportItems>
+                        </Rectangle>
+                      </ReportItems>
+                    </TableCell>
+                  </TableCells>
+                  <Height>0.25in</Height>
+                </TableRow>
+                <TableRow>
+                  <TableCells>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox19">
+                          <rd:DefaultName>textbox19</rd:DefaultName>
+                          <ZIndex>5</ZIndex>
+                          <Style>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingBottom>2pt</PaddingBottom>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                          </Style>
+                          <CanGrow>true</CanGrow>
+                          <Value />
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox20">
+                          <rd:DefaultName>textbox20</rd:DefaultName>
+                          <ZIndex>4</ZIndex>
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingBottom>2pt</PaddingBottom>
+                            <FontWeight>600</FontWeight>
+                            <FontSize>8pt</FontSize>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                          </Style>
+                          <CanGrow>true</CanGrow>
+                          <Value />
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Textbox Name="textbox22">
+                          <rd:DefaultName>textbox22</rd:DefaultName>
+                          <ZIndex>3</ZIndex>
+                          <Style>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingBottom>2pt</PaddingBottom>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                          </Style>
+                          <CanGrow>true</CanGrow>
+                          <Value />
+                        </Textbox>
+                      </ReportItems>
+                    </TableCell>
+                  </TableCells>
+                  <Height>0.5in</Height>
+                </TableRow>
+              </TableRows>
+            </Footer>
+            <Header>
+              <TableRows>
+                <TableRow>
+                  <TableCells>
+                    <TableCell>
+                      <ReportItems>
+                        <Rectangle Name="rectangle1">
+                          <ReportItems>
+                            <Textbox Name="textbox17">
+                              <Top>0.875in</Top>
+                              <rd:DefaultName>textbox17</rd:DefaultName>
+                              <ZIndex>6</ZIndex>
+                              <Style>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontWeight>700</FontWeight>
+                                <FontSize>8pt</FontSize>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Value>=Fields!PaymentDescription.Value</Value>
+                            </Textbox>
+                            <Textbox Name="textbox8">
+                              <Top>0.5in</Top>
+                              <ZIndex>5</ZIndex>
+                              <Width>1.25in</Width>
+                              <Style>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontSize>8pt</FontSize>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Height>0.25in</Height>
+                              <Value>Fax</Value>
+                            </Textbox>
+                            <Textbox Name="textbox7">
+                              <Left>1.25in</Left>
+                              <Top>0.5in</Top>
+                              <ZIndex>4</ZIndex>
+                              <Width>1.25in</Width>
+                              <Style>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontSize>8pt</FontSize>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Height>0.25in</Height>
+                              <Value>=Fields!VendorContactFax.Value</Value>
+                            </Textbox>
+                            <Textbox Name="textbox6">
+                              <Left>1.25in</Left>
+                              <Top>0.25in</Top>
+                              <ZIndex>3</ZIndex>
+                              <Width>1.25in</Width>
+                              <Style>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontSize>8pt</FontSize>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Height>0.25in</Height>
+                              <Value>=Fields!VendorContactPhone.Value</Value>
+                            </Textbox>
+                            <Textbox Name="textbox5">
+                              <Top>0.25in</Top>
+                              <ZIndex>2</ZIndex>
+                              <Width>1.25in</Width>
+                              <Style>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontSize>8pt</FontSize>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Height>0.25in</Height>
+                              <Value>Phone</Value>
+                            </Textbox>
+                            <Textbox Name="textbox4">
+                              <Left>1.25in</Left>
+                              <ZIndex>1</ZIndex>
+                              <Width>1.25in</Width>
+                              <Style>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontSize>8pt</FontSize>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Height>0.25in</Height>
+                              <Value>=Fields!VendorContactName.Value</Value>
+                            </Textbox>
+                            <Textbox Name="textbox3">
+                              <rd:DefaultName>textbox3</rd:DefaultName>
+                              <Width>1.25in</Width>
+                              <Style>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontSize>8pt</FontSize>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Height>0.25in</Height>
+                              <Value>ContactName</Value>
+                            </Textbox>
+                          </ReportItems>
+                          <ZIndex>11</ZIndex>
+                        </Rectangle>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Rectangle Name="rectangle7">
+                          <ReportItems>
+                            <Textbox Name="textbox65">
+                              <Left>2.625in</Left>
+                              <Top>0.875in</Top>
+                              <ZIndex>6</ZIndex>
+                              <Visibility>
+                                <Hidden>=Not(CStr(Fields!PaymentType.Value) = "Per Spot" or CStr(Fields!PaymentType.Value) = "Fixed")</Hidden>
+                              </Visibility>
+                              <Width>0.627in</Width>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontWeight>600</FontWeight>
+                                <FontSize>8pt</FontSize>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Value>NetRate</Value>
+                            </Textbox>
+                            <Textbox Name="textbox64">
+                              <Left>2in</Left>
+                              <Top>0.875in</Top>
+                              <ZIndex>5</ZIndex>
+                              <Visibility>
+                                <Hidden>=Not(CStr(Fields!PaymentType.Value) = "Percent Per Order" or CStr(Fields!PaymentType.Value) = "Pay Per Order")</Hidden>
+                              </Visibility>
+                              <Width>0.625in</Width>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontWeight>600</FontWeight>
+                                <FontSize>8pt</FontSize>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Value>Orders</Value>
+                            </Textbox>
+                            <Textbox Name="textbox63">
+                              <Left>1.375in</Left>
+                              <Top>0.875in</Top>
+                              <ZIndex>4</ZIndex>
+                              <Visibility>
+                                <Hidden>=Not(CStr(Fields!PaymentType.Value) = "Per Spot" or CStr(Fields!PaymentType.Value) = "Fixed")</Hidden>
+                              </Visibility>
+                              <Width>0.625in</Width>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontWeight>600</FontWeight>
+                                <FontSize>8pt</FontSize>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Value>Spots</Value>
+                            </Textbox>
+                            <Textbox Name="textbox62">
+                              <Top>0.875in</Top>
+                              <ZIndex>3</ZIndex>
+                              <Width>0.75in</Width>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontWeight>600</FontWeight>
+                                <FontSize>8pt</FontSize>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Value>Begin Time</Value>
+                            </Textbox>
+                            <Textbox Name="textbox61">
+                              <Left>0.75in</Left>
+                              <Top>0.875in</Top>
+                              <ZIndex>2</ZIndex>
+                              <Width>0.625in</Width>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontWeight>600</FontWeight>
+                                <FontSize>8pt</FontSize>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Value>End Time</Value>
+                            </Textbox>
+                            <Textbox Name="textbox37">
+                              <Left>0.625in</Left>
+                              <rd:DefaultName>textbox37</rd:DefaultName>
+                              <ZIndex>1</ZIndex>
+                              <Width>2.5in</Width>
+                              <Style>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontWeight>700</FontWeight>
+                                <FontSize>8pt</FontSize>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Height>0.25in</Height>
+                              <Value>=Fields!MediaVendorName.Value</Value>
+                            </Textbox>
+                            <Textbox Name="textbox10">
+                              <rd:DefaultName>textbox10</rd:DefaultName>
+                              <Width>0.625in</Width>
+                              <Style>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontWeight>600</FontWeight>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Height>0.25in</Height>
+                              <Value>Station:</Value>
+                            </Textbox>
+                          </ReportItems>
+                          <ZIndex>10</ZIndex>
+                        </Rectangle>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Rectangle Name="rectangle2">
+                          <ReportItems>
+                            <Textbox Name="textbox9">
+                              <Top>0.5in</Top>
+                              <ZIndex>11</ZIndex>
+                              <Width>1.25in</Width>
+                              <Style>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontSize>8pt</FontSize>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Height>0.25in</Height>
+                              <Value>Fax</Value>
+                            </Textbox>
+                            <Textbox Name="textbox11">
+                              <Left>1.25in</Left>
+                              <Top>0.5in</Top>
+                              <ZIndex>10</ZIndex>
+                              <Width>1.25in</Width>
+                              <Style>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontSize>8pt</FontSize>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Height>0.25in</Height>
+                              <Value>=Fields!BuyerFax.Value</Value>
+                            </Textbox>
+                            <Textbox Name="textbox12">
+                              <Left>1.25in</Left>
+                              <Top>0.25in</Top>
+                              <ZIndex>9</ZIndex>
+                              <Width>1.25in</Width>
+                              <Style>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontSize>8pt</FontSize>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Height>0.25in</Height>
+                              <Value>=Fields!BuyerPhone.Value</Value>
+                            </Textbox>
+                            <Textbox Name="textbox15">
+                              <Top>0.25in</Top>
+                              <ZIndex>8</ZIndex>
+                              <Width>1.25in</Width>
+                              <Style>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontSize>8pt</FontSize>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Height>0.25in</Height>
+                              <Value>Phone</Value>
+                            </Textbox>
+                            <Textbox Name="textbox18">
+                              <Left>1.25in</Left>
+                              <ZIndex>7</ZIndex>
+                              <Width>1.25in</Width>
+                              <Style>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontSize>8pt</FontSize>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Height>0.25in</Height>
+                              <Value>=Fields!BuyerName.Value</Value>
+                            </Textbox>
+                            <Textbox Name="textbox21">
+                              <ZIndex>6</ZIndex>
+                              <Width>1.25in</Width>
+                              <Style>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontSize>8pt</FontSize>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Height>0.25in</Height>
+                              <Value>Buyer Name</Value>
+                            </Textbox>
+                            <Textbox Name="textbox71">
+                              <Left>3in</Left>
+                              <Top>0.875in</Top>
+                              <ZIndex>5</ZIndex>
+                              <Width>0.5in</Width>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontWeight>600</FontWeight>
+                                <FontSize>8pt</FontSize>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Value>Due</Value>
+                            </Textbox>
+                            <Textbox Name="textbox70">
+                              <Left>2.25in</Left>
+                              <Top>0.875in</Top>
+                              <ZIndex>4</ZIndex>
+                              <Visibility>
+                                <Hidden>=Not(CStr(Fields!PaymentType.Value) = "Percent Per Order" or CStr(Fields!PaymentType.Value) = "Pay Per Order")</Hidden>
+                              </Visibility>
+                              <Width>0.625in</Width>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontWeight>600</FontWeight>
+                                <FontSize>8pt</FontSize>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Value>ProdTotal</Value>
+                            </Textbox>
+                            <Textbox Name="textbox69">
+                              <Left>1.875in</Left>
+                              <Top>0.875in</Top>
+                              <ZIndex>3</ZIndex>
+                              <Visibility>
+                                <Hidden>=Not(CStr(Fields!PaymentType.Value) = "Per Spot" or CStr(Fields!PaymentType.Value) = "Fixed")</Hidden>
+                              </Visibility>
+                              <Width>0.375in</Width>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontWeight>600</FontWeight>
+                                <FontSize>8pt</FontSize>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Value>DNR</Value>
+                            </Textbox>
+                            <Textbox Name="textbox68">
+                              <Left>1.5in</Left>
+                              <Top>0.875in</Top>
+                              <ZIndex>2</ZIndex>
+                              <Visibility>
+                                <Hidden>=Not(CStr(Fields!PaymentType.Value) = "Per Inquiry")</Hidden>
+                              </Visibility>
+                              <Width>0.375in</Width>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontWeight>600</FontWeight>
+                                <FontSize>8pt</FontSize>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Value>Calls</Value>
+                            </Textbox>
+                            <Textbox Name="textbox67">
+                              <Left>0.75in</Left>
+                              <Top>0.875in</Top>
+                              <ZIndex>1</ZIndex>
+                              <Visibility>
+                                <Hidden>=Not(CStr(Fields!PaymentType.Value) = "Percent Per Order" or CStr(Fields!PaymentType.Value) = "Pay Per Order" or CStr(Fields!PaymentType.Value) = "Per Inquiry")</Hidden>
+                              </Visibility>
+                              <Width>0.75in</Width>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontWeight>600</FontWeight>
+                                <FontSize>8pt</FontSize>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Value>GrossRate</Value>
+                            </Textbox>
+                            <Textbox Name="textbox66">
+                              <Top>0.875in</Top>
+                              <Width>0.75in</Width>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontWeight>600</FontWeight>
+                                <FontSize>8pt</FontSize>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Value>Adjustment</Value>
+                            </Textbox>
+                          </ReportItems>
+                          <ZIndex>9</ZIndex>
+                        </Rectangle>
+                      </ReportItems>
+                    </TableCell>
+                  </TableCells>
+                  <Height>1.125in</Height>
+                </TableRow>
+              </TableRows>
+              <RepeatOnNewPage>true</RepeatOnNewPage>
+            </Header>
+            <Sorting>
+              <SortBy>
+                <SortExpression>=Fields!StartDate.Value</SortExpression>
+                <Direction>Ascending</Direction>
+              </SortBy>
+            </Sorting>
+            <Grouping Name="ghBuy">
+              <GroupExpressions>
+                <GroupExpression>=Fields!MediaBuyID.Value</GroupExpression>
+              </GroupExpressions>
+            </Grouping>
+          </TableGroup>
+          <TableGroup>
+            <Sorting>
+              <SortBy>
+                <SortExpression>=Fields!StartDate.Value</SortExpression>
+                <Direction>Ascending</Direction>
+              </SortBy>
+            </Sorting>
+            <Grouping Name="ghSpotDetail">
+              <GroupExpressions>
+                <GroupExpression>=Fields!SpotDetailID.Value</GroupExpression>
+              </GroupExpressions>
+            </Grouping>
+          </TableGroup>
+          <TableGroup>
+            <Header>
+              <TableRows>
+                <TableRow>
+                  <TableCells>
+                    <TableCell>
+                      <ReportItems>
+                        <Rectangle Name="rectangle9">
+                          <ReportItems>
+                            <Textbox Name="textbox28">
+                              <Left>1.375in</Left>
+                              <HideDuplicates>ghSpotDetail</HideDuplicates>
+                              <ZIndex>3</ZIndex>
+                              <Width>0.625in</Width>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontWeight>600</FontWeight>
+                                <FontSize>8pt</FontSize>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Value>End Date</Value>
+                            </Textbox>
+                            <Textbox Name="textbox29">
+                              <Left>2in</Left>
+                              <HideDuplicates>ghSpotDetail</HideDuplicates>
+                              <ZIndex>2</ZIndex>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontWeight>600</FontWeight>
+                                <FontSize>8pt</FontSize>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Value>=Fields!EndDate.Value</Value>
+                            </Textbox>
+                            <Textbox Name="textbox30">
+                              <HideDuplicates>ghSpotDetail</HideDuplicates>
+                              <ZIndex>1</ZIndex>
+                              <Width>0.625in</Width>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontWeight>600</FontWeight>
+                                <FontSize>8pt</FontSize>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Value>Start Date</Value>
+                            </Textbox>
+                            <Textbox Name="textbox31">
+                              <Left>0.625in</Left>
+                              <HideDuplicates>ghSpotDetail</HideDuplicates>
+                              <Width>0.75in</Width>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontWeight>600</FontWeight>
+                                <FontSize>8pt</FontSize>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Value>=Fields!StartDate.Value</Value>
+                            </Textbox>
+                          </ReportItems>
+                          <ZIndex>8</ZIndex>
+                        </Rectangle>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Rectangle Name="rectangle4">
+                          <ReportItems>
+                            <Textbox Name="textbox52">
+                              <Left>2.625in</Left>
+                              <ZIndex>4</ZIndex>
+                              <Visibility>
+                                <Hidden>=Not(CStr(Fields!PaymentType.Value) = "Per Spot" or CStr(Fields!PaymentType.Value) = "Fixed")</Hidden>
+                              </Visibility>
+                              <Width>0.627in</Width>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontSize>8pt</FontSize>
+                                <Format>C</Format>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Value>=Fields!NetRate.Value</Value>
+                            </Textbox>
+                            <Textbox Name="textbox47">
+                              <Left>2in</Left>
+                              <ZIndex>3</ZIndex>
+                              <Visibility>
+                                <Hidden>=Not(CStr(Fields!PaymentType.Value) = "Percent Per Order" or CStr(Fields!PaymentType.Value) = "Pay Per Order")</Hidden>
+                              </Visibility>
+                              <Width>0.625in</Width>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontSize>8pt</FontSize>
+                                <Format>n0</Format>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Value>=Sum(Fields!Orders.Value)</Value>
+                            </Textbox>
+                            <Textbox Name="textbox42">
+                              <Left>1.375in</Left>
+                              <ZIndex>2</ZIndex>
+                              <Visibility>
+                                <Hidden>=Not(CStr(Fields!PaymentType.Value) = "Per Spot" or CStr(Fields!PaymentType.Value) = "Fixed")</Hidden>
+                              </Visibility>
+                              <Width>0.625in</Width>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontSize>8pt</FontSize>
+                                <Format>n0</Format>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Value>=Sum(Fields!Spots.Value)</Value>
+                            </Textbox>
+                            <Textbox Name="textbox38">
+                              <Left>0.75in</Left>
+                              <ZIndex>1</ZIndex>
+                              <Width>0.625in</Width>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontSize>8pt</FontSize>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Value>=Fields!EndTime.Value</Value>
+                            </Textbox>
+                            <Textbox Name="textbox23">
+                              <Left>0.125in</Left>
+                              <rd:DefaultName>textbox23</rd:DefaultName>
+                              <Width>0.625in</Width>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontSize>8pt</FontSize>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Value>=Fields!BeginTime.Value</Value>
+                            </Textbox>
+                          </ReportItems>
+                          <ZIndex>7</ZIndex>
+                        </Rectangle>
+                      </ReportItems>
+                    </TableCell>
+                    <TableCell>
+                      <ReportItems>
+                        <Rectangle Name="rectangle5">
+                          <ReportItems>
+                            <Textbox Name="textbox59">
+                              <Left>2.875in</Left>
+                              <ZIndex>5</ZIndex>
+                              <Width>0.625in</Width>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontSize>8pt</FontSize>
+                                <Format>C</Format>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Value>=Sum(Fields!AmountDue.Value)</Value>
+                            </Textbox>
+                            <Textbox Name="textbox58">
+                              <Left>2.25in</Left>
+                              <ZIndex>4</ZIndex>
+                              <Visibility>
+                                <Hidden>=Not(CStr(Fields!PaymentType.Value) = "Percent Per Order" or CStr(Fields!PaymentType.Value) = "Pay Per Order")</Hidden>
+                              </Visibility>
+                              <Width>0.625in</Width>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontSize>8pt</FontSize>
+                                <Format>C</Format>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Value>=Sum(Fields!ProductTotal.Value)</Value>
+                            </Textbox>
+                            <Textbox Name="textbox57">
+                              <Left>1.875in</Left>
+                              <ZIndex>3</ZIndex>
+                              <Visibility>
+                                <Hidden>=Not(CStr(Fields!PaymentType.Value) = "Per Spot" or CStr(Fields!PaymentType.Value) = "Fixed")</Hidden>
+                              </Visibility>
+                              <Width>0.375in</Width>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontSize>8pt</FontSize>
+                                <Format>n0</Format>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Value>=Sum(Fields!DNR.Value)</Value>
+                            </Textbox>
+                            <Textbox Name="textbox56">
+                              <Left>1.5in</Left>
+                              <ZIndex>2</ZIndex>
+                              <Visibility>
+                                <Hidden>=Not(CStr(Fields!PaymentType.Value) = "Per Inquiry")</Hidden>
+                              </Visibility>
+                              <Width>0.375in</Width>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontSize>8pt</FontSize>
+                                <Format>n0</Format>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Value>=Sum(Fields!Calls.Value)</Value>
+                            </Textbox>
+                            <Textbox Name="textbox45">
+                              <Left>0.75in</Left>
+                              <rd:DefaultName>textbox45</rd:DefaultName>
+                              <ZIndex>1</ZIndex>
+                              <Visibility>
+                                <Hidden>=Not(CStr(Fields!PaymentType.Value) = "Percent Per Order" or CStr(Fields!PaymentType.Value) = "Pay Per Order" or CStr(Fields!PaymentType.Value) = "Per Inquiry")</Hidden>
+                              </Visibility>
+                              <Width>0.75in</Width>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontSize>8pt</FontSize>
+                                <Format>C</Format>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Value>=Fields!GrossRate.Value</Value>
+                            </Textbox>
+                            <Textbox Name="textbox41">
+                              <Width>0.75in</Width>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingBottom>2pt</PaddingBottom>
+                                <FontSize>8pt</FontSize>
+                                <Format>c</Format>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                              </Style>
+                              <CanGrow>true</CanGrow>
+                              <Value>=Sum(Fields!Adjustment.Value)</Value>
+                            </Textbox>
+                          </ReportItems>
+                          <ZIndex>6</ZIndex>
+                        </Rectangle>
+                      </ReportItems>
+                    </TableCell>
+                  </TableCells>
+                  <Height>0.25in</Height>
+                </TableRow>
+              </TableRows>
+            </Header>
+            <Grouping Name="ghSpotTime">
+              <GroupExpressions>
+                <GroupExpression>=Fields!SpotTimeID.Value</GroupExpression>
+              </GroupExpressions>
+            </Grouping>
+          </TableGroup>
+        </TableGroups>
+        <Style>
+          <FontSize>8pt</FontSize>
+        </Style>
+        <Header>
+          <TableRows>
+            <TableRow>
+              <TableCells>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textbox1">
+                      <rd:DefaultName>textbox1</rd:DefaultName>
+                      <ZIndex>14</ZIndex>
+                      <Style>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingBottom>2pt</PaddingBottom>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value />
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Textbox Name="textbox36">
+                      <rd:DefaultName>textbox36</rd:DefaultName>
+                      <ZIndex>13</ZIndex>
+                      <Style>
+                        <TextAlign>Center</TextAlign>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingBottom>2pt</PaddingBottom>
+                        <FontWeight>600</FontWeight>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                      </Style>
+                      <CanGrow>true</CanGrow>
+                      <Value>=Fields!ContractVendorName.Value</Value>
+                    </Textbox>
+                  </ReportItems>
+                </TableCell>
+                <TableCell>
+                  <ReportItems>
+                    <Rectangle Name="rectangle6">
+                      <ReportItems>
+                        <Textbox Name="textbox51">
+                          <Left>0.875in</Left>
+                          <Top>0.25in</Top>
+                          <ZIndex>4</ZIndex>
+                          <Width>0.625in</Width>
+                          <Style>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingBottom>2pt</PaddingBottom>
+                            <FontSize>8pt</FontSize>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                          </Style>
+                          <CanGrow>true</CanGrow>
+                          <Value>=Fields!CheckDate.Value</Value>
+                        </Textbox>
+                        <Textbox Name="textbox50">
+                          <Top>0.25in</Top>
+                          <ZIndex>3</ZIndex>
+                          <Width>0.875in</Width>
+                          <Style>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingBottom>2pt</PaddingBottom>
+                            <FontSize>8pt</FontSize>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                          </Style>
+                          <CanGrow>true</CanGrow>
+                          <Value>Check Date:</Value>
+                        </Textbox>
+                        <Textbox Name="textbox49">
+                          <Left>1.75in</Left>
+                          <rd:DefaultName>textbox49</rd:DefaultName>
+                          <ZIndex>2</ZIndex>
+                          <Width>1in</Width>
+                          <Style>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingBottom>2pt</PaddingBottom>
+                            <FontSize>8pt</FontSize>
+                            <Format>d</Format>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                          </Style>
+                          <CanGrow>true</CanGrow>
+                          <Height>0.25in</Height>
+                          <Value>=Fields!PaymentDate.Value</Value>
+                        </Textbox>
+                        <Textbox Name="textbox48">
+                          <Left>0.875in</Left>
+                          <rd:DefaultName>textbox48</rd:DefaultName>
+                          <ZIndex>1</ZIndex>
+                          <Width>0.625in</Width>
+                          <Style>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingBottom>2pt</PaddingBottom>
+                            <FontSize>8pt</FontSize>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                          </Style>
+                          <CanGrow>true</CanGrow>
+                          <Height>0.25in</Height>
+                          <Value>=Fields!CheckNumber.Value</Value>
+                        </Textbox>
+                        <Textbox Name="textbox2">
+                          <rd:DefaultName>textbox2</rd:DefaultName>
+                          <Width>0.875in</Width>
+                          <Style>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingBottom>2pt</PaddingBottom>
+                            <FontSize>8pt</FontSize>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                          </Style>
+                          <CanGrow>true</CanGrow>
+                          <Height>0.25in</Height>
+                          <Value>Check Number:</Value>
+                        </Textbox>
+                      </ReportItems>
+                      <ZIndex>12</ZIndex>
+                    </Rectangle>
+                  </ReportItems>
+                </TableCell>
+              </TableCells>
+              <Height>0.5in</Height>
+            </TableRow>
+          </TableRows>
+        </Header>
+        <TableColumns>
+          <TableColumn>
+            <Width>2.75438in</Width>
+          </TableColumn>
+          <TableColumn>
+            <Width>3.375in</Width>
+          </TableColumn>
+          <TableColumn>
+            <Width>3.625in</Width>
+          </TableColumn>
+        </TableColumns>
+      </Table>
+    </ReportItems>
+    <Height>2.625in</Height>
+  </Body>
+  <PageHeader>
+    <Height>0pt</Height>
+  </PageHeader>
+  <rd:ReportID>ecd5a1e6-727c-47e6-97e1-13cb9d148744</rd:ReportID>
+  <LeftMargin>0.5in</LeftMargin>
+  <DataSets>
+    <DataSet Name="dsReport_PaymentDetail">
+      <rd:DataSetInfo>
+        <rd:DataSetName>dsReport</rd:DataSetName>
+        <rd:TableName>PaymentDetail</rd:TableName>
+      </rd:DataSetInfo>
+      <Query>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+        <CommandText />
+        <DataSourceName>DummyDataSource</DataSourceName>
+      </Query>
+      <Fields>
+        <Field Name="BeginTime">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>BeginTime</DataField>
+        </Field>
+        <Field Name="EndTime">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>EndTime</DataField>
+        </Field>
+        <Field Name="RunTime">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>RunTime</DataField>
+        </Field>
+        <Field Name="DNR">
+          <rd:TypeName>System.Int32</rd:TypeName>
+          <DataField>DNR</DataField>
+        </Field>
+        <Field Name="Spots">
+          <rd:TypeName>System.Int32</rd:TypeName>
+          <DataField>Spots</DataField>
+        </Field>
+        <Field Name="BuyerName">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>BuyerName</DataField>
+        </Field>
+        <Field Name="BuyerPhone">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>BuyerPhone</DataField>
+        </Field>
+        <Field Name="BuyerFax">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>BuyerFax</DataField>
+        </Field>
+        <Field Name="AmountDue">
+          <rd:TypeName>System.Double</rd:TypeName>
+          <DataField>AmountDue</DataField>
+        </Field>
+        <Field Name="NetRate">
+          <rd:TypeName>System.Double</rd:TypeName>
+          <DataField>NetRate</DataField>
+        </Field>
+        <Field Name="StartDate">
+          <rd:TypeName>System.DateTime</rd:TypeName>
+          <DataField>StartDate</DataField>
+        </Field>
+        <Field Name="VendorContactName">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>VendorContactName</DataField>
+        </Field>
+        <Field Name="VendorContactPhone">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>VendorContactPhone</DataField>
+        </Field>
+        <Field Name="EndDate">
+          <rd:TypeName>System.DateTime</rd:TypeName>
+          <DataField>EndDate</DataField>
+        </Field>
+        <Field Name="VendorDisplay">
+          <rd:TypeName>System.Int16</rd:TypeName>
+          <DataField>VendorDisplay</DataField>
+        </Field>
+        <Field Name="MediaVendorName">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>MediaVendorName</DataField>
+        </Field>
+        <Field Name="Orders">
+          <rd:TypeName>System.Int32</rd:TypeName>
+          <DataField>Orders</DataField>
+        </Field>
+        <Field Name="ProductTotal">
+          <rd:TypeName>System.Double</rd:TypeName>
+          <DataField>ProductTotal</DataField>
+        </Field>
+        <Field Name="Calls">
+          <rd:TypeName>System.Int32</rd:TypeName>
+          <DataField>Calls</DataField>
+        </Field>
+        <Field Name="GrossRate">
+          <rd:TypeName>System.Double</rd:TypeName>
+          <DataField>GrossRate</DataField>
+        </Field>
+        <Field Name="PaymentType">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>PaymentType</DataField>
+        </Field>
+        <Field Name="Adjustment">
+          <rd:TypeName>System.Int32</rd:TypeName>
+          <DataField>Adjustment</DataField>
+        </Field>
+        <Field Name="PaymentDescription">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>PaymentDescription</DataField>
+        </Field>
+        <Field Name="MediaBuyID">
+          <rd:TypeName>System.Int32</rd:TypeName>
+          <DataField>MediaBuyID</DataField>
+        </Field>
+        <Field Name="SpotDetailID">
+          <rd:TypeName>System.Int32</rd:TypeName>
+          <DataField>SpotDetailID</DataField>
+        </Field>
+        <Field Name="SpotTimeID">
+          <rd:TypeName>System.Int32</rd:TypeName>
+          <DataField>SpotTimeID</DataField>
+        </Field>
+        <Field Name="ContractVendorName">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>ContractVendorName</DataField>
+        </Field>
+        <Field Name="CheckDate">
+          <rd:TypeName>System.DateTime</rd:TypeName>
+          <DataField>CheckDate</DataField>
+        </Field>
+        <Field Name="Cost">
+          <rd:TypeName>System.Double</rd:TypeName>
+          <DataField>Cost</DataField>
+        </Field>
+        <Field Name="CheckNumber">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>CheckNumber</DataField>
+        </Field>
+        <Field Name="PaymentDate">
+          <rd:TypeName>System.DateTime</rd:TypeName>
+          <DataField>PaymentDate</DataField>
+        </Field>
+        <Field Name="PaidAmount">
+          <rd:TypeName>System.Double</rd:TypeName>
+          <DataField>PaidAmount</DataField>
+        </Field>
+        <Field Name="VendorContactFax">
+          <rd:TypeName>System.String</rd:TypeName>
+          <DataField>VendorContactFax</DataField>
+        </Field>
+      </Fields>
+    </DataSet>
+  </DataSets>
+  <Code />
+  <Width>9.75438in</Width>
+  <InteractiveHeight>11in</InteractiveHeight>
+  <Language>en-US</Language>
+  <PageFooter>
+    <Height>9pt</Height>
+  </PageFooter>
+  <TopMargin>1in</TopMargin>
+  <PageHeight>8.5in</PageHeight>
+</Report>
