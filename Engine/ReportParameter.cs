@@ -105,6 +105,7 @@ namespace Rdl.Engine
 
         public void LoadValidValues(Report rpt)
         {
+            _validValues = new List<ParameterValue>();
             if (_validValuesDS != null)
             {
                 DataSet ds = rpt.DataSets[_validValuesDS.DataSetName];

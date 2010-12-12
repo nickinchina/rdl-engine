@@ -119,7 +119,7 @@ namespace Rdl.Engine
             parse(_doc.DocumentElement);
 
             Rtb = rtb;
-            LoadDefaults();
+            //LoadDefaults();
         }
 
         /// <summary>
@@ -255,7 +255,7 @@ namespace Rdl.Engine
                 Type ty = CodeAssembly.GetType("Rdl.Runtime.RunTimeReportName");
                 Rtb = (Rdl.Runtime.RuntimeBase)Activator.CreateInstance(ty,
                     new object[] { this });
-                LoadDefaults();
+                //LoadDefaults();
             }
         }
 

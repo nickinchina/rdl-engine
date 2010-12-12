@@ -124,28 +124,29 @@ namespace Rdl.Render
             }
         }
 
-        public override decimal TotalHeight(bool ignoreVisibility)
-        {
-            decimal height = 0;
+        // The total height and width are defined by the SetChildSizes and SetParentSizes functions.  There should be no need for separate functions for this.
+        //public override decimal TotalHeight(bool ignoreVisibility)
+        //{
+        //    decimal height = 0;
 
-            if (FlowDirection == FlowDirectionEnum.TopDown)
-                foreach (Element child in _childElements)
-                    height += child.TotalHeight(ignoreVisibility);
-            else
-                height = base.TotalHeight(ignoreVisibility);
-            return Math.Max(height, _height);
-        }
+        //    if (FlowDirection == FlowDirectionEnum.TopDown)
+        //        foreach (Element child in _childElements)
+        //            height += child.TotalHeight(ignoreVisibility);
+        //    else
+        //        height = base.TotalHeight(ignoreVisibility);
+        //    return Math.Max(height, _height);
+        //}
 
-        public override decimal TotalWidth(bool ignoreVisibility)
-        {
-            decimal width = 0;
+        //public override decimal TotalWidth(bool ignoreVisibility)
+        //{
+        //    decimal width = 0;
 
-            if (FlowDirection == FlowDirectionEnum.LeftToRight)
-                foreach (Element child in _childElements)
-                    width += child.TotalWidth(ignoreVisibility);
-            else
-                width = base.TotalWidth(ignoreVisibility);
-            return Math.Max(width, _width);
-        }
+        //    if (FlowDirection == FlowDirectionEnum.LeftToRight)
+        //        foreach (Element child in _childElements)
+        //            width += child.TotalWidth(ignoreVisibility);
+        //    else
+        //        width = base.TotalWidth(ignoreVisibility);
+        //    return Math.Max(width, _width);
+        //}
     }
 }

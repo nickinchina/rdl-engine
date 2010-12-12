@@ -180,22 +180,22 @@ namespace Rdl.Render
                 child.SetChildSizes(ignoreVisibility);
         }
 
-        public override decimal TotalHeight(bool ignoreVisibility)
-        {
-            decimal height = 0;
+        //public override decimal TotalHeight(bool ignoreVisibility)
+        //{
+        //    decimal height = 0;
 
-            foreach (Element child in _childElements)
-                height = Math.Max(height, child.Top + child.TotalHeight(ignoreVisibility));
-            return Math.Max(height, _height);
-        }
+        //    foreach (Element child in _childElements)
+        //        height = Math.Max(height, child.Top + child.TotalHeight(ignoreVisibility));
+        //    return Math.Max(height, _height);
+        //}
 
-        public override decimal TotalWidth(bool ignoreVisibility)
-        {
-            decimal width = 0;
+        //public override decimal TotalWidth(bool ignoreVisibility)
+        //{
+        //    decimal width = 0;
 
-            foreach (Element child in _childElements)
-                width = Math.Max(width, child.Top + child.TotalWidth(ignoreVisibility));
-            return Math.Max(width, _width);
-        }
+        //    foreach (Element child in _childElements)
+        //        width = Math.Max(width, child.Left + child.TotalWidth(ignoreVisibility));
+        //    return Math.Max(width, _width);
+        //}
     }
 }
