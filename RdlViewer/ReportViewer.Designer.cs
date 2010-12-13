@@ -54,8 +54,8 @@ namespace RdlViewer
             this.panelReport.Name = "panelReport";
             this.panelReport.Size = new System.Drawing.Size(767, 370);
             this.panelReport.TabIndex = 0;
-            this.panelReport.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panelReport_MouseClick);
             this.panelReport.Paint += new System.Windows.Forms.PaintEventHandler(this.panelReport_Paint);
+            this.panelReport.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panelReport_MouseClick);
             // 
             // textCurrentPage
             // 
@@ -128,6 +128,7 @@ namespace RdlViewer
             "---",
             "Txt",
             "Xls",
+            "Xls (All Data)",
             "Pdf",
             "Csv"});
             this.comboExport.Location = new System.Drawing.Point(557, 4);
