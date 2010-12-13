@@ -1,3 +1,18 @@
+/*-----------------------------------------------------------------------------------
+This file is part of the SawikiSoft RDL Engine.
+The SawikiSoft RDL Engine is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+The SawikiSoft RDL Engine is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------------*/
 using System;
 using System.Data;
 using System.Configuration;
@@ -10,6 +25,7 @@ using System.Web.UI.WebControls.WebParts;
 using System.Web.UI.HtmlControls;
 using System.Web.SessionState;
 using System.IO;
+using System.Reflection;
 
 namespace RdlAsp
 {
@@ -65,25 +81,41 @@ namespace RdlAsp
                         if (ae.DrillThroughReportName != null)
                         {
                             string reportName = ae.DrillThroughReportName;
-                            if (!reportName.Contains("\\"))
-                                reportName = _htmlReport.SourceReport.Report.ReportPath + reportName;
-                            if (!reportName.Contains(".rdl"))
-                            {
-                                if (File.Exists(reportName + ".rdl"))
-                                    reportName += ".rdl";
-                                else if (File.Exists(reportName + ".rdlc"))
-                                    reportName += ".rdlc";
-                            }
-                            if (!File.Exists(reportName))
-                                throw new Exception("Unable to locate sub report " + reportName);
 
-                            Rdl.Engine.Report rpt = new Rdl.Engine.Report();
-                            FileStream fs = new FileStream(reportName,
-                                FileMode.Open, FileAccess.Read, FileShare.Read);
-                            rpt.Load(fs,
-                                _htmlReport.SourceReport.Report.ReportPath);
-                            fs.Close();
-                            fs.Dispose();
+                            Rdl.Engine.Report rpt;
+
+                            System.Runtime.Remoting.ObjectHandle oh = null;
+                            try
+                            {
+                                oh = Activator.CreateInstance(reportName, "Rdl.Runtime." + reportName.Replace(' ', '_'));
+                            }
+                            catch  { }
+                            if (oh != null)
+                            {
+                                rpt = ((Rdl.Runtime.RuntimeBase)oh.Unwrap()).Report;
+                            }
+                            else
+                            {
+                                if (!reportName.Contains("\\"))
+                                    reportName = _htmlReport.SourceReport.Report.ReportPath + reportName;
+                                if (!reportName.Contains(".rdl"))
+                                {
+                                    if (File.Exists(reportName + ".rdl"))
+                                        reportName += ".rdl";
+                                    else if (File.Exists(reportName + ".rdlc"))
+                                        reportName += ".rdlc";
+                                }
+                                if (!File.Exists(reportName))
+                                    throw new Exception("Unable to locate sub report " + reportName);
+
+                                rpt = new Rdl.Engine.Report();
+                                FileStream fs = new FileStream(reportName,
+                                    FileMode.Open, FileAccess.Read, FileShare.Read);
+                                rpt.Load(fs,
+                                    _htmlReport.SourceReport.Report.ReportPath);
+                                fs.Close();
+                                fs.Dispose();
+                            }
 
                             foreach (Rdl.Render.ActionElement.ActionParameter parm in ae.DrillThroughParameterList)
                             {
@@ -156,6 +188,11 @@ namespace RdlAsp
         /// <param name="report"></param>
         public void SetReport(Rdl.Render.GenericRender report)
         {
+            if (report == null)
+            {
+                _htmlReport = null;
+                return;
+            }
             // Render the report to streaming html
             _htmlReport = new Rdl.Render.RenderToHtml();
             _htmlReport.ImageUrl += new Rdl.Render.RenderToHtml.ImageUrlEventHandler(htmlRender_ImageUrl);

@@ -1,3 +1,18 @@
+/*-----------------------------------------------------------------------------------
+This file is part of the SawikiSoft RDL Engine.
+The SawikiSoft RDL Engine is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+The SawikiSoft RDL Engine is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------------*/
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -56,6 +71,19 @@ namespace Rdl.Render
                 else
                     _renderedWidth = Math.Max(_renderedWidth, child.Left + child.Width);
             }
+
+            // Set the positions of all children based on the height of each element
+            decimal height = 0;
+            decimal width = 0;
+            foreach (Element child in _childElements)
+            {
+                if (FlowDirection == FlowDirectionEnum.TopDown)
+                    child._renderedTop = height;
+                else
+                    child._renderedLeft = width;
+                height += child.Height;
+                width += child.Width;
+            }
         }
 
         internal override void SetChildSizes(bool ignoreVisibility)
@@ -70,56 +98,70 @@ namespace Rdl.Render
             decimal width;
             if (FillElement != null)
             {
+                // Calculate the total size of the children
                 height = 0;
                 width = 0;
                 foreach (Element child in _childElements)
+                {
+                    height += child.Height;
+                    width += child.Width;
+                }
+                // Get the difference between the size of the container and the size of the children
+                decimal dHeight = _renderedHeight - height;
+                decimal dWidth = _renderedWidth - width;
+
+                // Adjust the positions of the children to allow the specific FillElement
+                // to fill the open space.
+                height = 0;
+                width = 0;
+                foreach (Element child in _childElements)
+                {
+                    if (FlowDirection == FlowDirectionEnum.TopDown)
+                        child._renderedTop = height;
+                    else
+                        child._renderedLeft = width;
+
                     if (child != FillElement)
                     {
                         height += child.Height;
                         width += child.Width;
                     }
-                if (FlowDirection == FlowDirectionEnum.TopDown)
-                    FillElement._renderedHeight = _renderedHeight - height;
-                else
-                    FillElement._renderedWidth = _renderedWidth - width;
-                FillElement.SetChildSizes(ignoreVisibility);
-            }
-
-            height = 0;
-            width = 0;
-            foreach (Element child in _childElements)
-            {
-                if (FlowDirection == FlowDirectionEnum.TopDown)
-                    child._renderedTop = height;
-                else
-                    child._renderedLeft = width;
-                height += child.Height;
-                width += child.Width;
+                    else
+                    {
+                        // Add the difference between the rendered size of the container
+                        // and the total size of the children.
+                        if (FlowDirection == FlowDirectionEnum.TopDown)
+                            height += child.Height + _renderedHeight - dHeight;
+                        else
+                            width += child.Width + _renderedWidth - dWidth;
+                    }
+                }
             }
         }
 
-        public override decimal TotalHeight(bool ignoreVisibility)
-        {
-            decimal height = 0;
+        // The total height and width are defined by the SetChildSizes and SetParentSizes functions.  There should be no need for separate functions for this.
+        //public override decimal TotalHeight(bool ignoreVisibility)
+        //{
+        //    decimal height = 0;
 
-            if (FlowDirection == FlowDirectionEnum.TopDown)
-                foreach (Element child in _childElements)
-                    height += child.TotalHeight(ignoreVisibility);
-            else
-                height = base.TotalHeight(ignoreVisibility);
-            return Math.Max(height, _height);
-        }
+        //    if (FlowDirection == FlowDirectionEnum.TopDown)
+        //        foreach (Element child in _childElements)
+        //            height += child.TotalHeight(ignoreVisibility);
+        //    else
+        //        height = base.TotalHeight(ignoreVisibility);
+        //    return Math.Max(height, _height);
+        //}
 
-        public override decimal TotalWidth(bool ignoreVisibility)
-        {
-            decimal width = 0;
+        //public override decimal TotalWidth(bool ignoreVisibility)
+        //{
+        //    decimal width = 0;
 
-            if (FlowDirection == FlowDirectionEnum.LeftToRight)
-                foreach (Element child in _childElements)
-                    width += child.TotalWidth(ignoreVisibility);
-            else
-                width = base.TotalWidth(ignoreVisibility);
-            return Math.Max(width, _width);
-        }
+        //    if (FlowDirection == FlowDirectionEnum.LeftToRight)
+        //        foreach (Element child in _childElements)
+        //            width += child.TotalWidth(ignoreVisibility);
+        //    else
+        //        width = base.TotalWidth(ignoreVisibility);
+        //    return Math.Max(width, _width);
+        //}
     }
 }

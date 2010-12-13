@@ -1,3 +1,18 @@
+/*-----------------------------------------------------------------------------------
+This file is part of the SawikiSoft RDL Engine.
+The SawikiSoft RDL Engine is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+The SawikiSoft RDL Engine is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------------*/
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -335,7 +350,7 @@ namespace Rdl.Render
 
         private decimal ElementWidth(Rdl.Render.GenericRender rpt, Element elmt)
         {
-            decimal width = elmt.Width;
+            decimal width = elmt.TotalWidth(false);
             BoxStyle bs = rpt.StyleList[elmt.StyleIndex];
             if (bs.BorderStyle.Left != Rdl.Engine.BorderStyle.BorderStyleEnum.None)
                 width -= bs.BorderWidth.Left.points;
@@ -348,7 +363,7 @@ namespace Rdl.Render
 
         private decimal ElementHeight(Rdl.Render.GenericRender rpt, Element elmt)
         {
-            decimal height = elmt.Height;
+            decimal height = elmt.TotalHeight(false);
             BoxStyle bs = rpt.StyleList[elmt.StyleIndex];
             if (bs.BorderStyle.Top != Rdl.Engine.BorderStyle.BorderStyleEnum.None)
                 height -= bs.BorderWidth.Top.points;

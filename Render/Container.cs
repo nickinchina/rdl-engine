@@ -1,3 +1,18 @@
+/*-----------------------------------------------------------------------------------
+This file is part of the SawikiSoft RDL Engine.
+The SawikiSoft RDL Engine is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+The SawikiSoft RDL Engine is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------------*/
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -180,22 +195,22 @@ namespace Rdl.Render
                 child.SetChildSizes(ignoreVisibility);
         }
 
-        public override decimal TotalHeight(bool ignoreVisibility)
-        {
-            decimal height = 0;
+        //public override decimal TotalHeight(bool ignoreVisibility)
+        //{
+        //    decimal height = 0;
 
-            foreach (Element child in _childElements)
-                height = Math.Max(height, child.Top + child.TotalHeight(ignoreVisibility));
-            return Math.Max(height, _height);
-        }
+        //    foreach (Element child in _childElements)
+        //        height = Math.Max(height, child.Top + child.TotalHeight(ignoreVisibility));
+        //    return Math.Max(height, _height);
+        //}
 
-        public override decimal TotalWidth(bool ignoreVisibility)
-        {
-            decimal width = 0;
+        //public override decimal TotalWidth(bool ignoreVisibility)
+        //{
+        //    decimal width = 0;
 
-            foreach (Element child in _childElements)
-                width = Math.Max(width, child.Top + child.TotalWidth(ignoreVisibility));
-            return Math.Max(width, _width);
-        }
+        //    foreach (Element child in _childElements)
+        //        width = Math.Max(width, child.Left + child.TotalWidth(ignoreVisibility));
+        //    return Math.Max(width, _width);
+        //}
     }
 }
