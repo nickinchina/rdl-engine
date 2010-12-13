@@ -323,5 +323,11 @@ namespace Rdl.Engine
         {
             get { return _allowBlank; }
         }
+
+        public new string ToString()
+        {
+            return Name + "=" + ((Value == null) ? "null" : 
+                ((Value is string[]) ? ((string[])Value).ToString(",") : Value.ToString()));
+        }
     }
 }

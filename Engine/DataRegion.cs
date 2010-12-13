@@ -55,6 +55,9 @@ namespace Rdl.Engine
                 case "pagebreakatend":
                     _pageBreakAtEnd = bool.Parse(attr.InnerText);
                     break;
+                case "filters":
+                    _filters = new Filters(attr, this);
+                    break;
                 default:
                     break;
             }
