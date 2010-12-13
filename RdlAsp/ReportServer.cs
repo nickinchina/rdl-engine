@@ -1,3 +1,18 @@
+/*-----------------------------------------------------------------------------------
+This file is part of the SawikiSoft RDL Engine.
+The SawikiSoft RDL Engine is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+The SawikiSoft RDL Engine is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------------*/
 using System;
 using System.Data;
 using System.Configuration;
@@ -80,7 +95,7 @@ namespace RdlAsp
                             MemoryStream ms = new MemoryStream();
 
                             System.Drawing.Image img = cc.RenderChart( int.Parse(context.Request.QueryString["width"]),
-                                int.Parse(context.Request.QueryString["height"]), 1, 1);
+                                int.Parse(context.Request.QueryString["height"]), int.Parse(context.Request.QueryString["height"]), 1, 1);
                             if (img != null)
                             {
                                 img.Save(ms, System.Drawing.Imaging.ImageFormat.Gif);

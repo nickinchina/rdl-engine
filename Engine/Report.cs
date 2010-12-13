@@ -1,3 +1,18 @@
+/*-----------------------------------------------------------------------------------
+This file is part of the SawikiSoft RDL Engine.
+The SawikiSoft RDL Engine is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+The SawikiSoft RDL Engine is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------------*/
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -119,7 +134,7 @@ namespace Rdl.Engine
             parse(_doc.DocumentElement);
 
             Rtb = rtb;
-            LoadDefaults();
+            //LoadDefaults();
         }
 
         /// <summary>
@@ -255,7 +270,7 @@ namespace Rdl.Engine
                 Type ty = CodeAssembly.GetType("Rdl.Runtime.RunTimeReportName");
                 Rtb = (Rdl.Runtime.RuntimeBase)Activator.CreateInstance(ty,
                     new object[] { this });
-                LoadDefaults();
+                //LoadDefaults();
             }
         }
 
@@ -487,7 +502,17 @@ namespace Rdl.Engine
         private string MatchAggFn(Match m)
         {
             int fn = AddFunction(m.Groups["expression"].Value, "Aggregate", true);
-            return m.Groups["leading"].Value + "(AddressOf fn_" + fn.ToString() + m.Groups["scope"].Value + " )";
+            if (m.Groups["leading"].Value.Trim() == "RunningValue")
+            {
+                string[] splitParms = m.Groups["scope"].Value.Split(new char[] { ',' });
+                // The second parameter of RunningValue needs the RunningValueFunction enum prepended onto it.
+                return "RunningValue(AddressOf fn_" + fn.ToString() + ", RunningValueFunction." +
+                    splitParms[1].Trim() +
+                    ((splitParms.Length > 2) ? ", " + splitParms[2] : string.Empty) +
+                    ")";
+            }
+            else
+                return m.Groups["leading"].Value + "(AddressOf fn_" + fn.ToString() + m.Groups["scope"].Value + " )";
         }
 
         private string ReplaceAggFn(string source, string fn)
@@ -637,6 +662,25 @@ namespace Rdl.Engine
         public string ReportPath
         {
             get { return _reportPath; }
+        }
+    }
+
+    public static class ReportExtensions
+    {
+        public static string ToString(this Dictionary<string, ReportParameter> reportParameters, string separator)
+        {
+            string ret = string.Empty;
+            foreach (ReportParameter parm in reportParameters.Values)
+                ret += ((ret.Length > 0) ? separator : string.Empty) + parm.ToString();
+            return ret;
+        }
+
+        public static string ToString(this string[] strings, string separator)
+        {
+            string ret = string.Empty;
+            foreach (string s in strings)
+                ret += ((ret.Length > 0) ? separator : string.Empty) + s;
+            return ret;
         }
     }
 }
