@@ -645,4 +645,23 @@ namespace Rdl.Engine
             get { return _reportPath; }
         }
     }
+
+    public static class ReportExtensions
+    {
+        public static string ToString(this Dictionary<string, ReportParameter> reportParameters, string separator)
+        {
+            string ret = string.Empty;
+            foreach (ReportParameter parm in reportParameters.Values)
+                ret += ((ret.Length > 0) ? separator : string.Empty) + parm.ToString();
+            return ret;
+        }
+
+        public static string ToString(this string[] strings, string separator)
+        {
+            string ret = string.Empty;
+            foreach (string s in strings)
+                ret += ((ret.Length > 0) ? separator : string.Empty) + s;
+            return ret;
+        }
+    }
 }
