@@ -95,7 +95,7 @@ namespace RdlAsp
                             MemoryStream ms = new MemoryStream();
 
                             System.Drawing.Image img = cc.RenderChart( int.Parse(context.Request.QueryString["width"]),
-                                int.Parse(context.Request.QueryString["height"]), int.Parse(context.Request.QueryString["height"]), 1, 1);
+                                int.Parse(context.Request.QueryString["height"]), 1, 1);
                             if (img != null)
                             {
                                 img.Save(ms, System.Drawing.Imaging.ImageFormat.Gif);
