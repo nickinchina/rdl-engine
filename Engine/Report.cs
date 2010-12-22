@@ -84,7 +84,7 @@ namespace Rdl.Engine
         private string _reportPath = string.Empty;
 
         private List<string> _functions = new List<string>();
-        internal Rdl.Runtime.RuntimeBase Rtb = null;
+        public Rdl.Runtime.RuntimeBase Rtb = null;
 
         /// <summary>
         /// Used with the <see cref="InitializeDataSet"/> event.
@@ -157,7 +157,7 @@ namespace Rdl.Engine
             Compile(null, null);
         }
 
-        internal void LoadDefaults()
+        public void LoadDefaults()
         {
             // If there are any report parameters then load the default and valid values
             // from the data sources.
