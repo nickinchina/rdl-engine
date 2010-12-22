@@ -134,7 +134,7 @@ namespace Rdl.Engine
             parse(_doc.DocumentElement);
 
             Rtb = rtb;
-            LoadDefaults();
+            //LoadDefaults();
         }
 
         /// <summary>
@@ -270,7 +270,7 @@ namespace Rdl.Engine
                 Type ty = CodeAssembly.GetType("Rdl.Runtime.RunTimeReportName");
                 Rtb = (Rdl.Runtime.RuntimeBase)Activator.CreateInstance(ty,
                     new object[] { this });
-                LoadDefaults();
+                //LoadDefaults();
             }
         }
 
@@ -387,6 +387,7 @@ namespace Rdl.Engine
         /// then be used by one or more of the rendering classes to produce 
         /// a report in an output format.
         /// </summary>
+        /// <returns>Rdl.Render.GenericRender</returns> 
         public Rdl.Render.GenericRender Run()
         {
             return Render(null, null);
@@ -403,6 +404,7 @@ namespace Rdl.Engine
 
             // Initialize the data sets. // Initialized in RunTimeBase
             //_dataSets.Initialize();
+            _dataSets.Reset();
 
             // Set the default DataSet for the report
             if (_dataSchema != null)

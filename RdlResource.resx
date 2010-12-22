@@ -133,6 +133,8 @@ namespace Rdl.Runtime
       MyBase.New()
       AddFunctions()
       Initialize(rpt)
+      rpt.RTB = Me
+      rpt.LoadDefaults()
     end sub
  
     public sub New()
@@ -144,6 +146,8 @@ namespace Rdl.Runtime
       dim rm as New System.Resources.ResourceManager(Me.GetType())
       rpt.Load(DirectCast(Me, Rdl.Runtime.RunTimeBase), rm.GetString("ReportSource"))
       Initialize(rpt)
+      rpt.RTB = Me
+      rpt.LoadDefaults()
     end sub
     
     private sub AddFunctions()

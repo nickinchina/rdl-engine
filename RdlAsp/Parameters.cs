@@ -229,27 +229,31 @@ namespace RdlAsp
                     //Controls.Add(new LiteralControl("&nbsp&nbsp&nbsp&nbsp"));
                 }
                 Panel panel = new Panel();
-                if (requiredControls.Count > 0)
-                {
-                    panel.Controls.Add(new LiteralControl("<div><b>Required Parameters:</b>"));
-                    foreach (Control ctrl in requiredControls)
-                        panel.Controls.Add(ctrl);
-                    panel.Controls.Add(new LiteralControl("</div>"));
-                }
-                if (optionalControls.Count > 0)
-                {
-                    panel.Controls.Add(new LiteralControl("<div><b>Optional Parameters</b>"));
-                    foreach (Control ctrl in optionalControls)
-                        panel.Controls.Add(ctrl);
-                    panel.Controls.Add(new LiteralControl("</div>"));
-                }
+                UpdatePanel updatePanel = new UpdatePanel();
+                panel.Controls.Add(updatePanel);
+
                 btnView = new Button();
                 panel.Controls.Add(btnView);
                 btnView.Text = "View";
                 btnView.ID = "ViewReport";
                 btnView.Click += new EventHandler(btnView_Click);
-
                 panel.DefaultButton = "ViewReport";
+
+                // Add the required and optional parameter controls to the UpdatePanel
+                if (requiredControls.Count > 0)
+                {
+                    updatePanel.ContentTemplateContainer.Controls.Add(new LiteralControl("<div><b>Required Parameters:</b>"));
+                    foreach (Control ctrl in requiredControls)
+                        updatePanel.ContentTemplateContainer.Controls.Add(ctrl);
+                    updatePanel.ContentTemplateContainer.Controls.Add(new LiteralControl("</div>"));
+                }
+                if (optionalControls.Count > 0)
+                {
+                    updatePanel.ContentTemplateContainer.Controls.Add(new LiteralControl("<div><b>Optional Parameters</b>"));
+                    foreach (Control ctrl in optionalControls)
+                        updatePanel.ContentTemplateContainer.Controls.Add(ctrl);
+                    updatePanel.ContentTemplateContainer.Controls.Add(new LiteralControl("</div>"));
+                }
                 Controls.Add(panel);
             }
             ChildControlsCreated = true;
@@ -418,121 +422,126 @@ namespace RdlAsp
             ChildControlsCreated = false;
         }
 
+        private void RecurseLoadChildControls(Control ctrl)
+        {
+            foreach (Control ctrl1 in ctrl.Controls)
+                RecurseLoadChildControls(ctrl1);
+            if (ctrl is UpdatePanel)
+                RecurseLoadChildControls(((UpdatePanel)ctrl).ContentTemplateContainer);
+
+            Rdl.Engine.ReportParameter parm = null;
+            if (ctrl.ID != null && _report != null && _report.ReportParameters != null && _report.ReportParameters.ContainsKey(ctrl.ID))
+                parm = _report.ReportParameters[ctrl.ID];
+            if (parm != null)
+            {
+                switch (ctrl.GetType().Name)
+                {
+                    case "CheckBox":
+                        parm.Value = ((CheckBox)ctrl).Checked;
+                        break;
+                    case "TextBox":
+                        string[] values;
+                        if (parm.Nullable && ((TextBox)ctrl).Text.Trim() == string.Empty)
+                        {
+                            parm.Value = null;
+                            break;
+                        }
+                        if (parm.MultiValue)
+                        {
+                            if (((TextBox)ctrl).Text.Trim().Length > 0)
+                            {
+                                values = ((TextBox)ctrl).Text.Split(new char[] { ',' });
+                                for (int i = 0; i < values.Length; i++)
+                                    values[i] = values[i].Trim();
+                            }
+                            else
+                                values = new string[0];
+                        }
+                        else
+                            values = new string[1] { ((TextBox)ctrl).Text };
+
+                        for (int i = 0; i < values.Length; i++)
+                        {
+                            switch (parm.DataType.Name)
+                            {
+                                case "DateTime":
+                                    DateTime dt;
+                                    if (!DateTime.TryParse(values[i], out dt))
+                                    {
+                                        OnParameterError(new ParameterErrorEventArgs(_report, "Invalid date"));
+                                        return;
+                                    }
+                                    values[i] = dt.ToString("yyyy-MM-dd HH:mm:ss");
+                                    break;
+                                case "Boolean":
+                                    Boolean bv;
+                                    if (!Boolean.TryParse(values[i], out bv))
+                                    {
+                                        OnParameterError(new ParameterErrorEventArgs(_report, "Invalid Boolean value"));
+                                        return;
+                                    }
+                                    values[i] = bv.ToString();
+                                    break;
+                                case "Int32":
+                                    Int32 iv;
+                                    if (!Int32.TryParse(values[i], out iv))
+                                    {
+                                        OnParameterError(new ParameterErrorEventArgs(_report, "Invalid numeric value"));
+                                        return;
+                                    }
+                                    values[i] = iv.ToString();
+                                    break;
+                                case "Single":
+                                    Single sv;
+                                    if (!Single.TryParse(values[i], out sv))
+                                    {
+                                        OnParameterError(new ParameterErrorEventArgs(_report, "Invalid numeric value"));
+                                        return;
+                                    }
+                                    values[i] = sv.ToString();
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        if (parm.MultiValue)
+                            parm.Value = values;
+                        else
+                            parm.Value = values[0];
+                        break;
+                    case "DropDownList":
+                        if (((DropDownList)ctrl).Text == string.Empty)
+                        {
+                            if (parm.Nullable)
+                                parm.Value = null;
+                            else
+                                parm.Value = string.Empty;
+                            break;
+                        }
+                        foreach (Rdl.Engine.ParameterValue value in parm.ValidValues)
+                            if (value.Label == ((DropDownList)ctrl).SelectedItem.Text)
+                                parm.Value = value.Value;
+                        break;
+                    case "CheckBoxList":
+                        List<object> valueArray = new List<object>();
+                        foreach (ListItem li in ((CheckBoxList)ctrl).Items)
+                            if (li.Selected)
+                                foreach (Rdl.Engine.ParameterValue value in parm.ValidValues)
+                                    if (value.Label == li.Text)
+                                        valueArray.Add(value.Value);
+                        parm.Value = valueArray.ToArray();
+                        break;
+                }
+            }
+        }
+
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
             if (Page.IsPostBack)
             {
                 EnsureChildControls();
-                if (Controls.Count == 0)
-                    return;
-                foreach (Control ctrl in Controls[0].Controls)
-                {
-                    Rdl.Engine.ReportParameter parm = null;
-                    if (ctrl.ID != null && _report.ReportParameters != null && _report.ReportParameters.ContainsKey(ctrl.ID))
-                        parm = _report.ReportParameters[ctrl.ID];
-                    if (parm != null)
-                    {
-                        switch (ctrl.GetType().Name)
-                        {
-                            case "CheckBox":
-                                parm.Value = ((CheckBox)ctrl).Checked;
-                                break;
-                            case "TextBox":
-                                string[] values;
-                                if (parm.Nullable && ((TextBox)ctrl).Text.Trim() == string.Empty)
-                                {
-                                    parm.Value = null;
-                                    break;
-                                }
-                                if (parm.MultiValue)
-                                {
-                                    if (((TextBox)ctrl).Text.Trim().Length > 0)
-                                    {
-                                        values = ((TextBox)ctrl).Text.Split(new char[] { ',' });
-                                        for (int i = 0; i < values.Length; i++)
-                                            values[i] = values[i].Trim();
-                                    }
-                                    else
-                                        values = new string[0];
-                                }
-                                else
-                                    values = new string[1] { ((TextBox)ctrl).Text };
-
-                                for (int i = 0; i < values.Length; i++)
-                                {
-                                    switch (parm.DataType.Name)
-                                    {
-                                        case "DateTime":
-                                            DateTime dt;
-                                            if (!DateTime.TryParse(values[i], out dt))
-                                            {
-                                                OnParameterError(new ParameterErrorEventArgs(_report, "Invalid date"));
-                                                return;
-                                            }
-                                            values[i] = dt.ToString("yyyy-MM-dd HH:mm:ss");
-                                            break;
-                                        case "Boolean":
-                                            Boolean bv;
-                                            if (!Boolean.TryParse(values[i], out bv))
-                                            {
-                                                OnParameterError(new ParameterErrorEventArgs(_report, "Invalid Boolean value"));
-                                                return;
-                                            }
-                                            values[i] = bv.ToString();
-                                            break;
-                                        case "Int32":
-                                            Int32 iv;
-                                            if (!Int32.TryParse(values[i], out iv))
-                                            {
-                                                OnParameterError(new ParameterErrorEventArgs(_report, "Invalid numeric value"));
-                                                return;
-                                            }
-                                            values[i] = iv.ToString();
-                                            break;
-                                        case "Single":
-                                            Single sv;
-                                            if (!Single.TryParse(values[i], out sv))
-                                            {
-                                                OnParameterError(new ParameterErrorEventArgs(_report, "Invalid numeric value"));
-                                                return;
-                                            }
-                                            values[i] = sv.ToString();
-                                            break;
-                                        default:
-                                            break;
-                                    }
-                                }
-                                if (parm.MultiValue)
-                                    parm.Value = values;
-                                else
-                                    parm.Value = values[0];
-                                break;
-                            case "DropDownList":
-                                if (((DropDownList)ctrl).Text == string.Empty)
-                                {
-                                    if (parm.Nullable)
-                                        parm.Value = null;
-                                    else
-                                        parm.Value = string.Empty;
-                                    break;
-                                }
-                                foreach (Rdl.Engine.ParameterValue value in parm.ValidValues)
-                                    if (value.Label == ((DropDownList)ctrl).SelectedItem.Text)
-                                        parm.Value = value.Value;
-                                break;
-                            case "CheckBoxList":
-                                List<object> valueArray = new List<object>();
-                                foreach (ListItem li in ((CheckBoxList)ctrl).Items)
-                                    if (li.Selected)
-                                        foreach (Rdl.Engine.ParameterValue value in parm.ValidValues)
-                                            if (value.Label == li.Text)
-                                                valueArray.Add(value.Value);
-                                parm.Value = valueArray.ToArray();
-                                break;
-                        }
-                    }
-                }
+                RecurseLoadChildControls(this);
                 ReloadChildControls();
                 // Call CreateChildControls again because the valid values of parameters may have changed based on values loaded
                 // in the postback.
