@@ -93,6 +93,12 @@ namespace Rdl.Engine
             //}
         }
 
+        internal void Reset()
+        {
+            foreach (DataSet ds in _dataSets.Values)
+                ds.Reset();
+        }
+
         public DataSet this[string key]
         {
             get {
