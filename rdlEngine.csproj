@@ -61,8 +61,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Infragistics2.Excel.v6.2">
-      <HintPath>.\Infragistics2.Excel.v6.2.dll</HintPath>
+    <Reference Include="CSharpJExcel">
+      <HintPath>..\CSharpJExcel\CSharpJExcel\CSharpJExcel\bin\Release\CSharpJExcel.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
