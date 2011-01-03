@@ -17,7 +17,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using Infragistics.Excel;
+using CSharpJExcel.Jxl;
+using CSharpJExcel.Jxl.Write;
+using CSharpJExcel.Jxl.Format;
 
 
 namespace Rdl.Render
@@ -26,18 +28,26 @@ namespace Rdl.Render
     {
         private List<decimal> _rows = new List<decimal>();
         private List<decimal> _cols = new List<decimal>();
-        private const int _lineHeight = 25;  // The point multiplier for line heights
-        private const int _fontHeight = 20; // The point multiplier for font heights
-        private const int _colWidth = 45; // The point multiplier for column widths
-        private Workbook _workbook = null;
-        private Worksheet _ws = null;
+        //private const int _lineHeight = 25;  // The point multiplier for line heights
+        //private const int _fontHeight = 20; // The point multiplier for font heights
+        //private const int _colWidth = 45; // The point multiplier for column widths
+        private const int _lineHeight = 20;  // The point multiplier for line heights
+        private const int _fontHeight = 1; // The point multiplier for font heights
+        private const decimal _colWidth = 0.22M; // The point multiplier for column widths
+        private WritableWorkbook _workbook = null;
+        private WritableSheet _ws = null;
+        private WritableCellFormat[] formats;
+        Rdl.Render.GenericRender _report;
 
         public byte[] Render(Rdl.Render.GenericRender report, bool renderAll)
         {
+            _report = report;
+            MemoryStream ms = new MemoryStream();
             report.SetSizes(renderAll);
 
-            _workbook = new Workbook();
-            _ws = _workbook.Worksheets.Add("Report");
+            _workbook = Workbook.createWorkbook(ms);
+            //_workbook = Workbook.createWorkbook(new System.IO.FileInfo(@"c:\foo.xls"));
+            _ws = _workbook.createSheet("Sheet 1", 0);
 
             RecurseBuildRowsCols(report.BodyContainer, 0, 0, renderAll);
             _rows.Add(0);
@@ -46,15 +56,21 @@ namespace Rdl.Render
             _cols.Sort(delegate(decimal d1, decimal d2) { return decimal.Compare(d1, d2); });
 
             for (int i = 1; i < _rows.Count; i++)
-                _ws.Rows[i-1].Height = (int)((_rows[i] - _rows[i-1]) * _lineHeight);
+                _ws.setRowView(i-1, (int)((_rows[i] - _rows[i-1]) * _lineHeight));
 
             for (int i = 1; i < _cols.Count; i++)
-                _ws.Columns[i-1].Width = (int)((_cols[i] - _cols[i-1]) * _colWidth);
+                _ws.setColumnView(i-1, (int)((_cols[i] - _cols[i-1]) * _colWidth));
+
+            formats = new WritableCellFormat[report.StyleList.Count];
+            for (int i = 0; i < report.StyleList.Count; i++)
+                if (report.StyleList[i] is TextStyle)
+                    formats[i] = GetWritableFormat((TextStyle)report.StyleList[i]);
 
             RecurseRender(report.BodyContainer, 0, 0, renderAll);
 
-            MemoryStream ms = new MemoryStream();
-            BIFF8Writer.WriteWorkbookToStream(_workbook, ms);
+            _workbook.write();
+            _workbook.close();
+            //BIFF8Writer.WriteWorkbookToStream(_workbook, ms);
             return ms.ToArray();
         }
 
@@ -69,7 +85,7 @@ namespace Rdl.Render
 
             //if (_rows.Find(delegate(decimal d) { return d == top; }) == decimal.Zero)
             //    _rows.Add(top);
-            if (elmt is TextElement)
+            if (elmt is TextElement || elmt is ImageElement)
             {
                 if (top != 0 && _rows.Find(delegate(decimal d) { return d == top; }) == decimal.Zero)
                     _rows.Add(top);
@@ -109,58 +125,29 @@ namespace Rdl.Render
                 else
                     col = _cols.FindIndex(delegate(decimal d) { return d == left; });
 
-                WorksheetCell cell = _ws.Rows[row].Cells[col];
-                decimal dValue;
-                if (decimal.TryParse(te.Text, out dValue))
-                    cell.Value = dValue;
+                WritableCell cell;
+                double dValue;
+                if (double.TryParse(te.Text, out dValue))
+                    cell = new Number(col, row, dValue);
                 else
-                    cell.Value = te.Text;
+                    cell = new Label(col, row, te.Text);
+                cell.setCellFormat(formats[te.StyleIndex]);
+                _ws.addCell(cell);
+            }
 
-                if (ts != null)
-                {
-                    int fontHeight = (int)(ts.FontSize.points * _fontHeight);
+            if (elmt is ImageElement)
+            {
+                ImageElement ie = elmt as ImageElement;
 
-                    if (ts.BorderStyle != null && ts.BorderStyle != null)
-                    {
-                        BorderStyle bs = ts.BorderStyle;
+                Int32 row = _rows.FindIndex(delegate(decimal d) { return d == top; });
+                Int32 col;
+                if (ie != null)
+                    col = _cols.FindIndex(delegate(decimal d) { return d == left; });
 
-                        cell.CellFormat.TopBorderStyle = ExcelBorderStyleFromRdlBorderStyle(bs.Top);
-                        cell.CellFormat.BottomBorderStyle = ExcelBorderStyleFromRdlBorderStyle(bs.Bottom);
-                        cell.CellFormat.LeftBorderStyle = ExcelBorderStyleFromRdlBorderStyle(bs.Left);
-                        cell.CellFormat.RightBorderStyle = ExcelBorderStyleFromRdlBorderStyle(bs.Right);
-                    }
-                    if (ts.BorderColor != null)
-                    {
-                        cell.CellFormat.TopBorderColor = Rdl.Engine.Style.W32Color(ts.BorderColor.Top);
-                        cell.CellFormat.BottomBorderColor = Rdl.Engine.Style.W32Color(ts.BorderColor.Bottom);
-                        cell.CellFormat.LeftBorderColor = Rdl.Engine.Style.W32Color(ts.BorderColor.Left);
-                        cell.CellFormat.RightBorderColor = Rdl.Engine.Style.W32Color(ts.BorderColor.Right);
-                    }
-                    cell.CellFormat.Font.Name = ts.FontFamily;
-                    cell.CellFormat.Font.Height = fontHeight;
-                    Rdl.Engine.Style.FontStyleEnum style = ts.FontStyle;
-                    if (style == Rdl.Engine.Style.FontStyleEnum.Italic)
-                        cell.CellFormat.Font.Italic = ExcelDefaultableBoolean.True;
-                    switch (ts.FontWeight)
-                    {
-                        case Rdl.Engine.Style.FontWeightEnum.Bold:
-                        case Rdl.Engine.Style.FontWeightEnum.Bolder:
-                        case Rdl.Engine.Style.FontWeightEnum._600:
-                        case Rdl.Engine.Style.FontWeightEnum._700:
-                        case Rdl.Engine.Style.FontWeightEnum._800:
-                        case Rdl.Engine.Style.FontWeightEnum._900:
-                            cell.CellFormat.Font.Bold = ExcelDefaultableBoolean.True;
-                            break;
-                    }
-                    cell.CellFormat.Font.Color = Rdl.Engine.Style.W32Color(ts.Color);
-                    cell.CellFormat.Alignment = (HorizontalCellAlignment)Enum.Parse(typeof(HorizontalCellAlignment), ts.TextAlign.ToString(), true);
-                    if (ts.BackgroundColor != null)
-                    {
-                        cell.CellFormat.FillPatternForegroundColor = Rdl.Engine.Style.W32Color(ts.BackgroundColor);
-                        cell.CellFormat.FillPatternBackgroundColor = System.Drawing.Color.White;
-                        cell.CellFormat.FillPattern = FillPatternStyle.Solid;
-                    }
-                }
+                Rdl.Render.ImageData id = _report.ImageList[ie._imageIndex];
+                WritableImage img = new WritableImage(0, 0, (double)ie.Width, (double)ie.Height,
+                    id.GetImageData());
+                _ws.addImage(img);
             }
 
             if (elmt is Container)
@@ -168,32 +155,129 @@ namespace Rdl.Render
                     RecurseRender(child, top, left, renderAll);
         }
 
-        private CellBorderLineStyle ExcelBorderStyleFromRdlBorderStyle(Rdl.Engine.BorderStyle.BorderStyleEnum bs)
+        private Alignment ExcelAlignmentFromRdlAlignment(Rdl.Engine.Style.TextAlignEnum align)
+        {
+            switch( align )
+            {
+                case Engine.Style.TextAlignEnum.Center:
+                    return Alignment.CENTRE;
+                case Engine.Style.TextAlignEnum.General:
+                    return Alignment.GENERAL;
+                case Engine.Style.TextAlignEnum.Left:
+                    return Alignment.LEFT;
+                case Engine.Style.TextAlignEnum.Right:
+                    return Alignment.RIGHT;
+            }
+            return Alignment.GENERAL;
+        }
+
+        private BorderLineStyle ExcelBorderStyleFromRdlBorderStyle(Rdl.Engine.BorderStyle.BorderStyleEnum bs)
         {
             switch (bs)
             {
                 case Rdl.Engine.BorderStyle.BorderStyleEnum.Dashed:
-                    return CellBorderLineStyle.Dashed;
+                    return BorderLineStyle.DASHED;
                 case Rdl.Engine.BorderStyle.BorderStyleEnum.Dotted:
-                    return CellBorderLineStyle.Dotted;
+                    return BorderLineStyle.DOTTED;
                 case Rdl.Engine.BorderStyle.BorderStyleEnum.Double:
-                    return CellBorderLineStyle.Double;
+                    return BorderLineStyle.DOUBLE;
                 case Rdl.Engine.BorderStyle.BorderStyleEnum.Groove:
-                    return CellBorderLineStyle.DashDotDot;
+                    return BorderLineStyle.DOUBLE;
                 case Rdl.Engine.BorderStyle.BorderStyleEnum.Inset:
-                    return CellBorderLineStyle.Thin;
+                    return BorderLineStyle.THIN;
                 case Rdl.Engine.BorderStyle.BorderStyleEnum.None:
-                    return CellBorderLineStyle.None;
+                    return BorderLineStyle.NONE;
                 case Rdl.Engine.BorderStyle.BorderStyleEnum.Outset:
-                    return CellBorderLineStyle.Thick;
+                    return BorderLineStyle.THICK;
                 case Rdl.Engine.BorderStyle.BorderStyleEnum.Ridge:
-                    return CellBorderLineStyle.Double;
+                    return BorderLineStyle.DOUBLE;
                 case Rdl.Engine.BorderStyle.BorderStyleEnum.Solid:
-                    return CellBorderLineStyle.Thin;
+                    return BorderLineStyle.THIN;
                 case Rdl.Engine.BorderStyle.BorderStyleEnum.WindowInset:
-                    return CellBorderLineStyle.Thin;
+                    return BorderLineStyle.THIN;
             }
-            return CellBorderLineStyle.None;
+            return BorderLineStyle.NONE;
+        }
+
+        private WritableFont.BoldStyle BoldStyle(TextStyle ts)
+        {
+            switch(ts.FontWeight)
+            {
+                case Engine.Style.FontWeightEnum._100:
+                    return new WritableFont.BoldStyle(100);
+                case Engine.Style.FontWeightEnum._200:
+                    return new WritableFont.BoldStyle(200);
+                case Engine.Style.FontWeightEnum._300:
+                    return new WritableFont.BoldStyle(300);
+                case Engine.Style.FontWeightEnum._400:
+                    return new WritableFont.BoldStyle(400);
+                case Engine.Style.FontWeightEnum._500:
+                    return new WritableFont.BoldStyle(500);
+                case Engine.Style.FontWeightEnum._600:
+                    return new WritableFont.BoldStyle(600);
+                case Engine.Style.FontWeightEnum._700:
+                    return new WritableFont.BoldStyle(700);
+                case Engine.Style.FontWeightEnum._800:
+                    return new WritableFont.BoldStyle(800);
+                case Engine.Style.FontWeightEnum._900:
+                    return new WritableFont.BoldStyle(900);
+                case Engine.Style.FontWeightEnum.Bold:
+                    return new WritableFont.BoldStyle(800);
+                case Engine.Style.FontWeightEnum.Bolder:
+                    return new WritableFont.BoldStyle(1000);
+                case Engine.Style.FontWeightEnum.Lighter:
+                    return new WritableFont.BoldStyle(200);
+                case Engine.Style.FontWeightEnum.Normal:
+                    return new WritableFont.BoldStyle(300);
+            }
+            return new WritableFont.BoldStyle(300);
+        }
+
+        Colour getXlsColor(string color, Colour defaultColor)
+        {
+            if (color == null)
+                return defaultColor;
+            foreach (Colour c in Colour.getAllColours())
+            {
+                if (c.getDescription().ToLower() == color.ToLower())
+                    return c;
+            }
+            return defaultColor;
+        }
+
+        private WritableCellFormat GetWritableFormat(TextStyle ts)
+        {
+            WritableCellFormat cellFormat = new WritableCellFormat();
+
+            WritableFont font = new WritableFont(
+                new WritableFont.FontName(ts.FontFamily),
+                (int)ts.FontSize.points * _fontHeight,
+                BoldStyle(ts),
+                (ts.FontStyle == Engine.Style.FontStyleEnum.Italic),
+                (ts.TextDecoration == Engine.Style.TextDecorationEnum.Underline) ? UnderlineStyle.SINGLE : UnderlineStyle.NO_UNDERLINE,
+                (ts.Color == null) ? Colour.BLACK : getXlsColor(ts.Color, Colour.BLACK),
+                ScriptStyle.NORMAL_SCRIPT);
+            cellFormat.setFont(font);
+            cellFormat.setAlignment(ExcelAlignmentFromRdlAlignment(ts.TextAlign));
+
+
+            if (ts.BorderStyle != null && ts.BorderStyle != null)
+            {
+                BorderStyle bs = ts.BorderStyle;
+                BorderColor bc = ts.BorderColor;
+
+                cellFormat.setBorder(Border.TOP, ExcelBorderStyleFromRdlBorderStyle(bs.Top),
+                    (bc == null) ?  Colour.BLACK : getXlsColor(ts.BorderColor.Top, Colour.BLACK));
+                cellFormat.setBorder(Border.BOTTOM, ExcelBorderStyleFromRdlBorderStyle(bs.Bottom),
+                    (bc == null) ? Colour.BLACK : getXlsColor(ts.BorderColor.Bottom, Colour.BLACK));
+                cellFormat.setBorder(Border.LEFT, ExcelBorderStyleFromRdlBorderStyle(bs.Left),
+                    (bc == null) ? Colour.BLACK : getXlsColor(ts.BorderColor.Left, Colour.BLACK));
+                cellFormat.setBorder(Border.RIGHT, ExcelBorderStyleFromRdlBorderStyle(bs.Right),
+                    (bc == null) ? Colour.BLACK : getXlsColor(ts.BorderColor.Right, Colour.BLACK));
+            }
+            if (ts.BackgroundColor != null)
+                cellFormat.setBackground(getXlsColor(ts.BackgroundColor, Colour.WHITE), Pattern.SOLID);
+            return cellFormat;
         }
     }
 }
